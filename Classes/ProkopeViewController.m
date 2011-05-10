@@ -3,13 +3,38 @@
 //  Prokope
 //
 //  Created by D. Robert Adams on 5/9/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Grand Valley State University. All rights reserved.
 //
 
+#import "DocumentController.h"
 #import "ProkopeViewController.h"
 
 @implementation ProkopeViewController
 
+/******************************************************************************
+ * Handles the event of the user wanting to display a document. Loads the
+ * DocumentController and displays it.
+ */
+- (void) showDocument 
+{
+	[super viewDidLoad];
+	
+	// Load the document controller nib display it.
+	DocumentController *docController = [[DocumentController alloc] 
+										 initWithNibName:@"DocumentController" bundle:nil];
+	[self presentModalViewController:docController animated:YES];
+	
+	[docController release];
+}
+
+
+
+
+/*
+ // Implement loadView to create a view hierarchy programmatically, without using a nib.
+ - (void)loadView {
+ }
+ */
 
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -22,19 +47,10 @@
 }
 */
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
 
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-*/
+
+
 
 
 // Override to allow orientations other than the default portrait orientation.

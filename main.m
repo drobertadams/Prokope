@@ -3,7 +3,7 @@
 //  Prokope
 //
 //  Created by D. Robert Adams on 5/9/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Grand Valley State University. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
