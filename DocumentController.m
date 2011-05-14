@@ -8,7 +8,6 @@
 
 #import "DocumentController.h"
 
-
 @implementation DocumentController
 
 @synthesize document, commentary, vocabulary, sidebar;
@@ -33,13 +32,51 @@
 
 /******************************************************************************
  * Called when the URL connection is finished loading. Take the data that
- * was received and display it in the web view.
+ * was received (receivedData) and display it in the web view.
  */
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	[document loadHTMLString:[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] baseURL:nil];
+	// Convert the NSMutable data into a normal string.
+	NSString *data = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+	
+	// Find the content of the document itself.
+	NSString *doc = [self getXMLElement:@"<content>" endElement:@"</content>" fromData:data];
+	[document loadHTMLString:doc baseURL:nil];	
+
+	// Find the content of the commentary.
+	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
+	[commentary loadHTMLString:doc baseURL:nil];
+
+	// Find the content of the vocabulary.
+	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
+	[vocabulary loadHTMLString:doc baseURL:nil];
+
+	// Find the content of the sidebar.
+	doc = [self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data];
+	[sidebar loadHTMLString:doc baseURL:nil];
+	
 	[receivedData release];
 	[connection release];
+	[data release];
+}
+
+/******************************************************************************
+ * Fetches an entire XML element. NOTE: This method uses substring operations,
+ * not an XML parser. Therefore, all elements must be unique.
+ */
+- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data
+{
+	// Find where the start and end elements live.
+	NSRange startRange = [data rangeOfString:startElement];	
+	NSRange endRange = [data rangeOfString:endElement];
+	
+	// Create a range that subsumes the two elements and everything in between.
+	NSRange dataRange;
+	dataRange.location = startRange.location;
+	dataRange.length = endRange.location - startRange.location + 1 + endRange.length;
+	
+	// Return the data between the two.
+	return [data substringWithRange:dataRange];
 }
 	
 /******************************************************************************
@@ -58,8 +95,8 @@
     [super viewDidLoad];
 	
 	// Fetch the document from the server.
-	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYCQw";
-//	NSString *url = @"http://prokope-project.appspot.com/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYuZECDA";
+//	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYCQw";
+	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYoZkCDA";
 	
 	// Build the request.
 	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url] 

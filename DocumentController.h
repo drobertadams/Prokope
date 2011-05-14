@@ -24,6 +24,8 @@
 
 }
 
+- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
+
 - (IBAction) close; // close this view
 
 @property (nonatomic, retain) IBOutlet UIWebView *document;
