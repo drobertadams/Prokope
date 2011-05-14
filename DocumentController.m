@@ -1,4 +1,4 @@
-    //
+//
 //  DocumentController.m
 //  Prokope
 //
@@ -58,10 +58,13 @@
     [super viewDidLoad];
 	
 	// Fetch the document from the server.
-	NSString *url = @"http://prokope-project.appspot.com/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYuZECDA";
+	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYCQw";
+//	NSString *url = @"http://prokope-project.appspot.com/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYuZECDA";
 	
 	// Build the request.
-	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url] 
+												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
+												timeoutInterval:30];
 	
 	// Fetch the document.
 	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
