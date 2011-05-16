@@ -36,17 +36,7 @@
 	[webView loadRequest:theRequest]; 		
 }
 
-/*- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-	NSLog(@"Loading...");
-}
 
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-	NSLog(@"Done");
-}
-*/
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
 	return YES;
