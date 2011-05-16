@@ -7,6 +7,7 @@
 //
 
 #import "DocumentController.h"
+#import "WebViewController.h"
 
 @implementation DocumentController
 
@@ -94,6 +95,12 @@
 {
     [super viewDidLoad];
 	
+	// Make ourselves the delegate for the web views (document, commentary, etc.)
+	document.delegate = self;
+	commentary.delegate = self;
+	vocabulary.delegate = self;
+	sidebar.delegate = self;
+	
 	// Fetch the document from the server.
 //	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYCQw";
 	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYoZkCDA";
@@ -103,7 +110,7 @@
 												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
 												timeoutInterval:30];
 	
-	// Fetch the document.
+	// Fetch the document. These will call connection:didReceiveData and connectionDidFinishLoading.
 	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
 	if (theConnection) {
 		// Create the NSMutableData to hold the received data.
@@ -113,14 +120,39 @@
 		// Inform the user that the connection failed.
 	}
 	
-	
-	// Load some dummy data, just to show it works.
-	[commentary loadHTMLString:@"<w id=\"foo\">This is the commentary</w>" baseURL:nil];
-	[vocabulary loadHTMLString:@"This is the vocabulary" baseURL:nil];
-	[sidebar loadHTMLString:@"This is the sidebar" baseURL:nil];
 }
 
 
+/* **********************************************************************************************************************
+ * Filter the loading of web content.
+ */
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+	NSLog(@"shouldStartLoadWithRequest");
+	// "Other" means we are loading a page ourselves (i.e., not in response to click) -- probably a document.
+	if (navigationType == UIWebViewNavigationTypeOther)
+		return TRUE; // load the document
+	
+	// Did the user click on a link?
+	else if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+		
+		// Get the URL begin requested and feed it to our imageViewController.
+		NSString *StringRequest = [[request URL] absoluteString];
+		
+		// Load the image viewer nib and set the URL.
+		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
+																				 bundle:nil];
+		webViewer.url = StringRequest;
+		
+		// If not using a popover, create a modal view.
+		[self presentModalViewController:webViewer animated:YES];
+		[webViewer release];
+		
+	}
+	
+	// Ignore all other types of user interation.
+	return FALSE;
+}
 
 
 

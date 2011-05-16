@@ -15,6 +15,8 @@
 		2899E5220DE3E06400AC0155 /* ProkopeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* ProkopeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* ProkopeViewController.m */; };
+		473349661381A73A003F323B /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473349641381A73A003F323B /* WebViewController.m */; };
+		473349671381A73A003F323B /* WebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 473349651381A73A003F323B /* WebViewController.xib */; };
 		478B7174137A174600163956 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 478B7173137A174600163956 /* README */; };
 		47B06D1F1379EC67008BFF61 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B06D1D1379EC67008BFF61 /* DocumentController.m */; };
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
@@ -33,6 +35,9 @@
 		28D7ACF70DDB3853001CB0EB /* ProkopeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProkopeViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Prokope_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prokope_Prefix.pch; sourceTree = "<group>"; };
+		473349631381A73A003F323B /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		473349641381A73A003F323B /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		473349651381A73A003F323B /* WebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = WebViewController.xib; path = Classes/WebViewController.xib; sourceTree = "<group>"; };
 		478B7173137A174600163956 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		47B06D1C1379EC67008BFF61 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DocumentController.h; path = ../DocumentController.h; sourceTree = "<group>"; };
 		47B06D1D1379EC67008BFF61 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentController.m; path = ../DocumentController.m; sourceTree = "<group>"; };
@@ -63,6 +68,8 @@
 				1D3623250D0F684500981E51 /* ProkopeAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* ProkopeViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* ProkopeViewController.m */,
+				473349631381A73A003F323B /* WebViewController.h */,
+				473349641381A73A003F323B /* WebViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -100,9 +107,10 @@
 			isa = PBXGroup;
 			children = (
 				478B7173137A174600163956 /* README */,
-				2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */,
 				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */,
+				473349651381A73A003F323B /* WebViewController.xib */,
 				8D1107310486CEB800E47090 /* Prokope-Info.plist */,
 			);
 			name = Resources;
@@ -174,6 +182,7 @@
 				2899E5220DE3E06400AC0155 /* ProkopeViewController.xib in Resources */,
 				47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */,
 				478B7174137A174600163956 /* README in Resources */,
+				473349671381A73A003F323B /* WebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,6 +197,7 @@
 				1D3623260D0F684500981E51 /* ProkopeAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* ProkopeViewController.m in Sources */,
 				47B06D1F1379EC67008BFF61 /* DocumentController.m in Sources */,
+				473349661381A73A003F323B /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

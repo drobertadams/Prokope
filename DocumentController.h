@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DocumentController : UIViewController {
+@interface DocumentController : UIViewController <UIWebViewDelegate>{
 	
 	UIWebView 
 		*document,		// where the document/text is displayed
