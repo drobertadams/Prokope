@@ -50,6 +50,10 @@
 	// e.g. self.myOutlet = nil;
 }
 
+-(void)viewDidLoad
+{
+	self.title = @"Home Page";
+}
 
 - (void)dealloc {
     [super dealloc];
