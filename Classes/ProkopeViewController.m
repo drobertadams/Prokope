@@ -8,6 +8,7 @@
 
 #import "DocumentController.h"
 #import "ProkopeViewController.h"
+#import "SecondNavigation.h"
 
 @implementation ProkopeViewController
 
@@ -30,7 +31,9 @@
 
 - (IBAction) NavigationButtonClicked:(id)sender
 {
-	
+	SecondNavigation *viewController = [[SecondNavigation alloc] initWithNibName:@"SecondNavigation" bundle:nil];
+	[self.navigationController pushViewController:viewController animated:NO];
+	[viewController release];
 	
 }
 
