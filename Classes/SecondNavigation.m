@@ -17,7 +17,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"Author";
+		
     }
     return self;
 }
@@ -30,18 +30,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [myArray count];
+    return [myArrayData count];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	SecondNavigationTableView.delegate = self;
+	SecondNavigationTableView.dataSource = self;
+	
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	NSString *text = [self title];
+	NSString *text = [[self title] stringByAppendingString:@" Work"];
 	
 	myArrayData = [[NSMutableArray alloc] initWithObjects:[text stringByAppendingString:@" 1"] , [text stringByAppendingString:@" 2"], 
-			   [text stringByAppendingString:@" 3"], [text stringByAppendingString:@" 4"], nil];
+			   [text stringByAppendingString:@" 3"], [text stringByAppendingString:@" 4"],
+			   [text stringByAppendingString:@" 5"], [text stringByAppendingString:@" 6"],  nil];
 }
 
 
@@ -50,6 +54,20 @@
     return YES;
 }
 
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+    
+    cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
+	
+    return cell;
+}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

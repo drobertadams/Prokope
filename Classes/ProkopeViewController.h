@@ -10,14 +10,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProkopeViewController : UIViewController {
+@interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
-	IBOutlet UIButton *NavigationButton;
-
+	IBOutlet UITableView *ProkopeTableView;
+	NSMutableArray *myArrayData;
+	
 }
 
+@property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
+
 - (IBAction) showDocument; // action to display a document
-- (IBAction) NavigationButtonClicked:(id)sender;
 
 @end
 
