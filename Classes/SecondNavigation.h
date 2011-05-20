@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SecondNavigation : UIViewController {
+@interface SecondNavigation : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
+	NSMutableArray *myArrayData;
+	IBOutlet UITableView *SecondNavigationTableView
 }
+
+@property (nonatomic, retain) IBOutlet UITableView *SecondNavigationTableView;
 
 @end

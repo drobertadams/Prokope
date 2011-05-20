@@ -1,4 +1,4 @@
-//
+    //
 //  SecondNavigation.m
 //  Prokope
 //
@@ -11,31 +11,45 @@
 
 @implementation SecondNavigation
 
-// The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-/*
+@synthesize SecondNavigationTableView;
+ // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization.
+        self.title = @"Author";
     }
     return self;
 }
-*/
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Return the number of rows in the section.
+    return [myArray count];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	NSString *text = [self title];
+	
+	myArrayData = [[NSMutableArray alloc] initWithObjects:[text stringByAppendingString:@" 1"] , [text stringByAppendingString:@" 2"], 
+			   [text stringByAppendingString:@" 3"], [text stringByAppendingString:@" 4"], nil];
 }
-*/
 
-/*
-// Override to allow orientations other than the default portrait orientation.
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations.
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    // Overriden to allow any orientation.
+    return YES;
 }
-*/
+
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -43,6 +57,7 @@
     
     // Release any cached data, images, etc. that aren't in use.
 }
+
 
 - (void)viewDidUnload {
     [super viewDidUnload];
