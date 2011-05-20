@@ -99,7 +99,7 @@
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
-	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Tom", nil];
+	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
 }
 
 
