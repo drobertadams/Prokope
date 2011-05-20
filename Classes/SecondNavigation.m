@@ -7,7 +7,7 @@
 //
 
 #import "SecondNavigation.h"
-
+#import "DocumentController.h"
 
 @implementation SecondNavigation
 
@@ -67,6 +67,18 @@
     cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
 	
     return cell;
+}
+
+// This method repsonds to the touch on an item in the table view.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	[SecondNavigationTableView deselectRowAtIndexPath:indexPath animated:YES];
+	
+	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
+	[doc setTitle:[myArrayData objectAtIndex:indexPath.row]];
+	
+	[self.navigationController pushViewController:doc animated:YES];
+	[doc release];
 }
 
 - (void)didReceiveMemoryWarning {
