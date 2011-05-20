@@ -53,7 +53,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-	// The only line of code I added in this method - fyi. It populates the cells with the contents of the array
+	// The only line of code I added in this method. It populates the cells with the contents of the array
     cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
 	
     return cell;
@@ -67,6 +67,7 @@
 	SecondNavigation *secondNav = [[SecondNavigation alloc] initWithNibName:@"SecondNavigation" bundle:nil];
 	[secondNav setTitle:[myArrayData objectAtIndex:indexPath.row]];
 	
+	// Pushes the view controller on the navigation stack. The navigation controller takes care of the rest. 
 	[self.navigationController pushViewController:secondNav animated:YES];
 	[secondNav release];
 }
@@ -90,9 +91,10 @@
 
 -(void)viewDidLoad
 {
-	self.title = @"Home Page";
+	self.title = @"Prokope Home Page";
 	[super viewDidLoad];
 		
+	// You must set the delegate and dataSource of the table to self, otherwise it will just be an empty table.
 	ProkopeTableView.delegate = self;
 	ProkopeTableView.dataSource = self;
 		

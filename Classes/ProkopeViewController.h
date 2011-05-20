@@ -10,6 +10,10 @@
 
 #import <UIKit/UIKit.h>
 
+/* Implementing the UITableViewDelegate and the UITableViewDataSource protocols allows this class
+to implement the necessary methods for a table view to respond to actions and load data into the
+table. 
+ */
 @interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
 	IBOutlet UITableView *ProkopeTableView;
