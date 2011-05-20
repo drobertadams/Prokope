@@ -22,6 +22,7 @@
     
     // Override point for customization after app launch.
 	
+	// This line initialized the navigation controller. 
 	ProkopeNavigationController = [[UINavigationController alloc] init];
 	
 	[window addSubview:ProkopeNavigationController.view];

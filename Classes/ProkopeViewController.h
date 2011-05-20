@@ -12,10 +12,12 @@
 
 @interface ProkopeViewController : UIViewController {
 
+	IBOutlet UIButton *NavigationButton;
 
 }
 
 - (IBAction) showDocument; // action to display a document
+- (IBAction) NavigationButtonClicked:(id)sender;
 
 @end
 
