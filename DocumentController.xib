@@ -45,7 +45,7 @@
 					<object class="IBUIWebView" id="947363872">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrameSize">{481, 485}</string>
+						<string key="NSFrameSize">{408, 532}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="280161330">
 							<int key="NSColorSpace">1</int>
@@ -59,7 +59,7 @@
 					<object class="IBUIWebView" id="1015389768">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{489, 0}, {369, 485}}</string>
+						<string key="NSFrame">{{416, 0}, {442, 532}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -81,7 +81,7 @@
 					<object class="IBUIWebView" id="10031264">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, 493}, {858, 211}}</string>
+						<string key="NSFrame">{{0, 540}, {858, 164}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
