@@ -56,6 +56,16 @@
 	// The only line of code I added in this method. It populates the cells with the contents of the array
     cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
 	
+	NSString *url = @"http://www.stenudd.com/myth/greek/images/plato2.jpg";
+	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
+	
+//	UIImage *yourImage = [UIImage imageWithData:yourdata];
+//	UIImageView *imageViewToPutInCell = [[UIImageView alloc] initWithImage:yourImage];
+//	UIImageView.frame = CGRectMake(0, 0, yourImage.size.width / 2, yourImage.size.height / 2);
+	
+	cell.imageView.image = myimage;
+	
     return cell;
 }
 
