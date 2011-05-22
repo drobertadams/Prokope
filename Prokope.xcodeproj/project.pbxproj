@@ -17,6 +17,7 @@
 		28D7ACF80DDB3853001CB0EB /* ProkopeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* ProkopeViewController.m */; };
 		473349661381A73A003F323B /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473349641381A73A003F323B /* WebViewController.m */; };
 		473349671381A73A003F323B /* WebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 473349651381A73A003F323B /* WebViewController.xib */; };
+		474766C31388AC94004FEFB2 /* DocumentViewerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */; };
 		478B7174137A174600163956 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 478B7173137A174600163956 /* README */; };
 		47B06D1F1379EC67008BFF61 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B06D1D1379EC67008BFF61 /* DocumentController.m */; };
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
@@ -38,6 +39,8 @@
 		473349631381A73A003F323B /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		473349641381A73A003F323B /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		473349651381A73A003F323B /* WebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = WebViewController.xib; path = Classes/WebViewController.xib; sourceTree = "<group>"; };
+		474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentViewerDelegate.h; sourceTree = "<group>"; };
+		474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentViewerDelegate.m; sourceTree = "<group>"; };
 		478B7173137A174600163956 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		47B06D1C1379EC67008BFF61 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DocumentController.h; path = ../DocumentController.h; sourceTree = "<group>"; };
 		47B06D1D1379EC67008BFF61 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentController.m; path = ../DocumentController.m; sourceTree = "<group>"; };
@@ -64,6 +67,8 @@
 			children = (
 				47B06D1C1379EC67008BFF61 /* DocumentController.h */,
 				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
+				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
+				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
 				1D3623240D0F684500981E51 /* ProkopeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ProkopeAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* ProkopeViewController.h */,
@@ -198,6 +203,7 @@
 				28D7ACF80DDB3853001CB0EB /* ProkopeViewController.m in Sources */,
 				47B06D1F1379EC67008BFF61 /* DocumentController.m in Sources */,
 				473349661381A73A003F323B /* WebViewController.m in Sources */,
+				474766C31388AC94004FEFB2 /* DocumentViewerDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

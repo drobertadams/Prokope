@@ -7,6 +7,7 @@
 //
 
 #import "DocumentController.h"
+#import "DocumentViewerDelegate.h"
 #import "WebViewController.h"
 
 @implementation DocumentController
@@ -39,9 +40,11 @@
 {
 	// Convert the NSMutable data into a normal string.
 	NSString *data = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-	
+
+	// Make sure that links look like normal text.
+	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
 	// Find the content of the document itself.
-	NSString *doc = [self getXMLElement:@"<content>" endElement:@"</content>" fromData:data];
+	doc = [doc stringByAppendingString:[self getXMLElement:@"<content>" endElement:@"</content>" fromData:data]];
 	[document loadHTMLString:doc baseURL:nil];	
 
 	// Find the content of the commentary.
@@ -71,6 +74,10 @@
 	NSRange startRange = [data rangeOfString:startElement];	
 	NSRange endRange = [data rangeOfString:endElement];
 	
+	// If we didn't find both elements, return an empty string.
+	if (startRange.length == 0 || endRange.length == 0)
+		return @"";
+	
 	// Create a range that subsumes the two elements and everything in between.
 	NSRange dataRange;
 	dataRange.location = startRange.location;
@@ -95,15 +102,17 @@
 {
     [super viewDidLoad];
 	
-	// Make ourselves the delegate for the web views (document, commentary, etc.)
-	document.delegate = self;
+	// Create a delegate for the document viewer.
+	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
+
+	// Make ourselves the delegate for the other web views.
 	commentary.delegate = self;
 	vocabulary.delegate = self;
 	sidebar.delegate = self;
 	
 	// Fetch the document from the server.
-//	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYCQw";
-	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYoZkCDA";
+	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYFQw";
+//	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYoZkCDA";
 	
 	// Build the request.
 	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url] 
@@ -119,16 +128,14 @@
 	} else {
 		// Inform the user that the connection failed.
 	}
-	
 }
 
 
 /* **********************************************************************************************************************
- * Filter the loading of web content.
+ * Called when any of the webviews (except document) wants to load a URL.
  */
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	NSLog(@"shouldStartLoadWithRequest");
 	// "Other" means we are loading a page ourselves (i.e., not in response to click) -- probably a document.
 	if (navigationType == UIWebViewNavigationTypeOther)
 		return TRUE; // load the document
@@ -153,6 +160,16 @@
 	// Ignore all other types of user interation.
 	return FALSE;
 }
+
+/* **********************************************************************************************************************
+ * Called by DocumentViewerDelegate when the user clicks on a word.
+ */
+- (void) wordClicked:(NSString *)id
+{
+	// Simply print the word id in the commentary window.
+	[commentary loadHTMLString:id baseURL:nil];
+}
+
 
 
 

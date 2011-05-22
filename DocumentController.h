@@ -12,8 +12,8 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DocumentController : UIViewController <UIWebViewDelegate>{
-	
+@interface DocumentController : UIViewController <UIWebViewDelegate>
+{	
 	UIWebView 
 		*document,		// where the document/text is displayed
 		*commentary,	// where the commentary is displayed
@@ -24,7 +24,12 @@
 
 }
 
+// Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
+
+// Called by DocumentVieweerDelegate when the user clicks on a word in the document.
+- (void) wordClicked:(NSString *)id;
+
 
 - (IBAction) close; // close this view
 
@@ -32,6 +37,5 @@
 @property (nonatomic, retain) IBOutlet UIWebView *commentary;
 @property (nonatomic, retain) IBOutlet UIWebView *vocabulary;
 @property (nonatomic, retain) IBOutlet UIWebView *sidebar;
-
 
 @end

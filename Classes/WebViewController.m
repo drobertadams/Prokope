@@ -2,6 +2,8 @@
 //  WebViewController.m
 //  Prokope
 //
+//  A "web browser" for displaying information linked from commentary.
+//
 //  Created by D. Robert Adams on 5/16/11.
 //  Copyright 2011 Grand Valley State University. All rights reserved.
 //
