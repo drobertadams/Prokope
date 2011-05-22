@@ -44,7 +44,7 @@
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
 	// Find the content of the document itself.
-	doc = [doc stringByAppendingString:[self getXMLElement:@"<content>" endElement:@"</content>" fromData:data]];
+	doc = [doc stringByAppendingString:[self getXMLElement:@"<body>" endElement:@"</body>" fromData:data]];
 	[document loadHTMLString:doc baseURL:nil];	
 
 	// Find the content of the commentary.
@@ -111,8 +111,8 @@
 	sidebar.delegate = self;
 	
 	// Fetch the document from the server.
-	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYFQw";
-//	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYoZkCDA";
+//	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYFQw";
+	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYo5kCDA";
 	
 	// Build the request.
 	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url] 
