@@ -21,6 +21,8 @@
 		478B7174137A174600163956 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 478B7173137A174600163956 /* README */; };
 		47B06D1F1379EC67008BFF61 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B06D1D1379EC67008BFF61 /* DocumentController.m */; };
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
+		944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D113F138AF36100DEF8B2 /* SecondNavigation.m */; };
+		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,9 @@
 		47B06D1D1379EC67008BFF61 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentController.m; path = ../DocumentController.m; sourceTree = "<group>"; };
 		47B06D1E1379EC67008BFF61 /* DocumentController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DocumentController.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Prokope-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Prokope-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		944D113E138AF36100DEF8B2 /* SecondNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondNavigation.h; sourceTree = "<group>"; };
+		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
+		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SecondNavigation.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +74,9 @@
 				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
 				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
 				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
+				944D113E138AF36100DEF8B2 /* SecondNavigation.h */,
+				944D113F138AF36100DEF8B2 /* SecondNavigation.m */,
+				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				1D3623240D0F684500981E51 /* ProkopeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ProkopeAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* ProkopeViewController.h */,
@@ -188,6 +196,7 @@
 				47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */,
 				478B7174137A174600163956 /* README in Resources */,
 				473349671381A73A003F323B /* WebViewController.xib in Resources */,
+				944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +213,7 @@
 				47B06D1F1379EC67008BFF61 /* DocumentController.m in Sources */,
 				473349661381A73A003F323B /* WebViewController.m in Sources */,
 				474766C31388AC94004FEFB2 /* DocumentViewerDelegate.m in Sources */,
+				944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
