@@ -18,6 +18,7 @@ table.
 
 	IBOutlet UITableView *ProkopeTableView;
 	NSMutableArray *myArrayData;
+	NSMutableArray *MyURLData;
 	
 }
 

@@ -56,6 +56,13 @@
 	// The only line of code I added in this method. It populates the cells with the contents of the array
     cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
 	
+	// Gets the URL from the corresponding entry in the MyURLData Array.
+	NSString *url = [MyURLData objectAtIndex:indexPath.row];
+	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
+	
+	cell.imageView.image = myimage;
+	
     return cell;
 }
 
@@ -102,6 +109,9 @@
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
 	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
+	MyURLData = [[NSMutableArray alloc] initWithObjects: @"http://www.stenudd.com/myth/greek/images/plato.jpg", 
+				 @"http://www.stenudd.com/myth/greek/images/plato2.jpg", @"http://www.stenudd.com/myth/greek/images/plato3.jpg",
+				 @"http://www.stenudd.com/myth/greek/images/plato4.jpg", nil];
 }
 
 
