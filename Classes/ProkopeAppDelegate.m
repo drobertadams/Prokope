@@ -27,7 +27,7 @@
 	
 	[window addSubview:ProkopeNavigationController.view];
 	
-	ProkopeViewController *viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
+	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
 	
