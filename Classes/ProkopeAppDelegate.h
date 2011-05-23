@@ -13,6 +13,8 @@
 @interface ProkopeAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
     ProkopeViewController *viewController;
+	
+	UINavigationController *ProkopeNavigationController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

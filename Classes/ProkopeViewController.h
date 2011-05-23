@@ -10,10 +10,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProkopeViewController : UIViewController {
+/* Implementing the UITableViewDelegate and the UITableViewDataSource protocols allows this class
+to implement the necessary methods for a table view to respond to actions and load data into the
+table. 
+ */
+@interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
-
+	IBOutlet UITableView *ProkopeTableView;
+	NSMutableArray *myArrayData;
+	NSMutableArray *MyURLData;
+	
 }
+
+@property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
 
 - (IBAction) showDocument; // action to display a document
 

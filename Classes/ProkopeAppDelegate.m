@@ -22,8 +22,17 @@
     
     // Override point for customization after app launch.
 	
+	// This line initialized the navigation controller. 
+	ProkopeNavigationController = [[UINavigationController alloc] init];
+	
+	[window addSubview:ProkopeNavigationController.view];
+	
+	ProkopeViewController *viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
+	[ProkopeNavigationController pushViewController:viewController animated:NO];
+	[viewController release];
+	
 	// Set the view controller as the window's root view controller and display.
-    self.window.rootViewController = self.viewController;
+    //self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
 
 	return YES;
