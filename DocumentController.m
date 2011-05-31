@@ -49,6 +49,25 @@
 
 	// Find the content of the commentary.
 	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
+	
+	// Construct a function to hide all comments except the ones associated with the
+	// given id (ref attribute)
+	NSString *js = 
+		@"<script lang=\"text/javascript\">"
+		"function show_only(ref)"
+		"{"
+		"	var comments = document.getElementsByTagName('li');"
+		"	for (i = 0; i < comments.length; i++) {"
+		"		if ( comments[i].getAttribute('ref') == ref ) {"
+		"			comments[i].style.display = 'list-item';"
+		"		}"
+		"		else {"
+		"			comments[i].style.display = 'none';"
+		"		}"
+		"	}"
+		"}"
+		"</script>";
+	doc = [doc stringByAppendingString:js];
 	[commentary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the vocabulary.
@@ -86,7 +105,7 @@
 	// Return the data between the two.
 	return [data substringWithRange:dataRange];
 }
-	
+
 /******************************************************************************
  * Force the application to remain in landscape mode.
  */
@@ -111,9 +130,8 @@
 	sidebar.delegate = self;
 	
 	// Fetch the document from the server.
-
-//	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYFQw";
-	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYo5kCDA";
+	NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
+//	NSString *url = @"http://localhost/~adams/Private/Prokope/index.php/rest/document/4";
 
 	
 	// Build the request.
@@ -168,8 +186,13 @@
  */
 - (void) wordClicked:(NSString *)id
 {
-	// Simply print the word id in the commentary window.
-	[commentary loadHTMLString:id baseURL:nil];
+	//[commentary loadHTMLString:id baseURL:nil];
+	
+	// Call the javascript show_only() function in the commentary UIWebView to display all comments associated with the
+	// given id and hide all the others.
+	NSString *js = [NSString stringWithFormat: 
+							  @"show_only('%@');", id];
+	[commentary stringByEvaluatingJavaScriptFromString:js];	
 }
 
 
