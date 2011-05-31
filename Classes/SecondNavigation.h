@@ -11,10 +11,13 @@
 
 @interface SecondNavigation : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
-	NSMutableArray *myArrayData;
 	IBOutlet UITableView *SecondNavigationTableView;
+	
+	NSMutableArray *MySecondArray;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *SecondNavigationTableView;
+
+-(void)SetSecondDataArray:(NSMutableArray *)dataArray;
 
 @end

@@ -24,6 +24,10 @@
 		944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D113F138AF36100DEF8B2 /* SecondNavigation.m */; };
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
 		949E805D1395AB180069CE08 /* Authors.xml in Resources */ = {isa = PBXBuildFile; fileRef = 949E805C1395AB180069CE08 /* Authors.xml */; };
+		949E80911395ADA90069CE08 /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 949E80901395ADA90069CE08 /* Author.m */; };
+		949E80B91395B02C0069CE08 /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 949E80B81395B02C0069CE08 /* Work.m */; };
+		949E80D71395B1BC0069CE08 /* ThirdNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 949E80D51395B1BC0069CE08 /* ThirdNavigation.m */; };
+		949E80D81395B1BC0069CE08 /* ThirdNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 949E80D61395B1BC0069CE08 /* ThirdNavigation.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +57,13 @@
 		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
 		949E805C1395AB180069CE08 /* Authors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Authors.xml; path = "../Simple XML/Authors.xml"; sourceTree = SOURCE_ROOT; };
+		949E808F1395ADA90069CE08 /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Author.h; path = "../Simple XML/Classes/Author.h"; sourceTree = SOURCE_ROOT; };
+		949E80901395ADA90069CE08 /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Author.m; path = "../Simple XML/Classes/Author.m"; sourceTree = SOURCE_ROOT; };
+		949E80B71395B02C0069CE08 /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Work.h; path = "../Simple XML/Classes/Work.h"; sourceTree = SOURCE_ROOT; };
+		949E80B81395B02C0069CE08 /* Work.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Work.m; path = "../Simple XML/Classes/Work.m"; sourceTree = SOURCE_ROOT; };
+		949E80D41395B1BC0069CE08 /* ThirdNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdNavigation.h; sourceTree = "<group>"; };
+		949E80D51395B1BC0069CE08 /* ThirdNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdNavigation.m; sourceTree = "<group>"; };
+		949E80D61395B1BC0069CE08 /* ThirdNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ThirdNavigation.xib; path = Classes/ThirdNavigation.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,16 +83,22 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				47B06D1C1379EC67008BFF61 /* DocumentController.h */,
-				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
-				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
-				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
-				944D113E138AF36100DEF8B2 /* SecondNavigation.h */,
-				944D113F138AF36100DEF8B2 /* SecondNavigation.m */,
 				1D3623240D0F684500981E51 /* ProkopeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ProkopeAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* ProkopeViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* ProkopeViewController.m */,
+				944D113E138AF36100DEF8B2 /* SecondNavigation.h */,
+				944D113F138AF36100DEF8B2 /* SecondNavigation.m */,
+				949E80D41395B1BC0069CE08 /* ThirdNavigation.h */,
+				949E80D51395B1BC0069CE08 /* ThirdNavigation.m */,
+				47B06D1C1379EC67008BFF61 /* DocumentController.h */,
+				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
+				949E808F1395ADA90069CE08 /* Author.h */,
+				949E80901395ADA90069CE08 /* Author.m */,
+				949E80B71395B02C0069CE08 /* Work.h */,
+				949E80B81395B02C0069CE08 /* Work.m */,
+				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
+				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
 				473349631381A73A003F323B /* WebViewController.h */,
 				473349641381A73A003F323B /* WebViewController.m */,
 			);
@@ -122,10 +139,11 @@
 			children = (
 				478B7173137A174600163956 /* README */,
 				949E805C1395AB180069CE08 /* Authors.xml */,
-				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
-				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */,
+				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
+				949E80D61395B1BC0069CE08 /* ThirdNavigation.xib */,
+				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				473349651381A73A003F323B /* WebViewController.xib */,
 				8D1107310486CEB800E47090 /* Prokope-Info.plist */,
 			);
@@ -201,6 +219,7 @@
 				473349671381A73A003F323B /* WebViewController.xib in Resources */,
 				944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */,
 				949E805D1395AB180069CE08 /* Authors.xml in Resources */,
+				949E80D81395B1BC0069CE08 /* ThirdNavigation.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +237,9 @@
 				473349661381A73A003F323B /* WebViewController.m in Sources */,
 				474766C31388AC94004FEFB2 /* DocumentViewerDelegate.m in Sources */,
 				944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */,
+				949E80911395ADA90069CE08 /* Author.m in Sources */,
+				949E80B91395B02C0069CE08 /* Work.m in Sources */,
+				949E80D71395B1BC0069CE08 /* ThirdNavigation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

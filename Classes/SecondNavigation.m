@@ -8,6 +8,8 @@
 
 #import "SecondNavigation.h"
 #import "DocumentController.h"
+#import "Work.h"
+#import "ThirdNavigation.h"
 
 @implementation SecondNavigation
 
@@ -22,6 +24,11 @@
     return self;
 }
 
+-(void)SetSecondDataArray:(NSMutableArray *)dataArray;
+{
+	MySecondArray = dataArray; 
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     return 1;
@@ -30,8 +37,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [myArrayData count];
+    return [MySecondArray count];
 }
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,10 +51,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	NSString *text = [[self title] stringByAppendingString:@" Work"];
-	
-	myArrayData = [[NSMutableArray alloc] initWithObjects:[text stringByAppendingString:@" 1"] , [text stringByAppendingString:@" 2"], 
-			   [text stringByAppendingString:@" 3"], [text stringByAppendingString:@" 4"],
-			   [text stringByAppendingString:@" 5"], [text stringByAppendingString:@" 6"],  nil];
+
 }
 
 
@@ -63,8 +69,14 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
-    cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
+    Work *w = [MySecondArray objectAtIndex:indexPath.row];
+	
+	int count = [w.ChaptersArray count];
+	if(count > 0)
+	{		
+		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+	}
+    cell.textLabel.text = w.name;
 	
     return cell;
 }
@@ -74,11 +86,27 @@
 	
 	[SecondNavigationTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-	[doc setTitle:[myArrayData objectAtIndex:indexPath.row]];
+	Work *w = [MySecondArray objectAtIndex:indexPath.row];
 	
-	[self.navigationController pushViewController:doc animated:YES];
-	[doc release];
+	if (w.iconURL != nil)
+	{	
+		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
+		[doc setTitle:w.iconURL];
+		
+		[self.navigationController pushViewController:doc animated:YES];
+		[doc release];
+	}
+	else
+	{	
+		ThirdNavigation *doc = [[ThirdNavigation alloc] initWithNibName:@"ThirdNavigation" bundle:nil];
+		
+		Work *a = [MySecondArray objectAtIndex:indexPath.row];
+		[doc setTitle: a.name];
+		[doc SetSecondDataArray:a.ChaptersArray];
+		
+		[self.navigationController pushViewController:doc animated:YES];
+		[doc release];
+	}
 }
 
 - (void)didReceiveMemoryWarning {

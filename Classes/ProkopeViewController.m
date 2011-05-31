@@ -9,6 +9,7 @@
 #import "DocumentController.h"
 #import "ProkopeViewController.h"
 #import "SecondNavigation.h"
+#import "Author.h"
 
 @implementation ProkopeViewController
 
@@ -39,7 +40,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [myArrayData count];
+    return [AuthorArray count];
 }
 
 
@@ -53,15 +54,14 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-	// The only line of code I added in this method. It populates the cells with the contents of the array
-    cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
+	Author *a = [AuthorArray objectAtIndex:indexPath.row];
 	
-	// Gets the URL from the corresponding entry in the MyURLData Array.
-	NSString *url = [MyURLData objectAtIndex:indexPath.row];
+	NSString *url = a.iconURL;
 	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
 	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
+	cell.image = myimage;
 	
-	cell.imageView.image = myimage;
+    cell.textLabel.text = a.name;
 	
     return cell;
 }
@@ -72,11 +72,19 @@
 	[ProkopeTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	SecondNavigation *secondNav = [[SecondNavigation alloc] initWithNibName:@"SecondNavigation" bundle:nil];
-	[secondNav setTitle:[myArrayData objectAtIndex:indexPath.row]];
+	
+	Author *a = [AuthorArray objectAtIndex:indexPath.row];
+	[secondNav setTitle: a.name];
+	[secondNav SetSecondDataArray:a.WorksArray];
 	
 	// Pushes the view controller on the navigation stack. The navigation controller takes care of the rest. 
 	[self.navigationController pushViewController:secondNav animated:YES];
 	[secondNav release];
+}
+
+-(void)SetDataArray:(NSMutableArray *)dataArray
+{
+	AuthorArray = dataArray;
 }
 
 // Override to allow orientations other than the default portrait orientation.
@@ -108,10 +116,10 @@
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
-	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
-	MyURLData = [[NSMutableArray alloc] initWithObjects: @"http://www.stenudd.com/myth/greek/images/plato.jpg", 
-				 @"http://www.stenudd.com/myth/greek/images/plato.jpg", @"http://www.stenudd.com/myth/greek/images/plato3.jpg",
-				 @"http://www.stenudd.com/myth/greek/images/plato4.jpg", nil];
+//	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
+//	MyURLData = [[NSMutableArray alloc] initWithObjects: @"http://www.stenudd.com/myth/greek/images/plato.jpg", 
+//				 @"http://www.stenudd.com/myth/greek/images/plato.jpg", @"http://www.stenudd.com/myth/greek/images/plato3.jpg",
+//				 @"http://www.stenudd.com/myth/greek/images/plato4.jpg", nil];
 }
 
 

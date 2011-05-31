@@ -15,6 +15,11 @@
     ProkopeViewController *viewController;
 	
 	UINavigationController *ProkopeNavigationController;
+	
+	NSMutableArray *AuthorsArray;
+	
+	int AuthorCount;
+	int WorkCount;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

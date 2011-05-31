@@ -17,14 +17,16 @@ table.
 @interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
 	IBOutlet UITableView *ProkopeTableView;
-	NSMutableArray *myArrayData;
-	NSMutableArray *MyURLData;
 	
+	NSMutableArray *AuthorArray;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
 
 - (IBAction) showDocument; // action to display a document
+
+-(void)SetCount:(int)newCount;
+-(void)SetDataArray:(NSMutableArray *)dataArray;
 
 @end
 
