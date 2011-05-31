@@ -72,6 +72,7 @@
 
 	// Find the content of the vocabulary.
 	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
+	doc = [doc stringByAppendingString:js];
 	[vocabulary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the sidebar.
@@ -193,6 +194,7 @@
 	NSString *js = [NSString stringWithFormat: 
 							  @"show_only('%@');", id];
 	[commentary stringByEvaluatingJavaScriptFromString:js];	
+	[vocabulary stringByEvaluatingJavaScriptFromString:js];	
 }
 
 
