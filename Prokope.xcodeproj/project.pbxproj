@@ -23,6 +23,7 @@
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
 		944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D113F138AF36100DEF8B2 /* SecondNavigation.m */; };
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
+		949E805D1395AB180069CE08 /* Authors.xml in Resources */ = {isa = PBXBuildFile; fileRef = 949E805C1395AB180069CE08 /* Authors.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		944D113E138AF36100DEF8B2 /* SecondNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondNavigation.h; sourceTree = "<group>"; };
 		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
+		949E805C1395AB180069CE08 /* Authors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Authors.xml; path = "../Simple XML/Authors.xml"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				478B7173137A174600163956 /* README */,
+				949E805C1395AB180069CE08 /* Authors.xml */,
 				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
@@ -197,6 +200,7 @@
 				478B7174137A174600163956 /* README in Resources */,
 				473349671381A73A003F323B /* WebViewController.xib in Resources */,
 				944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */,
+				949E805D1395AB180069CE08 /* Authors.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
