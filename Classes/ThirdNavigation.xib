@@ -42,14 +42,17 @@
 				<int key="NSvFlags">292</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUITableView" id="1072737962">
+					<object class="IBUITableView" id="892845889">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{20, 58}, {253, 670}}</string>
+						<string key="NSFrame">{{20, 62}, {250, 407}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
-						<object class="NSColor" key="IBUIBackgroundColor" id="372250903">
+						<object class="NSColor" key="IBUIBackgroundColor" id="187121362">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
+							<object class="NSColorSpace" key="NSCustomColorSpace">
+								<int key="NSID">2</int>
+							</object>
 						</object>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -60,7 +63,7 @@
 						<float key="IBUISectionHeaderHeight">22</float>
 						<float key="IBUISectionFooterHeight">22</float>
 					</object>
-					<object class="IBUILabel" id="1053214986">
+					<object class="IBUILabel" id="834502001">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{20, 20}, {250, 30}}</string>
@@ -70,35 +73,22 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Please select a work</string>
-						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Georgia</string>
-							<double key="NSSize">18</double>
-							<int key="NSfFlags">16</int>
-						</object>
+						<string key="IBUIText">Please select a chapter : </string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAAA</bytes>
 						</object>
-						<reference key="IBUIHighlightedColor" ref="372250903"/>
-						<object class="NSColor" key="IBUIShadowColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MCAxIDEAA</bytes>
+						<object class="NSColor" key="IBUIHighlightedColor">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MQA</bytes>
 						</object>
-						<string key="IBUIShadowOffset">{0, 0}</string>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
 					</object>
 				</object>
 				<string key="NSFrameSize">{1024, 748}</string>
 				<reference key="NSSuperview"/>
-				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">3</int>
-					<bytes key="NSWhite">MQA</bytes>
-					<object class="NSColorSpace" key="NSCustomColorSpace">
-						<int key="NSID">2</int>
-					</object>
-				</object>
+				<reference key="IBUIBackgroundColor" ref="187121362"/>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
@@ -122,9 +112,9 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">SecondNavigationTableView</string>
+						<string key="label">ThirdTableView</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="1072737962"/>
+						<reference key="destination" ref="892845889"/>
 					</object>
 					<int key="connectionID">5</int>
 				</object>
@@ -154,19 +144,19 @@
 						<reference key="object" ref="766721923"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1053214986"/>
-							<reference ref="1072737962"/>
+							<reference ref="834502001"/>
+							<reference ref="892845889"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">4</int>
-						<reference key="object" ref="1072737962"/>
+						<reference key="object" ref="892845889"/>
 						<reference key="parent" ref="766721923"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">6</int>
-						<reference key="object" ref="1053214986"/>
+						<reference key="object" ref="834502001"/>
 						<reference key="parent" ref="766721923"/>
 					</object>
 				</object>
@@ -186,17 +176,17 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>SecondNavigation</string>
+					<string>ThirdNavigation</string>
 					<string>UIResponder</string>
-					<string>{{337, 68}, {1039, 688}}</string>
+					<string>{{356, 68}, {1039, 688}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABBoAAAxCQAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABCigAAw+sAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABCAAAAwlQAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABCigAAwhwAAA</bytes>
 					</object>
 				</object>
 			</object>
@@ -222,22 +212,22 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">SecondNavigation</string>
+					<string key="className">ThirdNavigation</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">SecondNavigationTableView</string>
+						<string key="NS.key.0">ThirdTableView</string>
 						<string key="NS.object.0">UITableView</string>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">SecondNavigationTableView</string>
+						<string key="NS.key.0">ThirdTableView</string>
 						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">SecondNavigationTableView</string>
+							<string key="name">ThirdTableView</string>
 							<string key="candidateClassName">UITableView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/SecondNavigation.h</string>
+						<string key="minorKey">Classes/ThirdNavigation.h</string>
 					</object>
 				</object>
 			</object>
