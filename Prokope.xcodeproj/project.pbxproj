@@ -23,11 +23,11 @@
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
 		944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D113F138AF36100DEF8B2 /* SecondNavigation.m */; };
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
-		949E805D1395AB180069CE08 /* Authors.xml in Resources */ = {isa = PBXBuildFile; fileRef = 949E805C1395AB180069CE08 /* Authors.xml */; };
 		949E80D71395B1BC0069CE08 /* ThirdNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 949E80D51395B1BC0069CE08 /* ThirdNavigation.m */; };
 		949E80D81395B1BC0069CE08 /* ThirdNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 949E80D61395B1BC0069CE08 /* ThirdNavigation.xib */; };
 		949E81E91395C9760069CE08 /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 949E81E81395C9760069CE08 /* Author.m */; };
 		949E81F31395CA180069CE08 /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 949E81F21395CA180069CE08 /* Work.m */; };
+		949E826C1395CCC40069CE08 /* Authors.xml in Resources */ = {isa = PBXBuildFile; fileRef = 949E826B1395CCC40069CE08 /* Authors.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,14 +56,14 @@
 		944D113E138AF36100DEF8B2 /* SecondNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondNavigation.h; sourceTree = "<group>"; };
 		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
-		949E805C1395AB180069CE08 /* Authors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Authors.xml; path = "../Simple XML/Authors.xml"; sourceTree = SOURCE_ROOT; };
 		949E80D41395B1BC0069CE08 /* ThirdNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdNavigation.h; sourceTree = "<group>"; };
 		949E80D51395B1BC0069CE08 /* ThirdNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdNavigation.m; sourceTree = "<group>"; };
 		949E80D61395B1BC0069CE08 /* ThirdNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ThirdNavigation.xib; path = Classes/ThirdNavigation.xib; sourceTree = "<group>"; };
-		949E81E71395C9760069CE08 /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Author.h; path = ../Author.h; sourceTree = "<group>"; };
+		949E81E71395C9760069CE08 /* Author.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Author.h; path = ../Author.h; sourceTree = "<group>"; };
 		949E81E81395C9760069CE08 /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Author.m; path = ../Author.m; sourceTree = "<group>"; };
 		949E81F11395CA180069CE08 /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Work.h; sourceTree = "<group>"; };
 		949E81F21395CA180069CE08 /* Work.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Work.m; sourceTree = "<group>"; };
+		949E826B1395CCC40069CE08 /* Authors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Authors.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				478B7173137A174600163956 /* README */,
-				949E805C1395AB180069CE08 /* Authors.xml */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */,
 				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
@@ -146,6 +145,7 @@
 				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				473349651381A73A003F323B /* WebViewController.xib */,
 				8D1107310486CEB800E47090 /* Prokope-Info.plist */,
+				949E826B1395CCC40069CE08 /* Authors.xml */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -218,8 +218,8 @@
 				478B7174137A174600163956 /* README in Resources */,
 				473349671381A73A003F323B /* WebViewController.xib in Resources */,
 				944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */,
-				949E805D1395AB180069CE08 /* Authors.xml in Resources */,
 				949E80D81395B1BC0069CE08 /* ThirdNavigation.xib in Resources */,
+				949E826C1395CCC40069CE08 /* Authors.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

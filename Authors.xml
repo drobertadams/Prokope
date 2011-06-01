@@ -1,0 +1,34 @@
+<Prokope>
+
+<Author name="Ciscero" icon="http://www.stenudd.com/myth/greek/images/plato.jpg">
+   <Work name="Ciscero Work 1" url="http://www.CisceroWork1.com"></Work>
+   <Work name="Ciscero Work 2" url="http://www.CisceroWork2.com"></Work>
+   <Work name="Ciscero Work 3" url="http://www.CisceroWork3.com"></Work>
+   <Work name="Ciscero Work 4">
+		<Chapter name="Ciscero Work 4 Chap. 1" url="www.CisceroWork4Chap1.com"></Chapter>
+		<Chapter name="Ciscero Work 4 Chap. 2" url="www.CisceroWork4Chap2.com"></Chapter>
+   </Work>
+   <Work name="Ciscero Work 5" url="http://www.CisceroWork5.com"></Work>
+</Author>
+
+<Author name="Plato" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <Work name="Plato Work 1" url="http://www.PlatoWork1.com"></Work>
+   <Work name="Plato Work 2" url="http://www.PlatoWork2.com"></Work>
+   <Work name="Plato Work 3">
+		<Chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></Chapter>
+		<Chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></Chapter>
+   </Work>
+</Author>
+
+<Author name="Socrates" icon="http://www.stenudd.com/myth/greek/images/plato3.jpg">
+   <Work name="Socrates Work 1" url="http://www.SocratesWork1.com"></Work>
+</Author>
+
+<Author name="Aristotle" icon="http://www.stenudd.com/myth/greek/images/plato4.jpg">
+   <Work name="Aristotle Work 1">
+		<Chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></Chapter>
+		<Chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></Chapter>
+   </Work>
+</Author>
+
+</Prokope>
