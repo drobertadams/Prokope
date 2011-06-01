@@ -45,7 +45,7 @@
 					<object class="IBUITableView" id="892845889">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{20, 62}, {250, 407}}</string>
+						<string key="NSFrame">{{20, 62}, {441, 407}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="187121362">
 							<int key="NSColorSpace">3</int>
@@ -178,7 +178,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>ThirdNavigation</string>
 					<string>UIResponder</string>
-					<string>{{356, 68}, {1039, 688}}</string>
+					<string>{{241, 68}, {1039, 688}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">

@@ -26,7 +26,7 @@
 	
 	AuthorsArray = [[NSMutableArray alloc] initWithCapacity:100];
 	
-	AuthorCount = -1;							
+	AuthorCount = 0;							
 	WorkCount = 0;
 	
 	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
@@ -47,9 +47,7 @@
 	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
-	
-	// Set the view controller as the window's root view controller and display.
-    //self.window.rootViewController = self.viewController;
+
     [self.window makeKeyAndVisible];
 
 	return YES;
@@ -62,8 +60,7 @@
 	
 	if([elementName isEqualToString:@"Author"])
 	{		
-		AuthorCount++;
-		WorkCount = -1;
+		WorkCount = 0;
 		
 		Author *newAuthor = [[Author alloc] init];
 		NSString *thename = [attributeDict objectForKey:@"name"];
@@ -77,28 +74,30 @@
 	}
 	else if ([elementName isEqualToString:@"Work"])
 	{	
-		WorkCount ++;
 		NSString *url = [attributeDict objectForKey:@"url"];
 		NSString *name = [attributeDict objectForKey:@"name"]; 
 		
 		Work *w = [[Work alloc] init];
 		w.name = name;
-		w.iconURL = url;
+		w.workURL = url;
 		
 		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
 		[a.WorksArray addObject:w];
+		[w release];
 	}
 	else if ([elementName isEqualToString:@"Chapter"])
 	{	
 		NSString *name = [attributeDict objectForKey:@"name"];
 		NSString *url = [attributeDict objectForKey:@"url"]; 
 		
+		// This is the key to setting up the array. The counts are incremented as the XML file is being parsed.
+		// That serves as a place holder to know where to insert the 'Chapters'.
 		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
 		Work *w = [a.WorksArray objectAtIndex:WorkCount];
 		
 		Work *newOne = [[Work alloc] init];
 		newOne.name = name;
-		newOne.iconURL = url;
+		newOne.workURL = url;
 		
 		[w.ChaptersArray addObject:newOne];
 	}
@@ -111,6 +110,15 @@
 	{
 		NSLog(@"Done Parsing Prokope");
 	}
+	else if ([elementName isEqualToString:@"Author"])
+	{
+		AuthorCount ++;
+	}
+	else if ([elementName isEqualToString:@"Work"])
+	{
+		WorkCount ++;
+	}
+	
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

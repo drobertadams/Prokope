@@ -97,10 +97,10 @@
 				949E80901395ADA90069CE08 /* Author.m */,
 				949E80B71395B02C0069CE08 /* Work.h */,
 				949E80B81395B02C0069CE08 /* Work.m */,
-				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
-				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
 				473349631381A73A003F323B /* WebViewController.h */,
 				473349641381A73A003F323B /* WebViewController.m */,
+				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
+				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";

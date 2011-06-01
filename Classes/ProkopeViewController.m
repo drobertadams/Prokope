@@ -115,11 +115,7 @@
 		
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
-		
-//	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
-//	MyURLData = [[NSMutableArray alloc] initWithObjects: @"http://www.stenudd.com/myth/greek/images/plato.jpg", 
-//				 @"http://www.stenudd.com/myth/greek/images/plato.jpg", @"http://www.stenudd.com/myth/greek/images/plato3.jpg",
-//				 @"http://www.stenudd.com/myth/greek/images/plato4.jpg", nil];
+
 }
 
 

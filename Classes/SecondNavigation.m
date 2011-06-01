@@ -88,10 +88,10 @@
 	
 	Work *w = [MySecondArray objectAtIndex:indexPath.row];
 	
-	if (w.iconURL != nil)
+	if (w.workURL != nil)
 	{	
 		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-		[doc setTitle:w.iconURL];
+		[doc setTitle:w.workURL];
 		
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];

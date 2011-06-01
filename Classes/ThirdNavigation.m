@@ -67,7 +67,7 @@
 	Work *w = [MyThirdArray objectAtIndex:indexPath.row];
 	
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-	[doc setTitle:w.iconURL];
+	[doc setTitle:w.workURL];
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];
