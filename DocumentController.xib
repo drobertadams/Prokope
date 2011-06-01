@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="15"/>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -45,7 +45,7 @@
 					<object class="IBUIWebView" id="947363872">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrameSize">{481, 485}</string>
+						<string key="NSFrame">{{0, 7}, {481, 478}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="280161330">
 							<int key="NSColorSpace">1</int>
@@ -59,7 +59,7 @@
 					<object class="IBUIWebView" id="1015389768">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{489, 0}, {369, 485}}</string>
+						<string key="NSFrame">{{489, 7}, {369, 478}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -92,7 +92,7 @@
 					<object class="IBUIToolbar" id="481248534">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">266</int>
-						<string key="NSFrame">{{0, 704}, {1024, 44}}</string>
+						<string key="NSFrame">{{0, 660}, {1024, 44}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -102,7 +102,7 @@
 						</object>
 					</object>
 				</object>
-				<string key="NSFrameSize">{1024, 748}</string>
+				<string key="NSFrameSize">{1024, 704}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
@@ -111,6 +111,9 @@
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
+				</object>
+				<object class="IBUISimulatedNavigationBarMetrics" key="IBUISimulatedTopBarMetrics">
+					<bool key="IBUIPrompted">NO</bool>
 				</object>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 					<int key="interfaceOrientation">3</int>
@@ -248,7 +251,7 @@
 					<string>DocumentController</string>
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{466, 68}, {1039, 688}}</string>
+					<string>{{241, 68}, {1039, 688}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -264,7 +267,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDeAAAxDWAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAxC+AAA</bytes>
 					</object>
 				</object>
 			</object>
