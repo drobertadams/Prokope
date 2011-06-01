@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ThirdNavigation : UIViewController {
+@interface ThirdNavigation : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
 	IBOutlet UITableView *ThirdTableView;
 	NSMutableArray *MyThirdArray;
