@@ -19,9 +19,6 @@
 		*commentary,	// where the commentary is displayed
 		*vocabulary,	// where the vocabulary is displayed
 		*sidebar;		// the sidebar
-	
-	NSMutableData *receivedData; // data received from the server
-
 }
 
 // Utility method to extract an XML element from a string.

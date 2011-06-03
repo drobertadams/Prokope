@@ -24,22 +24,17 @@
 
 
 /******************************************************************************
- * Called whenever data is received. At this point we simply buffer it
- * until we are notified that the URL finished loading.
+ * Fetches and displays all the data related to a document.
  */
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{	
-	[receivedData appendData:data];
-}
-
-/******************************************************************************
- * Called when the URL connection is finished loading. Take the data that
- * was received (receivedData) and display it in the web view.
- */
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+- (void)fetchDocumentData
 {
+	// Fetch the document from the server.
+	NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
+	//	NSString *url = @"http://localhost/~adams/Private/Prokope/index.php/rest/document/4";
+	
 	// Convert the NSMutable data into a normal string.
-	NSString *data = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+	NSError *error;
+	NSString *data = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:url] encoding:NSUTF8StringEncoding error:&error];
 
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
@@ -79,8 +74,6 @@
 	doc = [self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data];
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
-	[receivedData release];
-	[connection release];
 	[data release];
 }
 
@@ -130,25 +123,8 @@
 	vocabulary.delegate = self;
 	sidebar.delegate = self;
 	
-	// Fetch the document from the server.
-	NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
-//	NSString *url = @"http://localhost/~adams/Private/Prokope/index.php/rest/document/4";
-
-	
-	// Build the request.
-	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url] 
-												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
-												timeoutInterval:30];
-	
-	// Fetch the document. These will call connection:didReceiveData and connectionDidFinishLoading.
-	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	if (theConnection) {
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable.
-		receivedData = [[NSMutableData data] retain];
-	} else {
-		// Inform the user that the connection failed.
-	}
+	// Go fetch and display the document.
+	[self fetchDocumentData];
 }
 
 
