@@ -42,7 +42,7 @@
 	[window addSubview:ProkopeNavigationController.view];
 	
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
-	[viewController SetDataArray:AuthorsArray];
+//	[viewController SetDataArray:AuthorsArray];
 	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
@@ -75,7 +75,8 @@
 	{	
 		NSString *url = [attributeDict objectForKey:@"url"];
 		NSString *name = [attributeDict objectForKey:@"name"]; 
-		
+		NSLog(url);
+		NSLog(name);
 	//	Work *w = [[Work alloc] init];
 	//	w.name = name;
 	//	w.workURL = url;
