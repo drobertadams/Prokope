@@ -9,6 +9,7 @@
 #import "ProkopeAppDelegate.h"
 #import "ProkopeViewController.h"
 #import "Author.h"
+#import "Work.h"
 
 @implementation ProkopeAppDelegate
 
@@ -20,8 +21,7 @@
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    
-	
+ 	
     // Override point for customization after app launch.
 	
 	AuthorsArray = [[NSMutableArray alloc] initWithCapacity:100];
@@ -33,6 +33,7 @@
 	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
+	// Set the parser's delgate to this class, since it implements the NSXMLParserDelegate protocol.
 	[parser setDelegate:self];
 	[parser parse];
 	[parser release];
@@ -57,7 +58,6 @@
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
 	attributes:(NSDictionary *)attributeDict {
 	
-	
 	if([elementName isEqualToString:@"author"])
 	{	
 		WorkCount = 0;
@@ -77,13 +77,13 @@
 		NSString *url = [attributeDict objectForKey:@"url"];
 		NSString *name = [attributeDict objectForKey:@"name"]; 
 
-	//	Work *w = [[Work alloc] init];
-	//	w.name = name;
-	//	w.workURL = url;
+		Work *w = [[Work alloc] init];
+		w.name = name;
+		w.workURL = url;
 		
-	//	Author *a = [AuthorsArray objectAtIndex:AuthorCount];
-	//	[a.WorksArray addObject:w];
-	//	[w release];
+		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
+		[a.WorksArray addObject:w];
+		[w release];
 	}
 	else if ([elementName isEqualToString:@"chapter"])
 	{	
@@ -92,21 +92,19 @@
 		
 		// This is the key to setting up the array. The counts are incremented as the XML file is being parsed.
 		// That serves as a place holder to know where to insert the 'Chapters'.
-	//	Author *a = [AuthorsArray objectAtIndex:AuthorCount];
-	//	Work *w = [a.WorksArray objectAtIndex:WorkCount];
+		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
+		Work *w = [a.WorksArray objectAtIndex:WorkCount];
 		
-	//	Work *newOne = [[Work alloc] init];
-	//	newOne.name = name;
-	//	newOne.workURL = url;
+		Work *newOne = [[Work alloc] init];
+		newOne.name = name;
+		newOne.workURL = url;
 		
-	//	[w.ChaptersArray addObject:newOne];
+		[w.ChaptersArray addObject:newOne];
 	}
 	else
 	{
 		NSLog(@"Unknown XML Element");
 	}
-
-
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 

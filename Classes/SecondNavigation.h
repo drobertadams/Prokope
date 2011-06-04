@@ -17,4 +17,6 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *SecondNavigationTableView;
 
+-(void)SetDataArray:(NSMutableArray *)dataArray;
+
 @end

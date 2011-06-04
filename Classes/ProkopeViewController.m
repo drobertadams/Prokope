@@ -75,8 +75,10 @@
 	
 	[ProkopeTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
+	Author *a = [AuthorsArray objectAtIndex:indexPath.row];
 	SecondNavigation *secondNav = [[SecondNavigation alloc] initWithNibName:@"SecondNavigation" bundle:nil];
-	//[secondNav setTitle:[myArrayData objectAtIndex:indexPath.row]];
+	[secondNav setTitle:a.name];
+	[secondNav SetDataArray:a.WorksArray];
 	
 	// Pushes the view controller on the navigation stack. The navigation controller takes care of the rest. 
 	[self.navigationController pushViewController:secondNav animated:YES];

@@ -8,6 +8,8 @@
 
 #import "SecondNavigation.h"
 #import "DocumentController.h"
+#import "Author.h"
+#import "Work.h"
 
 @implementation SecondNavigation
 
@@ -41,13 +43,12 @@
 	
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	NSString *text = [[self title] stringByAppendingString:@" Work"];
-	
-	myArrayData = [[NSMutableArray alloc] initWithObjects:[text stringByAppendingString:@" 1"] , [text stringByAppendingString:@" 2"], 
-			   [text stringByAppendingString:@" 3"], [text stringByAppendingString:@" 4"],
-			   [text stringByAppendingString:@" 5"], [text stringByAppendingString:@" 6"],  nil];
 }
 
+-(void)SetDataArray:(NSMutableArray *)dataArray
+{
+	myArrayData = dataArray;
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
@@ -64,7 +65,10 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
+	// get the Author object and populate the table with the name of that work in the array.
+    Author *a = [myArrayData objectAtIndex:indexPath.row];
+	
+    cell.textLabel.text = a.name;
 	
     return cell;
 }
@@ -74,8 +78,11 @@
 	
 	[SecondNavigationTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
+	// get the Work object and grab the url in it to load the document controller.
+	Work *a = [myArrayData objectAtIndex:indexPath.row];
+	
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-	[doc setTitle:[myArrayData objectAtIndex:indexPath.row]];
+	[doc setTitle:a.workURL];
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];
