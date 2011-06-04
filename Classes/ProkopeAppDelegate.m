@@ -39,9 +39,7 @@
 	NSLog(someString);
 	//NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
 	//NSData* data = [NSData dataWithContentsOfFile: path];
-	NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-	
-	NSLog(@"Parsing set");
+	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data1];
 	
 	[parser setDelegate:self];
 	[parser parse];
@@ -53,7 +51,7 @@
 	[window addSubview:ProkopeNavigationController.view];
 	
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
-	[viewController SetDataArray:AuthorsArray];
+	//[viewController SetDataArray:AuthorsArray];
 	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
@@ -79,15 +77,16 @@
 		newAuthor.name = thename;
 		newAuthor.iconURL = icon;
 		
-	//	[AuthorsArray addObject:newAuthor];
+		NSLog(newAuthor.name);
+		
+		[AuthorsArray addObject:newAuthor];
 		
 	}
 	else if ([elementName isEqualToString:@"work"])
 	{	
 		NSString *url = [attributeDict objectForKey:@"url"];
 		NSString *name = [attributeDict objectForKey:@"name"]; 
-		NSLog(url);
-		NSLog(name);
+
 	//	Work *w = [[Work alloc] init];
 	//	w.name = name;
 	//	w.workURL = url;
@@ -112,6 +111,15 @@
 		
 	//	[w.ChaptersArray addObject:newOne];
 	}
+	else if ([elementName isEqualToString:@"prokope"])
+	{
+		NSLog(@"prokope");
+	}
+	else {
+		NSLog(@"Error");
+	}
+
+
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
