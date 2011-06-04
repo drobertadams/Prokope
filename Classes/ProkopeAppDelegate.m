@@ -29,17 +29,9 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 	
-	NSString *URL = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/index";
-	NSURL *url = [NSURL URLWithString:URL];
-	
-	NSURL *url1 = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/index"];
-	NSData *data1 = [NSData dataWithContentsOfURL:url1];  
-	NSString *someString = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-
-	NSLog(someString);
-	//NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
-	//NSData* data = [NSData dataWithContentsOfFile: path];
-	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data1];
+	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/index"];
+	NSData *data = [NSData dataWithContentsOfURL:url]; 
+	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
 	[parser setDelegate:self];
 	[parser parse];
@@ -52,7 +44,6 @@
 	
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
 	[viewController SetDataArray:AuthorsArray];
-	NSLog(@"%i",[AuthorsArray count]);
 	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
@@ -77,8 +68,6 @@
 		
 		newAuthor.name = thename;
 		newAuthor.iconURL = icon;
-		
-		NSLog(newAuthor.name);
 		
 		[AuthorsArray addObject:newAuthor];
 		
@@ -112,12 +101,9 @@
 		
 	//	[w.ChaptersArray addObject:newOne];
 	}
-	else if ([elementName isEqualToString:@"prokope"])
+	else
 	{
-		NSLog(@"prokope");
-	}
-	else {
-		NSLog(@"Error");
+		NSLog(@"Unknown XML Element");
 	}
 
 
@@ -138,7 +124,6 @@
 	{
 		WorkCount ++;
 	}
-	
 }
 
 
