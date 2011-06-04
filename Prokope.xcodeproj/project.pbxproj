@@ -52,7 +52,7 @@
 		8D1107310486CEB800E47090 /* Prokope-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Prokope-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		944D113E138AF36100DEF8B2 /* SecondNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondNavigation.h; sourceTree = "<group>"; };
 		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
-		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SecondNavigation.xib; sourceTree = "<group>"; };
+		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
 		94AE4B981399BAD000827A1E /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Author.h; sourceTree = "<group>"; };
 		94AE4B991399BAD000827A1E /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Author.m; sourceTree = "<group>"; };
 		94AE4D041399DAB100827A1E /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Work.h; sourceTree = "<group>"; };
@@ -87,7 +87,6 @@
 				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
 				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
 				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
-				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				473349631381A73A003F323B /* WebViewController.h */,
 				473349641381A73A003F323B /* WebViewController.m */,
 			);
@@ -127,9 +126,10 @@
 			isa = PBXGroup;
 			children = (
 				478B7173137A174600163956 /* README */,
-				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */,
+				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
+				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				473349651381A73A003F323B /* WebViewController.xib */,
 				8D1107310486CEB800E47090 /* Prokope-Info.plist */,
 			);
