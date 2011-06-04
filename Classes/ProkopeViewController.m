@@ -9,6 +9,7 @@
 #import "DocumentController.h"
 #import "ProkopeViewController.h"
 #import "SecondNavigation.h"
+#import "Author.h"
 
 @implementation ProkopeViewController
 
@@ -57,17 +58,14 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-	// The only line of code I added in this method. It populates the cells with the contents of the array
-    //cell.textLabel.text = [AuthorsArray objectAtIndex:indexPath.row];
+	Author *a = [AuthorsArray objectAtIndex:indexPath.row];
 	
-	NSString *AuthorName = 
+	NSString *url = a.iconURL;
+	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
+	cell.image = myimage;
 	
-	// Gets the URL from the corresponding entry in the MyURLData Array.
-//	NSString *url = [MyURLData objectAtIndex:indexPath.row];
-//	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
-//	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
-	
-//	cell.imageView.image = myimage;
+    cell.textLabel.text = a.name;
 	
     return cell;
 }
