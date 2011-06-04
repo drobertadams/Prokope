@@ -24,22 +24,17 @@
 
 
 /******************************************************************************
- * Called whenever data is received. At this point we simply buffer it
- * until we are notified that the URL finished loading.
+ * Fetches and displays all the data related to a document.
  */
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{	
-	[receivedData appendData:data];
-}
-
-/******************************************************************************
- * Called when the URL connection is finished loading. Take the data that
- * was received (receivedData) and display it in the web view.
- */
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+- (void)fetchDocumentData
 {
+	// Fetch the document from the server.
+	NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
+	//	NSString *url = @"http://localhost/~adams/Private/Prokope/index.php/rest/document/4";
+	
 	// Convert the NSMutable data into a normal string.
-	NSString *data = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+	NSError *error;
+	NSString *data = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:url] encoding:NSUTF8StringEncoding error:&error];
 
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
@@ -49,18 +44,36 @@
 
 	// Find the content of the commentary.
 	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
+	
+	// Construct a function to hide all comments except the ones associated with the
+	// given id (ref attribute)
+	NSString *js = 
+		@"<script lang=\"text/javascript\">"
+		"function show_only(ref)"
+		"{"
+		"	var comments = document.getElementsByTagName('li');"
+		"	for (i = 0; i < comments.length; i++) {"
+		"		if ( comments[i].getAttribute('ref') == ref ) {"
+		"			comments[i].style.display = 'list-item';"
+		"		}"
+		"		else {"
+		"			comments[i].style.display = 'none';"
+		"		}"
+		"	}"
+		"}"
+		"</script>";
+	doc = [doc stringByAppendingString:js];
 	[commentary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the vocabulary.
 	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
+	doc = [doc stringByAppendingString:js];
 	[vocabulary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the sidebar.
 	doc = [self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data];
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
-	[receivedData release];
-	[connection release];
 	[data release];
 }
 
@@ -86,7 +99,7 @@
 	// Return the data between the two.
 	return [data substringWithRange:dataRange];
 }
-	
+
 /******************************************************************************
  * Force the application to remain in landscape mode.
  */
@@ -110,26 +123,8 @@
 	vocabulary.delegate = self;
 	sidebar.delegate = self;
 	
-	// Fetch the document from the server.
-
-//	NSString *url = @"http://localhost:8082/rest/document/ag9wcm9rb3BlLXByb2plY3RyEwsSDURvY3VtZW50TW9kZWwYFQw";
-	NSString *url = @"http://prokope-project.appspot.com/rest/document/ag9wcm9rb3BlLXByb2plY3RyFQsSDURvY3VtZW50TW9kZWwYo5kCDA";
-
-	
-	// Build the request.
-	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url] 
-												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
-												timeoutInterval:30];
-	
-	// Fetch the document. These will call connection:didReceiveData and connectionDidFinishLoading.
-	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	if (theConnection) {
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable.
-		receivedData = [[NSMutableData data] retain];
-	} else {
-		// Inform the user that the connection failed.
-	}
+	// Go fetch and display the document.
+	[self fetchDocumentData];
 }
 
 
@@ -168,8 +163,14 @@
  */
 - (void) wordClicked:(NSString *)id
 {
-	// Simply print the word id in the commentary window.
-	[commentary loadHTMLString:id baseURL:nil];
+	//[commentary loadHTMLString:id baseURL:nil];
+	
+	// Call the javascript show_only() function in the commentary UIWebView to display all comments associated with the
+	// given id and hide all the others.
+	NSString *js = [NSString stringWithFormat: 
+							  @"show_only('%@');", id];
+	[commentary stringByEvaluatingJavaScriptFromString:js];	
+	[vocabulary stringByEvaluatingJavaScriptFromString:js];	
 }
 
 
