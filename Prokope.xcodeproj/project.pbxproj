@@ -70,17 +70,17 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				47B06D1C1379EC67008BFF61 /* DocumentController.h */,
-				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
-				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
-				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
-				944D113E138AF36100DEF8B2 /* SecondNavigation.h */,
-				944D113F138AF36100DEF8B2 /* SecondNavigation.m */,
-				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				1D3623240D0F684500981E51 /* ProkopeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ProkopeAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* ProkopeViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* ProkopeViewController.m */,
+				944D113E138AF36100DEF8B2 /* SecondNavigation.h */,
+				944D113F138AF36100DEF8B2 /* SecondNavigation.m */,
+				47B06D1C1379EC67008BFF61 /* DocumentController.h */,
+				47B06D1D1379EC67008BFF61 /* DocumentController.m */,
+				474766C11388AC94004FEFB2 /* DocumentViewerDelegate.h */,
+				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
+				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				473349631381A73A003F323B /* WebViewController.h */,
 				473349641381A73A003F323B /* WebViewController.m */,
 			);
