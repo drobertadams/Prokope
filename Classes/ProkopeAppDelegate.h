@@ -10,7 +10,9 @@
 
 @class ProkopeViewController;
 
-@interface ProkopeAppDelegate : NSObject <UIApplicationDelegate> {
+@protocol NSXMLParserDelegate;
+
+@interface ProkopeAppDelegate : NSObject <UIApplicationDelegate, NSXMLParserDelegate> {
     UIWindow *window;
     ProkopeViewController *viewController;
 	
