@@ -12,7 +12,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView;
+@synthesize ProkopeTableView, AuthorsArray;
 
 /******************************************************************************
  * Handles the event of the user wanting to display a document. Loads the
@@ -39,9 +39,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [myArrayData count];
+    return [AuthorsArray count];
 }
 
+-(void) SetDataArray: (NSMutableArray *)newArray
+{
+	AuthorsArray = newArray;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -54,14 +58,14 @@
     }
     
 	// The only line of code I added in this method. It populates the cells with the contents of the array
-    cell.textLabel.text = [myArrayData objectAtIndex:indexPath.row];
+    cell.textLabel.text = [AuthorsArray objectAtIndex:indexPath.row];
 	
 	// Gets the URL from the corresponding entry in the MyURLData Array.
-	NSString *url = [MyURLData objectAtIndex:indexPath.row];
-	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
-	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
+//	NSString *url = [MyURLData objectAtIndex:indexPath.row];
+//	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+//	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
 	
-	cell.imageView.image = myimage;
+//	cell.imageView.image = myimage;
 	
     return cell;
 }
@@ -72,7 +76,7 @@
 	[ProkopeTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	SecondNavigation *secondNav = [[SecondNavigation alloc] initWithNibName:@"SecondNavigation" bundle:nil];
-	[secondNav setTitle:[myArrayData objectAtIndex:indexPath.row]];
+	//[secondNav setTitle:[myArrayData objectAtIndex:indexPath.row]];
 	
 	// Pushes the view controller on the navigation stack. The navigation controller takes care of the rest. 
 	[self.navigationController pushViewController:secondNav animated:YES];
@@ -108,7 +112,7 @@
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
-	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
+//	myArrayData = [[NSMutableArray alloc] initWithObjects: @"Ceasar", @"Ciscero", @"Plato", @"Aristole", nil];
 	MyURLData = [[NSMutableArray alloc] initWithObjects: @"http://www.stenudd.com/myth/greek/images/plato.jpg", 
 				 @"http://www.stenudd.com/myth/greek/images/plato2.jpg", @"http://www.stenudd.com/myth/greek/images/plato3.jpg",
 				 @"http://www.stenudd.com/myth/greek/images/plato4.jpg", nil];

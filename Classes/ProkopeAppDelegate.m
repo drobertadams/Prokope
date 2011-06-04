@@ -8,6 +8,7 @@
 
 #import "ProkopeAppDelegate.h"
 #import "ProkopeViewController.h"
+#import "Author.h"
 
 @implementation ProkopeAppDelegate
 
@@ -28,9 +29,19 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 	
-	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
-	NSData* data = [NSData dataWithContentsOfFile: path];
-	NSXMLParser* parser = [[NSXMLParser alloc] initWithData: data];
+	NSString *URL = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/index";
+	NSURL *url = [NSURL URLWithString:URL];
+	
+	NSURL *url1 = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/index"];
+	NSData *data1 = [NSData dataWithContentsOfURL:url1];  
+	NSString *someString = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
+
+	NSLog(someString);
+	//NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
+	//NSData* data = [NSData dataWithContentsOfFile: path];
+	NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+	
+	NSLog(@"Parsing set");
 	
 	[parser setDelegate:self];
 	[parser parse];
@@ -42,7 +53,7 @@
 	[window addSubview:ProkopeNavigationController.view];
 	
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
-//	[viewController SetDataArray:AuthorsArray];
+	[viewController SetDataArray:AuthorsArray];
 	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
@@ -57,21 +68,21 @@
 	attributes:(NSDictionary *)attributeDict {
 	
 	
-	if([elementName isEqualToString:@"Author"])
-	{		
+	if([elementName isEqualToString:@"author"])
+	{	
 		WorkCount = 0;
 		
-	//	Author *newAuthor = [[Author alloc] init];
+		Author *newAuthor = [[Author alloc] init];
 		NSString *thename = [attributeDict objectForKey:@"name"];
 		NSString *icon = [attributeDict objectForKey:@"icon"];
 		
-	//	newAuthor.name = thename;
-	//	newAuthor.iconURL = icon;
+		newAuthor.name = thename;
+		newAuthor.iconURL = icon;
 		
 	//	[AuthorsArray addObject:newAuthor];
 		
 	}
-	else if ([elementName isEqualToString:@"Work"])
+	else if ([elementName isEqualToString:@"work"])
 	{	
 		NSString *url = [attributeDict objectForKey:@"url"];
 		NSString *name = [attributeDict objectForKey:@"name"]; 
@@ -85,7 +96,7 @@
 	//	[a.WorksArray addObject:w];
 	//	[w release];
 	}
-	else if ([elementName isEqualToString:@"Chapter"])
+	else if ([elementName isEqualToString:@"chapter"])
 	{	
 		NSString *name = [attributeDict objectForKey:@"name"];
 		NSString *url = [attributeDict objectForKey:@"url"]; 
@@ -106,15 +117,15 @@
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
-	if([elementName isEqualToString:@"Prokope"])
+	if([elementName isEqualToString:@"prokope"])
 	{
 		NSLog(@"Done Parsing Prokope");
 	}
-	else if ([elementName isEqualToString:@"Author"])
+	else if ([elementName isEqualToString:@"author"])
 	{
 		AuthorCount ++;
 	}
-	else if ([elementName isEqualToString:@"Work"])
+	else if ([elementName isEqualToString:@"work"])
 	{
 		WorkCount ++;
 	}

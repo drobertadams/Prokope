@@ -11,4 +11,15 @@
 
 @implementation Author
 
+@synthesize name, iconURL, WorksArray;
+
+-(id)init
+{
+    if (self = [super init])
+    {
+		WorksArray = [[NSMutableArray alloc] initWithCapacity:100];
+    }
+    return self;
+}
+
 @end
