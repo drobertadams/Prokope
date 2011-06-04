@@ -26,7 +26,7 @@ table.
 @property (nonatomic, retain) NSMutableArray *AuthorsArray;
 
 - (IBAction) showDocument; // action to display a document
--(void) SetDataArray: (NSMutableArray *)newArray;
+-(void)SetDataArray:(NSMutableArray *)dataArray;
 
 @end
 

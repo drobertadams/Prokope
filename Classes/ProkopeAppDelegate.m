@@ -51,7 +51,8 @@
 	[window addSubview:ProkopeNavigationController.view];
 	
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
-	//[viewController SetDataArray:AuthorsArray];
+	[viewController SetDataArray:AuthorsArray];
+	NSLog(@"%i",[AuthorsArray count]);
 	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];

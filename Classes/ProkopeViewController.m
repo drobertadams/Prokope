@@ -42,9 +42,9 @@
     return [AuthorsArray count];
 }
 
--(void) SetDataArray: (NSMutableArray *)newArray
+-(void)SetDataArray:(NSMutableArray *)dataArray
 {
-	AuthorsArray = newArray;
+	AuthorsArray = dataArray;
 }
 
 // Customize the appearance of table view cells.
@@ -58,7 +58,9 @@
     }
     
 	// The only line of code I added in this method. It populates the cells with the contents of the array
-    cell.textLabel.text = [AuthorsArray objectAtIndex:indexPath.row];
+    //cell.textLabel.text = [AuthorsArray objectAtIndex:indexPath.row];
+	
+	NSString *AuthorName = 
 	
 	// Gets the URL from the corresponding entry in the MyURLData Array.
 //	NSString *url = [MyURLData objectAtIndex:indexPath.row];
