@@ -14,7 +14,7 @@
 to implement the necessary methods for a table view to respond to actions and load data into the
 table. 
  */
-@interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
 
 	IBOutlet UITableView *ProkopeTableView;
 	NSMutableArray *AuthorsArray;
@@ -27,6 +27,7 @@ table.
 
 - (IBAction) showDocument; // action to display a document
 -(void)SetDataArray:(NSMutableArray *)dataArray;
+-(void)ShowAlert;
 
 @end
 

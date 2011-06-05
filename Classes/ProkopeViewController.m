@@ -113,9 +113,29 @@
 		
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
-		
+	[self ShowAlert];
 }
 
+-(void)ShowAlert
+{
+	UIAlertView *alertDialog;
+	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"quit" otherButtonTitles:@"ok", nil];
+		
+	UITextField *userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
+	[userInput setBackgroundColor:[UIColor whiteColor]];
+	[userInput setText:@"User Name"];
+	[userInput setClearsOnBeginEditing:YES];
+	
+	UITextField *userInput2 = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
+	[userInput2 setBackgroundColor:[UIColor whiteColor]];
+	[userInput2 setText:@"PassWord"];
+	[userInput2 setClearsOnBeginEditing:YES];
+	
+	[alertDialog addSubview:userInput];
+	[alertDialog addSubview:userInput2];
+	[alertDialog show];
+	[alertDialog release];
+}
 
 
 - (void)dealloc {
