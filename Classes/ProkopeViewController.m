@@ -199,7 +199,7 @@
 		[SecondShelf addSubview:ProgramButton];
 		x_cord += 50;
 	}
-	x_cord += 100;
+	x_cord += 85;
 	
 	NSURL *url = [NSURL URLWithString: MyAuth.iconURL]; 
 	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
