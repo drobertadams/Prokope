@@ -138,6 +138,8 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
 		[ProgramButton addTarget:self action:@selector(AuthorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		
+		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[BookShelfImage addSubview:ProgramButton];
 		x_cord += 50;
@@ -167,7 +169,6 @@
 {
 	[self ClearSecondShelf];
 	UIButton *resultButton = (UIButton *)sender;
- //   NSLog(@" The button's title is %@.", resultButton.currentTitle);
 	CurrentAuthor = resultButton.currentTitle;
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
@@ -235,7 +236,7 @@
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields
  * that are created and then added to the alert. Two buttons are also created in the 
- * initialization code. Furthermore the message is set to "\n\n\n" to 'stretch' the 
+ * initialization code. Furthermore the message is set to "\n\n\n..." to 'stretch' the 
  * alertView's boundries to include the two UITextFields.
  */
 -(void)ShowAlert
