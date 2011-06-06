@@ -10,10 +10,11 @@
 #import "ProkopeViewController.h"
 #import "SecondNavigation.h"
 #import "Author.h"
+#import "Work.h"
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, NameLabel, BookShelfImage;
+@synthesize ProkopeTableView, NameLabel, BookShelfImage, SecondShelf, CurrentAuthor;
 
 
 /******************************************************************************
@@ -101,6 +102,8 @@
 	// e.g. self.myOutlet = nil;
 }
 
+
+
 -(void)viewDidLoad
 {
 	self.title = @"Prokope Home Page";
@@ -109,11 +112,125 @@
 	// You must set the delegate and dataSource of the table to self, otherwise it will just be an empty table.
 	ProkopeTableView.delegate = self;
 	ProkopeTableView.dataSource = self;
+	
+	[SecondShelf setBackgroundColor:[UIColor clearColor]];
 		
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self ShowAlert];
+	
+	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
+	
+	int x_cord = 20;
+	int count = 0;
+	
+	// This loop populates the 'top shelf' of the BookShelfImage.
+	for (Author *a in AuthorsArray)
+	{
+		NSLog(a.name);
+		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		ProgramButton.frame = CGRectMake(x_cord, 100, 150, 40);
+		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:30]];
+		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
+		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
+		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
+		[ProgramButton addTarget:self action:@selector(AuthorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
+		[BookShelfImage addSubview:ProgramButton];
+		x_cord += 50;
+		count++;
+	}
 }
+
+/******************************************************************************
+ * This method simply removes all the UIViews from the SecondShelf View. It is 
+ * necessary to clear the shelf and load the new books when another 'book' on the
+ * shelf is clicked.
+ */
+-(void)ClearSecondShelf
+{
+	NSArray *viewsToRemove = [self.SecondShelf subviews];
+	for (UIView *v in viewsToRemove)
+	{
+		[v removeFromSuperview];
+	}
+}
+
+/******************************************************************************
+ * This method is called when something in the table was clicked. It creates a SecondNavigation
+ * object and sets its array to the WorksArray of the corresponding cell that was clicked.
+ */
+-(void)AuthorButtonClicked:(id)sender
+{
+	[self ClearSecondShelf];
+	UIButton *resultButton = (UIButton *)sender;
+ //   NSLog(@" The button's title is %@.", resultButton.currentTitle);
+	CurrentAuthor = resultButton.currentTitle;
+	Author *MyAuth;
+	for (Author *auth in AuthorsArray)
+	{
+		if([auth.name isEqualToString:resultButton.currentTitle])
+		{
+			MyAuth = auth;
+			break;
+		}
+	}
+	
+	int x_cord = -20;
+
+	// This loop adds the books on the second level of the book shelf.
+	for (Work *work in MyAuth.WorksArray)
+	{
+		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		ProgramButton.frame = CGRectMake(x_cord, 85, 200, 40);
+		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
+		[ProgramButton setTitle:work.name forState:UIControlStateNormal];
+		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
+		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
+		[ProgramButton addTarget:self action:@selector(WorkButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
+		[SecondShelf addSubview:ProgramButton];
+		x_cord += 50;
+	}
+}
+
+/******************************************************************************
+ * This method is used as the selector when when a second level book is selected.
+ * There is a series of loops that have to be done in order to get to the correct
+ * work in the AuthorsArray. It then loads the DocumentController of that work it its
+ * URL.
+ */
+-(void)WorkButtonClicked:(id)sender
+{
+	UIButton *resultButton = (UIButton *)sender;
+	Work *MyAuth;
+	for (Author *auth in AuthorsArray)
+	{
+		if([auth.name isEqualToString:CurrentAuthor])
+		{
+			for (Work *worktitle in auth.WorksArray)
+			{
+				if ([worktitle.name isEqualToString:resultButton.currentTitle])
+				{
+					MyAuth = worktitle;
+					break;
+				}
+			}
+		}
+	}	
+	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
+	[doc setTitle:MyAuth.workURL];
+	
+	[self.navigationController pushViewController:doc animated:YES];
+	[doc release];
+}
+
 
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields

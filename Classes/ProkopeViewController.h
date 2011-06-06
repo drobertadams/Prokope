@@ -17,25 +17,35 @@ table.
 @interface ProkopeViewController : UIViewController 
 		<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIAlertViewDelegate> {
 
+	NSMutableArray *AuthorsArray;
+			
 	IBOutlet UITableView *ProkopeTableView;
 	IBOutlet UILabel *NameLabel;
-	NSMutableArray *AuthorsArray;
 	IBOutlet UIImageView *BookShelfImage;
+	IBOutlet UIView *SecondShelf;
 			
+	UIImage *BookSpine;
+	
 	// userInput is the UITextField added to the AlertView to capture the user's name.
 	UITextField *userInput;
 	
 	// passInput is the UITextField added to the AlertView to capture the user's password.
 	UITextField *passInput;
 
+	NSString *CurrentAuthor;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
 @property (nonatomic, retain) IBOutlet UILabel *NameLabel;
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
+@property (nonatomic, retain) IBOutlet UIView *SecondShelf;
+@property (nonatomic, retain) NSString *CurrentAuthor;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 -(void)ShowAlert;
+-(void)AuthorButtonClicked:(id)sender;
+-(void)ClearSecondShelf;
+-(void)WorkButtonClicked:(id)sender;
 
 @end
 
