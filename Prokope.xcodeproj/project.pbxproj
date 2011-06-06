@@ -23,10 +23,10 @@
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
 		944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D113F138AF36100DEF8B2 /* SecondNavigation.m */; };
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
-		947C74A0139C55B700D85DF7 /* BookCase.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 947C749F139C55B700D85DF7 /* BookCase.jpg */; };
-		947C74A2139C55BE00D85DF7 /* BookSpine2.png in Resources */ = {isa = PBXBuildFile; fileRef = 947C74A1139C55BE00D85DF7 /* BookSpine2.png */; };
 		94AE4B9A1399BAD000827A1E /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4B991399BAD000827A1E /* Author.m */; };
 		94AE4D061399DAB100827A1E /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4D051399DAB100827A1E /* Work.m */; };
+		94B372F4139D4EB60039CC52 /* BookCase.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 94B372F2139D4EB60039CC52 /* BookCase.jpg */; };
+		94B372F5139D4EB60039CC52 /* BookSpine2.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B372F3139D4EB60039CC52 /* BookSpine2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,12 +55,12 @@
 		944D113E138AF36100DEF8B2 /* SecondNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondNavigation.h; sourceTree = "<group>"; };
 		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
-		947C749F139C55B700D85DF7 /* BookCase.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = BookCase.jpg; path = ../../../Downloads/BookCase.jpg; sourceTree = SOURCE_ROOT; };
-		947C74A1139C55BE00D85DF7 /* BookSpine2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BookSpine2.png; path = ../../../Downloads/BookSpine2.png; sourceTree = SOURCE_ROOT; };
 		94AE4B981399BAD000827A1E /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Author.h; sourceTree = "<group>"; };
 		94AE4B991399BAD000827A1E /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Author.m; sourceTree = "<group>"; };
 		94AE4D041399DAB100827A1E /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Work.h; sourceTree = "<group>"; };
 		94AE4D051399DAB100827A1E /* Work.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Work.m; sourceTree = "<group>"; };
+		94B372F2139D4EB60039CC52 /* BookCase.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BookCase.jpg; sourceTree = "<group>"; };
+		94B372F3139D4EB60039CC52 /* BookSpine2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BookSpine2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,8 +129,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				947C749F139C55B700D85DF7 /* BookCase.jpg */,
-				947C74A1139C55BE00D85DF7 /* BookSpine2.png */,
+				94B372F2139D4EB60039CC52 /* BookCase.jpg */,
+				94B372F3139D4EB60039CC52 /* BookSpine2.png */,
 				478B7173137A174600163956 /* README */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				2899E5210DE3E06400AC0155 /* ProkopeViewController.xib */,
@@ -221,8 +221,8 @@
 				478B7174137A174600163956 /* README in Resources */,
 				473349671381A73A003F323B /* WebViewController.xib in Resources */,
 				944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */,
-				947C74A0139C55B700D85DF7 /* BookCase.jpg in Resources */,
-				947C74A2139C55BE00D85DF7 /* BookSpine2.png in Resources */,
+				94B372F4139D4EB60039CC52 /* BookCase.jpg in Resources */,
+				94B372F5139D4EB60039CC52 /* BookSpine2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
