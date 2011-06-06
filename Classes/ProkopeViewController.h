@@ -20,7 +20,11 @@ table.
 	IBOutlet UITableView *ProkopeTableView;
 	IBOutlet UILabel *NameLabel;
 	NSMutableArray *AuthorsArray;
+	
+	// userInput is the UITextField added to the AlertView to capture the user's name.
 	UITextField *userInput;
+	
+	// passInput is the UITextField added to the AlertView to capture the user's password.
 	UITextField *passInput;
 
 }
