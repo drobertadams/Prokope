@@ -199,6 +199,13 @@
 		[SecondShelf addSubview:ProgramButton];
 		x_cord += 50;
 	}
+	x_cord += 100;
+	
+	NSURL *url = [NSURL URLWithString: MyAuth.iconURL]; 
+	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
+	UIImageView *myi = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 100, 100, 100)];
+	[myi setImage:image];
+	[SecondShelf addSubview:myi];
 }
 
 /******************************************************************************

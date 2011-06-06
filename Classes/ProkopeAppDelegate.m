@@ -110,7 +110,7 @@
 	}
 	else
 	{
-		NSLog(@"Unknown XML Element");
+	//	NSLog(@"Unknown XML Element");
 	}
 }
 
