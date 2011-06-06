@@ -13,7 +13,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, AuthorsArray, NameLabel;
+@synthesize ProkopeTableView, NameLabel, BookShelfImage;
 
 
 /******************************************************************************

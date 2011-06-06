@@ -20,7 +20,8 @@ table.
 	IBOutlet UITableView *ProkopeTableView;
 	IBOutlet UILabel *NameLabel;
 	NSMutableArray *AuthorsArray;
-	
+	IBOutlet UIImageView *BookShelfImage;
+			
 	// userInput is the UITextField added to the AlertView to capture the user's name.
 	UITextField *userInput;
 	
@@ -30,8 +31,8 @@ table.
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
-@property (nonatomic, retain) NSMutableArray *AuthorsArray;
 @property (nonatomic, retain) IBOutlet UILabel *NameLabel;
+@property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 -(void)ShowAlert;
