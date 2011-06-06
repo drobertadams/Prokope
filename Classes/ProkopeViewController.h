@@ -14,18 +14,21 @@
 to implement the necessary methods for a table view to respond to actions and load data into the
 table. 
  */
-@interface ProkopeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
+@interface ProkopeViewController : UIViewController 
+		<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIAlertViewDelegate> {
 
 	IBOutlet UITableView *ProkopeTableView;
+	IBOutlet UILabel *NameLabel;
 	NSMutableArray *AuthorsArray;
-	NSMutableArray *MyURLData;
-	
+	UITextField *userInput;
+	UITextField *passInput;
+
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
 @property (nonatomic, retain) NSMutableArray *AuthorsArray;
+@property (nonatomic, retain) IBOutlet UILabel *NameLabel;
 
-- (IBAction) showDocument; // action to display a document
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 -(void)ShowAlert;
 

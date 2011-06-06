@@ -45,6 +45,9 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+/******************************************************************************
+ * This method is used by the ProkopeViewController to populate this Array.
+ */
 -(void)SetDataArray:(NSMutableArray *)dataArray
 {
 	myArrayData = dataArray;
@@ -55,7 +58,9 @@
     return YES;
 }
 
-// Customize the appearance of table view cells.
+/******************************************************************************
+ * Sets the name of the cell to name of the author's work
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
@@ -73,7 +78,10 @@
     return cell;
 }
 
-// This method repsonds to the touch on an item in the table view.
+/******************************************************************************
+ * This method is called when something in the table was clicked. It creates a DocumentController
+ * object and sets its url to the url of the corresponding cell that was clicked.
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	[SecondNavigationTableView deselectRowAtIndexPath:indexPath animated:YES];

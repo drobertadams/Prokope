@@ -43,6 +43,8 @@
 	
 	[window addSubview:ProkopeNavigationController.view];
 	
+	// Calling the SetDataArray will give the next controller the data we got from parsing the XML file.
+	// It is an essential method, and it is how controllers pass data to other controllers. 
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
 	[viewController SetDataArray:AuthorsArray];
 	
@@ -54,6 +56,11 @@
 	return YES;
 }
 
+/******************************************************************************
+ * This method is used by the NSXMLParserDelegate protocol and it populates all
+ * the data from the XML file. The data is populated with Authors, Works, and
+ * Chapters using NSMutableArrays for each of these XML tags.
+ */
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
 	attributes:(NSDictionary *)attributeDict {
@@ -107,6 +114,10 @@
 	}
 }
 
+/******************************************************************************
+ * This method is used by the NSXMLParserDelegate protocol and it keeps track of
+ * what the current author and work are. 
+ */
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
@@ -116,6 +127,8 @@
 	}
 	else if ([elementName isEqualToString:@"author"])
 	{
+		// Since the NSXMLParserDelegate is an event driven parser these 'counts' are incremented
+		// in order to know what the current author and work are. 
 		AuthorCount ++;
 	}
 	else if ([elementName isEqualToString:@"work"])
