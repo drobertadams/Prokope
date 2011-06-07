@@ -22,8 +22,11 @@ table.
 	IBOutlet UITableView *ProkopeTableView;
 	IBOutlet UILabel *NameLabel;
 	IBOutlet UIImageView *BookShelfImage;
+	
+	// Three IBOutlet UIScrollView's that hold the three layers of the bookshelf.
 	IBOutlet UIScrollView *FirstShelf;
 	IBOutlet UIScrollView *SecondShelf;
+	IBOutlet UIScrollView *ThirdShelfScroll;
 			
 	UIImage *BookSpine;
 	
@@ -34,24 +37,30 @@ table.
 	UITextField *passInput;
 
 	NSString *CurrentAuthor;
-			
-	IBOutlet UIScrollView *ThirdShelfScroll;
+	NSString *CurrentWork;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
 @property (nonatomic, retain) IBOutlet UILabel *NameLabel;
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
 @property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
-@property (nonatomic, retain) NSString *CurrentAuthor;
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
 @property (nonatomic, retain) IBOutlet UIScrollView *FirstShelf;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
--(void)ShowAlert;
--(void)AuthorButtonClicked:(id)sender;
--(void)ClearSecondShelf;
--(void)WorkButtonClicked:(id)sender;
+
+-(void)FirstShelfButtonClicked:(id)sender;
+-(void)SecondShelfButtonClicked:(id)sender;
+-(void)ThirdShelfButtonClicked:(id)sender;
+
 -(void)PopulateScroll;
+
+-(void)ClearFirstShelfFonts;
+-(void)ClearSecondShelf;
+-(void)ClearSecondShelfFonts;
+-(void)ClearThirdShelf;
+
+-(void)ShowAlert;
 
 @end
 

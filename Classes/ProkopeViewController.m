@@ -14,7 +14,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, NameLabel, BookShelfImage, SecondShelf, CurrentAuthor, ThirdShelfScroll, FirstShelf;
+@synthesize ProkopeTableView, NameLabel, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf;
 
 
 /******************************************************************************
@@ -102,11 +102,12 @@
 	// e.g. self.myOutlet = nil;
 }
 
+/******************************************************************************
+ * This method used to demo a horizontal scroll bar.
+ */
 -(void)PopulateScroll
 {
 	int x_cord = -65;
-	
-	// This loop populates the 'top shelf' of the BookShelfImage.
 	for (int i = 0; i <= 25; i++)
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -118,18 +119,18 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
-	//	[ProgramButton addTarget:self action:@selector(AuthorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-		
-		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[ThirdShelfScroll addSubview:ProgramButton];
 		x_cord += 50;
 	}
 	[ThirdShelfScroll setScrollEnabled:YES];
 	[ThirdShelfScroll setContentSize:CGSizeMake(x_cord + 40, ThirdShelfScroll.frame.size.height)];
-
 }
 
+/******************************************************************************
+ * This method is called when the view is loaded. Custom code is called to configure
+ * the application.
+ */
 -(void)viewDidLoad
 {
 	self.title = @"Prokope - Intermediate Latin Reader";
@@ -139,84 +140,53 @@
 	ProkopeTableView.delegate = self;
 	ProkopeTableView.dataSource = self;
 	
-	[SecondShelf setBackgroundColor:[UIColor clearColor]];
-		
+//	NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: @"http://www.justinantranikian.com/Photos/StoneBook2.png"]];
+//	BookShelfImage.image = [UIImage imageWithData: imageData];
+	
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self ShowAlert];
 	
-//	NSURL *url = [NSURL URLWithString: @"http://www.justinantranikian.com/Photos/StoneBook.png"]; 
-//	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
-//	[BookShelfImage setImage:image];
-	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
 	
 	int x_cord = -70 + 10;
-	int count = 0;
-	
 	// This loop populates the 'top shelf' of the BookShelfImage.
 	for (Author *a in AuthorsArray)
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 		ProgramButton.frame = CGRectMake(x_cord, 70, FirstShelf.frame.size.height, 40);
-		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:30]];
+		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
 		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
 		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
-		[ProgramButton addTarget:self action:@selector(AuthorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		[ProgramButton addTarget:self action:@selector(FirstShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 		
 		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[FirstShelf addSubview:ProgramButton];
 		x_cord += 50;
-		count++;
 	}
 	[self PopulateScroll];
 }
 
-/******************************************************************************
- * This method simply removes all the UIViews from the SecondShelf View. It is 
- * necessary to clear the shelf and load the new books when another 'book' on the
- * shelf is clicked.
- */
--(void)ClearSecondShelf
-{
-	NSArray *viewsToRemove = [self.SecondShelf subviews];
-	for (UIView *v in viewsToRemove)
-	{
-		[v removeFromSuperview];
-	}
-}
 
 /******************************************************************************
  * This method is called when something in the table was clicked. It creates a SecondNavigation
  * object and sets its array to the WorksArray of the corresponding cell that was clicked.
  */
--(void)AuthorButtonClicked:(id)sender
+-(void)FirstShelfButtonClicked:(id)sender
 {
 	[self ClearSecondShelf];
-	
-	NSArray *viewsToChange = [self.FirstShelf subviews];
-	for (UIView *v in viewsToChange)
-	{
-		if ([v isKindOfClass: [UIButton class]])
-		{
-			UIButton *button = (UIButton *)v;
-			[button setFont:[UIFont systemFontOfSize:25.0]];
-			NSLog(button.currentTitle);
-		}
-		else if ([v isKindOfClass: [UIImageView class]]){
-			NSLog(@"OTHER");
-		}
+	[self ClearThirdShelf];
+	[self ClearFirstShelfFonts];
 
-	}
-	
 	UIButton *resultButton = (UIButton *)sender;
 	CurrentAuthor = resultButton.currentTitle;
-	[resultButton setFont:[UIFont italicSystemFontOfSize:30.0]];
+	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:30.0];
+	resultButton.titleLabel.font = myFont;
 	
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
@@ -250,7 +220,7 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
-		[ProgramButton addTarget:self action:@selector(WorkButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		[ProgramButton addTarget:self action:@selector(SecondShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[SecondShelf addSubview:ProgramButton];
 		x_cord += 45;
@@ -272,24 +242,88 @@
  * work in the AuthorsArray. It then loads the DocumentController of that work it its
  * URL.
  */
--(void)WorkButtonClicked:(id)sender
+-(void)SecondShelfButtonClicked:(id)sender
 {
+	[self ClearThirdShelf];
+	[self ClearSecondShelfFonts];
+	
 	UIButton *resultButton = (UIButton *)sender;
+	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
+	resultButton.titleLabel.font = myFont;
+	
+	CurrentWork = resultButton.currentTitle;
+	
 	Work *MyAuth;
 	for (Author *auth in AuthorsArray)
 	{
-		if([auth.name isEqualToString:CurrentAuthor])
+		for (Work *worktitle in auth.WorksArray)
 		{
-			for (Work *worktitle in auth.WorksArray)
+			if ([worktitle.name isEqualToString:resultButton.currentTitle])
 			{
-				if ([worktitle.name isEqualToString:resultButton.currentTitle])
+				MyAuth = worktitle;
+				break;
+			}
+		}
+	}
+	
+	if(MyAuth.workURL != nil)
+	{
+		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
+		[doc setTitle:MyAuth.workURL];
+	
+		[self.navigationController pushViewController:doc animated:YES];
+		[doc release];
+	}
+	else 
+	{
+		int x_cord = 10;
+		for (Work *work in MyAuth.ChaptersArray)
+		{
+			UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+			ProgramButton.frame = CGRectMake(x_cord, 85, 200, 40);
+			[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
+			[ProgramButton setTitle:work.name forState:UIControlStateNormal];
+			[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
+			[ProgramButton setBackgroundColor:[UIColor cyanColor]];
+			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
+			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
+			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
+			[ProgramButton addTarget:self action:@selector(ThirdShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+			ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
+			[ThirdShelfScroll addSubview:ProgramButton];
+			x_cord += 45;
+		}
+		[ThirdShelfScroll setScrollEnabled:YES];
+		[ThirdShelfScroll setContentSize:CGSizeMake(x_cord + 40, ThirdShelfScroll.frame.size.height)];
+	}
+
+}
+
+/******************************************************************************
+ * This method is used as the selector when when a third level book is selected.
+ * There is a series of loops that have to be done in order to get to the correct
+ * work in the ChaptersArray. It then loads the DocumentController of that work it its
+ * URL.
+ */
+-(void)ThirdShelfButtonClicked:(id)sender
+{
+	UIButton *resultButton = (UIButton *)sender;
+	
+	Work *MyAuth;
+	for (Author *auth in AuthorsArray)
+	{
+		for (Work *worktitle in auth.WorksArray)
+		{
+			for (Work *chapter in worktitle.ChaptersArray)
+			{
+				if ([chapter.name isEqualToString:resultButton.currentTitle])
 				{
-					MyAuth = worktitle;
+					MyAuth = chapter;
 					break;
 				}
 			}
 		}
-	}	
+	}
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
 	[doc setTitle:MyAuth.workURL];
 	
@@ -297,6 +331,76 @@
 	[doc release];
 }
 
+
+/******************************************************************************
+ * This method is needed to reset the fonts of the first shelf. Once a button is
+ * clicked. 
+ */
+-(void)ClearFirstShelfFonts
+{
+	NSArray *viewsToChange = [self.FirstShelf subviews];
+	for (UIView *v in viewsToChange)
+	{
+		if ([v isKindOfClass: [UIButton class]])
+		{
+			UIButton *button = (UIButton *)v;
+			UIFont *font = [UIFont systemFontOfSize:25.0];
+			button.titleLabel.font = font;
+		}
+		else if ([v isKindOfClass: [UIImageView class]]){
+		//	NSLog(@"OTHER");
+		}
+		
+	}	
+}
+
+/******************************************************************************
+ * This method simply removes all the UIViews from the SecondShelf View. It is 
+ * necessary to clear the shelf and load the new books when another 'book' on the
+ * shelf is clicked.
+ */
+-(void)ClearSecondShelf
+{
+	NSArray *viewsToRemove = [self.SecondShelf subviews];
+	for (UIView *v in viewsToRemove)
+	{
+		[v removeFromSuperview];
+	}
+}
+
+/******************************************************************************
+ * This method is needed to reset the fonts of the second shelf once a button is
+ * clicked. 
+ */
+-(void)ClearSecondShelfFonts
+{
+	NSArray *viewsToChange = [self.SecondShelf subviews];
+	for (UIView *v in viewsToChange)
+	{
+		if ([v isKindOfClass: [UIButton class]])
+		{
+			UIButton *button = (UIButton *)v;
+			UIFont *font = [UIFont systemFontOfSize:25.0];
+			button.titleLabel.font = font;
+		}
+		else if ([v isKindOfClass: [UIImageView class]]){
+		//	NSLog(@"OTHER");
+		}
+		
+	}	
+}
+
+/******************************************************************************
+ * This method is needed to clear the third shelf of all the buttons in it.
+ */
+-(void)ClearThirdShelf
+{
+	NSArray *viewsToChange = [self.ThirdShelfScroll subviews];
+	for (UIView *v in viewsToChange)
+	{
+		[v removeFromSuperview];
+	}
+}
 
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields
