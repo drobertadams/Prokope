@@ -14,7 +14,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, NameLabel, BookShelfImage, SecondShelf, CurrentAuthor;
+@synthesize ProkopeTableView, NameLabel, BookShelfImage, SecondShelf, CurrentAuthor, ThirdShelfScroll, FirstShelf;
 
 
 /******************************************************************************
@@ -102,11 +102,37 @@
 	// e.g. self.myOutlet = nil;
 }
 
+-(void)PopulateScroll
+{
+	int x_cord = -65;
+	
+	// This loop populates the 'top shelf' of the BookShelfImage.
+	for (int i = 0; i <= 25; i++)
+	{
+		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		ProgramButton.frame = CGRectMake(x_cord, 75, 182, 40);
+		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:30]];
+		[ProgramButton setTitle:[NSString stringWithFormat:@"Title %i", i] forState:UIControlStateNormal];
+		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
+		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
+	//	[ProgramButton addTarget:self action:@selector(AuthorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		
+		// This line of code rotates the button to be facing vertical.
+		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
+		[ThirdShelfScroll addSubview:ProgramButton];
+		x_cord += 50;
+	}
+	[ThirdShelfScroll setScrollEnabled:YES];
+	[ThirdShelfScroll setContentSize:CGSizeMake(x_cord + 40, ThirdShelfScroll.frame.size.height)];
 
+}
 
 -(void)viewDidLoad
 {
-	self.title = @"Prokope Home Page";
+	self.title = @"Prokope - Intermediate Latin Reader";
 	[super viewDidLoad];
 		
 	// You must set the delegate and dataSource of the table to self, otherwise it will just be an empty table.
@@ -119,17 +145,20 @@
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self ShowAlert];
 	
+//	NSURL *url = [NSURL URLWithString: @"http://www.justinantranikian.com/Photos/StoneBook.png"]; 
+//	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
+//	[BookShelfImage setImage:image];
+	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
 	
-	int x_cord = 20;
+	int x_cord = -70 + 10;
 	int count = 0;
 	
 	// This loop populates the 'top shelf' of the BookShelfImage.
 	for (Author *a in AuthorsArray)
 	{
-		NSLog(a.name);
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(x_cord, 100, 150, 40);
+		ProgramButton.frame = CGRectMake(x_cord, 70, FirstShelf.frame.size.height, 40);
 		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:30]];
 		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
@@ -141,10 +170,11 @@
 		
 		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
-		[BookShelfImage addSubview:ProgramButton];
+		[FirstShelf addSubview:ProgramButton];
 		x_cord += 50;
 		count++;
 	}
+	[self PopulateScroll];
 }
 
 /******************************************************************************
@@ -168,8 +198,26 @@
 -(void)AuthorButtonClicked:(id)sender
 {
 	[self ClearSecondShelf];
+	
+	NSArray *viewsToChange = [self.FirstShelf subviews];
+	for (UIView *v in viewsToChange)
+	{
+		if ([v isKindOfClass: [UIButton class]])
+		{
+			UIButton *button = (UIButton *)v;
+			[button setFont:[UIFont systemFontOfSize:25.0]];
+			NSLog(button.currentTitle);
+		}
+		else if ([v isKindOfClass: [UIImageView class]]){
+			NSLog(@"OTHER");
+		}
+
+	}
+	
 	UIButton *resultButton = (UIButton *)sender;
 	CurrentAuthor = resultButton.currentTitle;
+	[resultButton setFont:[UIFont italicSystemFontOfSize:30.0]];
+	
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
 	{
@@ -180,8 +228,16 @@
 		}
 	}
 	
-	int x_cord = -20;
+	int x_cord = 10;
 
+	NSURL *url = [NSURL URLWithString: MyAuth.iconURL]; 
+	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
+	UIImageView *myi = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 110, 100, 100)];
+	[myi setImage:image];
+	[SecondShelf addSubview:myi];
+	
+	x_cord += 20;
+	
 	// This loop adds the books on the second level of the book shelf.
 	for (Work *work in MyAuth.WorksArray)
 	{
@@ -197,15 +253,17 @@
 		[ProgramButton addTarget:self action:@selector(WorkButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[SecondShelf addSubview:ProgramButton];
-		x_cord += 50;
+		x_cord += 45;
 	}
-	x_cord += 85;
+	x_cord += 75;
 	
-	NSURL *url = [NSURL URLWithString: MyAuth.iconURL]; 
-	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
-	UIImageView *myi = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 100, 100, 100)];
-	[myi setImage:image];
-	[SecondShelf addSubview:myi];
+	UIImageView *myi2 = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 110, 100, 100)];
+	[myi2 setImage:image];
+	[SecondShelf addSubview:myi2];
+	
+	[SecondShelf setScrollEnabled:YES];
+	[SecondShelf setShowsHorizontalScrollIndicator:YES];
+	[SecondShelf setContentSize:CGSizeMake(x_cord + 110, SecondShelf.frame.size.height)];
 }
 
 /******************************************************************************
