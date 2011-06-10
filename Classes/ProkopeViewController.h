@@ -38,11 +38,7 @@ table.
 
 	NSString *CurrentAuthor;
 	NSString *CurrentWork;
-	
-	NSString *docDir;
-	NSString *file;
-			
-	NSDictionary *test;
+
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;

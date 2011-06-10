@@ -143,14 +143,12 @@
 //	NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: @"http://www.justinantranikian.com/Photos/StoneBook2.png"]];
 //	BookShelfImage.image = [UIImage imageWithData: imageData];
 	
-	docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
+	self.navigationItem.rightBarButtonItem = anotherButton;
+	[anotherButton release];
 	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	[self setUpNavBar];
 	
-	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self ShowAlert];
 	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
@@ -178,6 +176,39 @@
 	[self PopulateScroll];
 }
 
+-(void)setUpNavBar
+{
+
+	UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	btn.frame = CGRectMake(0, 0, 320, 40);
+	
+	UILabel *label;
+	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 200, 16)];
+	label.tag = 1;
+	label.backgroundColor = [UIColor clearColor];
+	label.font = [UIFont boldSystemFontOfSize:16];
+	label.adjustsFontSizeToFitWidth = NO;
+	label.textAlignment = UITextAlignmentCenter;
+	label.textColor = [UIColor blackColor];
+	label.text = @"first line";
+	label.highlightedTextColor = [UIColor blackColor];
+	[btn addSubview:label];
+	[label release];
+	
+	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, 200, 16)];
+	label.tag = 2;
+	label.backgroundColor = [UIColor clearColor];
+	label.font = [UIFont boldSystemFontOfSize:16];
+	label.adjustsFontSizeToFitWidth = NO;
+	label.textAlignment = UITextAlignmentCenter;
+	label.textColor = [UIColor blackColor];
+	label.text = @"second line";
+	label.highlightedTextColor = [UIColor blackColor];
+	[btn addSubview:label];
+	[label release];
+	
+	self.navigationItem.titleView = btn;
+}
 
 /******************************************************************************
  * This method is called when something in the table was clicked. It creates a SecondNavigation
@@ -421,6 +452,12 @@
 	UIAlertView *alertDialog;
 	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"clear file", nil];
 	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
 	NSString *theUser = @"User Name";
 	NSString *thePass = @"Pass Word";
 	
@@ -459,6 +496,9 @@
 	
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
 	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
 	if ([buttonTitle isEqualToString:@"ok"])
