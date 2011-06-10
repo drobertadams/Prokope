@@ -147,7 +147,7 @@
 	self.navigationItem.rightBarButtonItem = anotherButton;
 	[anotherButton release];
 	
-	[self setUpNavBar];
+	//[self setUpNavBar];
 	
 	[self ShowAlert];
 	
