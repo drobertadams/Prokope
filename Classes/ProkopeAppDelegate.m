@@ -29,7 +29,9 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 	
-	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/index"];
+	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/index"];
+	
+	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
 	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	

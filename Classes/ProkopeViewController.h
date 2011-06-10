@@ -20,7 +20,6 @@ table.
 	NSMutableArray *AuthorsArray;
 			
 	IBOutlet UITableView *ProkopeTableView;
-	IBOutlet UILabel *NameLabel;
 	IBOutlet UIImageView *BookShelfImage;
 	
 	// Three IBOutlet UIScrollView's that hold the three layers of the bookshelf.
@@ -38,11 +37,13 @@ table.
 
 	NSString *CurrentAuthor;
 	NSString *CurrentWork;
+			
+	NSString *UserNameLabel;
 
+	UILabel *label2;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
-@property (nonatomic, retain) IBOutlet UILabel *NameLabel;
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
 @property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
@@ -60,8 +61,9 @@ table.
 -(void)ClearSecondShelf;
 -(void)ClearSecondShelfFonts;
 -(void)ClearThirdShelf;
-
 -(void)ShowAlert;
+-(void)SetUpLoginButton;
+-(void)LogoutButtonClicked;
 
 @end
 

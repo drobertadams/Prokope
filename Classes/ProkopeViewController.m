@@ -14,7 +14,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, NameLabel, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf;
+@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf;
 
 
 /******************************************************************************
@@ -140,18 +140,14 @@
 	ProkopeTableView.delegate = self;
 	ProkopeTableView.dataSource = self;
 	
-//	NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: @"http://www.justinantranikian.com/Photos/StoneBook2.png"]];
-//	BookShelfImage.image = [UIImage imageWithData: imageData];
-	
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
-	self.navigationItem.rightBarButtonItem = anotherButton;
-	[anotherButton release];
-	
-	//[self setUpNavBar];
+	[self setUpNavBar];
+	[self SetUpLoginButton];
 	
 	[self ShowAlert];
 	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
+	
+	UserNameLabel = @"";
 	
 	int x_cord = -70 + 10;
 	// This loop populates the 'top shelf' of the BookShelfImage.
@@ -179,35 +175,38 @@
 -(void)setUpNavBar
 {
 
-	UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	btn.frame = CGRectMake(0, 0, 320, 40);
+	UIView *NavBarView = [[UIView alloc] init];
+	NavBarView.frame = CGRectMake(0, 0, 320, 40);
 	
 	UILabel *label;
-	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 200, 16)];
+	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 300, 16)];
 	label.tag = 1;
 	label.backgroundColor = [UIColor clearColor];
-	label.font = [UIFont boldSystemFontOfSize:16];
+	label.font = [UIFont boldSystemFontOfSize:17];
 	label.adjustsFontSizeToFitWidth = NO;
 	label.textAlignment = UITextAlignmentCenter;
-	label.textColor = [UIColor blackColor];
-	label.text = @"first line";
+	label.textColor = [UIColor grayColor];
+	label.text = @"Prokope Intermediate Latin Reader";
 	label.highlightedTextColor = [UIColor blackColor];
-	[btn addSubview:label];
+	[NavBarView addSubview:label];
 	[label release];
 	
-	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, 200, 16)];
-	label.tag = 2;
-	label.backgroundColor = [UIColor clearColor];
-	label.font = [UIFont boldSystemFontOfSize:16];
-	label.adjustsFontSizeToFitWidth = NO;
-	label.textAlignment = UITextAlignmentCenter;
-	label.textColor = [UIColor blackColor];
-	label.text = @"second line";
-	label.highlightedTextColor = [UIColor blackColor];
-	[btn addSubview:label];
-	[label release];
 	
-	self.navigationItem.titleView = btn;
+	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(-350, 10, 350, 16)];
+	label2 = [[UILabel alloc] initWithFrame:CGRectMake(300, 10, 295, 16)];
+	label2.tag = 2;
+	label2.backgroundColor = [UIColor clearColor];
+	label2.font = [UIFont boldSystemFontOfSize:17];
+	label2.adjustsFontSizeToFitWidth = YES;
+	label2.textAlignment = UITextAlignmentRight;
+	label2.textColor = [UIColor blackColor];
+	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+	label2.highlightedTextColor = [UIColor blackColor];
+	[NavBarView addSubview:label2];
+	[label2 release];
+	
+	self.navigationItem.titleView = NavBarView;
+	
 }
 
 /******************************************************************************
@@ -506,6 +505,10 @@
 		NSString *UserName = userInput.text;
 		NSString *PassWord = passInput.text;
 		
+		UserNameLabel = UserName;
+		
+		label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  UserName,
 							  @"UserName", 
@@ -515,7 +518,11 @@
 		
 		[dict writeToFile:file atomically: TRUE];
 		NSLog(@"File saved");
-		[NameLabel setText:[NSString stringWithFormat:@"Welcome : %@", UserName]];
+		self.navigationItem.rightBarButtonItem = nil;
+		
+		UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
+		self.navigationItem.rightBarButtonItem = anotherButton;
+		[anotherButton release];
 	}
 	else if([buttonTitle isEqualToString:@"clear file"])
 	{
@@ -530,6 +537,22 @@
 			NSLog(@"File was never created");
 		}
 	}
+}
+
+-(void)SetUpLoginButton
+{
+	self.navigationItem.rightBarButtonItem = nil;
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
+	self.navigationItem.rightBarButtonItem = anotherButton;
+	[anotherButton release];	
+}
+
+-(void)LogoutButtonClicked
+{
+	[self SetUpLoginButton];
+	
+	UserNameLabel = nil;
+	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
 }
 
 - (void)dealloc {
