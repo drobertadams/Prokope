@@ -143,6 +143,13 @@
 //	NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: @"http://www.justinantranikian.com/Photos/StoneBook2.png"]];
 //	BookShelfImage.image = [UIImage imageWithData: imageData];
 	
+	docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	NSLog(file);
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self ShowAlert];
@@ -411,16 +418,29 @@
 -(void)ShowAlert
 {
 	UIAlertView *alertDialog;
-	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"quit", nil];
-		
+	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"clear file", nil];
+	
+	NSString *theUser = @"User Name";
+	NSString *thePass = @"Pass Word";
+	
+	if(!test)
+	{
+		NSLog(@"File has not been created");
+	}
+	else
+	{
+		theUser = [test objectForKey:@"UserName"];
+		thePass = [test objectForKey:@"Password"];
+	}
+	
 	userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
 	[userInput setBackgroundColor:[UIColor whiteColor]];
-	[userInput setText:@"User Name"];
+	[userInput setText:theUser];
 	[userInput setClearsOnBeginEditing:YES];
 	
 	passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
 	[passInput setBackgroundColor:[UIColor whiteColor]];
-	[passInput setText:@"Pass Word"];
+	[passInput setText:thePass];
 	[passInput setClearsOnBeginEditing:YES];
 	
 	[alertDialog addSubview:userInput];
@@ -435,20 +455,39 @@
  */
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
 	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
 	if ([buttonTitle isEqualToString:@"ok"])
 	{
 		NSString *UserName = userInput.text;
 		NSString *PassWord = passInput.text;
 		
-		NSLog(UserName);
-		NSLog(PassWord);
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  UserName,
+							  @"UserName", 
+							  PassWord,
+							  @"Password", 
+							  nil];
 		
+		[dict writeToFile:file atomically: TRUE];
+		NSLog(@"File saved");
 		[NameLabel setText:[NSString stringWithFormat:@"Welcome : %@", UserName]];
 	}
-	else if([buttonTitle isEqualToString:@"quit"])
+	else if([buttonTitle isEqualToString:@"clear file"])
 	{
-		NSLog(@"You need to login");
+		if(test)
+		{
+			NSFileManager *fileManager = [NSFileManager defaultManager];
+			[fileManager removeItemAtPath:file error:NULL];
+			NSLog(@"The file has been cleared.");
+		}
+		else 
+		{
+			NSLog(@"File was never created");
+		}
 	}
 }
 
