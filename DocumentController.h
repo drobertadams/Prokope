@@ -21,12 +21,14 @@
 		*sidebar;		// the sidebar
 }
 
+NSString *URL;
+
 // Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 - (void) wordClicked:(NSString *)id;
-
+-(void)setStringURL:(NSString *)StringURL;
 
 - (IBAction) close; // close this view
 

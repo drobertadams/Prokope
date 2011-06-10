@@ -145,13 +145,12 @@
 	
 	docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	NSLog(file);
 	
 	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
 	test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self ShowAlert];
 	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
@@ -276,7 +275,8 @@
 	if(MyAuth.workURL != nil)
 	{
 		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-		[doc setTitle:MyAuth.workURL];
+		[doc setStringURL:MyAuth.workURL];
+		[doc setTitle:MyAuth.name];
 	
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];
@@ -332,7 +332,8 @@
 		}
 	}
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-	[doc setTitle:MyAuth.workURL];
+	[doc setStringURL:MyAuth.workURL];
+	[doc setTitle:MyAuth.name];
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];

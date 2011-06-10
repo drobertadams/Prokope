@@ -29,12 +29,12 @@
 - (void)fetchDocumentData
 {
 	// Fetch the document from the server.
-	NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
+	//NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
 	//	NSString *url = @"http://localhost/~adams/Private/Prokope/index.php/rest/document/4";
 	
 	// Convert the NSMutable data into a normal string.
 	NSError *error;
-	NSString *data = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:url] encoding:NSUTF8StringEncoding error:&error];
+	NSString *data = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:URL] encoding:NSUTF8StringEncoding error:&error];
 
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
@@ -156,6 +156,11 @@
 	
 	// Ignore all other types of user interation.
 	return FALSE;
+}
+
+-(void)setStringURL:(NSString *)StringURL
+{
+	URL = StringURL;
 }
 
 /* **********************************************************************************************************************

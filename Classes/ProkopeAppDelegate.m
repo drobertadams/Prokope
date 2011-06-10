@@ -41,6 +41,10 @@
 	// This line initialized the navigation controller. 
 	ProkopeNavigationController = [[UINavigationController alloc] init];
 	
+	
+	addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target:self action:nil];
+
+	
 	[window addSubview:ProkopeNavigationController.view];
 	
 	// Calling the SetDataArray will give the next controller the data we got from parsing the XML file.
@@ -54,6 +58,11 @@
     [self.window makeKeyAndVisible];
 	
 	return YES;
+}
+
+-(void)addButtonPressed
+{
+	NSLog(@"Hello");
 }
 
 /******************************************************************************
