@@ -30,7 +30,6 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet ProkopeViewController *viewController;
 
--(void)addButtonPressed;
 
 @end
 

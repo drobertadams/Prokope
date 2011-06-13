@@ -11,10 +11,11 @@
 #import "SecondNavigation.h"
 #import "Author.h"
 #import "Work.h"
+#import "LoginAlertViewDelegate.h"
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf;
+@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2;
 
 
 /******************************************************************************
@@ -39,6 +40,16 @@
 -(void)SetDataArray:(NSMutableArray *)dataArray
 {
 	AuthorsArray = dataArray;
+}
+
+-(UILabel *)getLabel2
+{
+	return self.label2;
+}
+
+-(NSString *)geUserNameLabel
+{
+	return UserNameLabel;
 }
 
 /******************************************************************************
@@ -145,6 +156,8 @@
 	
 	[self ShowAlert];
 	
+	log = [[LoginAlertViewDelegate alloc] initWithController:self];
+	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
 	
 	UserNameLabel = @"";
@@ -186,14 +199,14 @@
 	label.adjustsFontSizeToFitWidth = NO;
 	label.textAlignment = UITextAlignmentCenter;
 	label.textColor = [UIColor grayColor];
-	label.text = @"Prokope Intermediate Latin Reader";
+	label.text = @"Prokope - Intermediate Latin Reader";
 	label.highlightedTextColor = [UIColor blackColor];
 	[NavBarView addSubview:label];
 	[label release];
 	
 	
 	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(-350, 10, 350, 16)];
-	label2 = [[UILabel alloc] initWithFrame:CGRectMake(300, 10, 295, 16)];
+	label2 = [[UILabel alloc] initWithFrame:CGRectMake(305, 10, 295, 16)];
 	label2.tag = 2;
 	label2.backgroundColor = [UIColor clearColor];
 	label2.font = [UIFont boldSystemFontOfSize:17];
@@ -423,8 +436,7 @@
 		}
 		else if ([v isKindOfClass: [UIImageView class]]){
 		//	NSLog(@"OTHER");
-		}
-		
+		}		
 	}	
 }
 
@@ -448,95 +460,8 @@
  */
 -(void)ShowAlert
 {
-	UIAlertView *alertDialog;
-	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"clear file", nil];
-	
-	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-	
-	NSString *theUser = @"User Name";
-	NSString *thePass = @"Pass Word";
-	
-	if(!test)
-	{
-		NSLog(@"File has not been created");
-	}
-	else
-	{
-		theUser = [test objectForKey:@"UserName"];
-		thePass = [test objectForKey:@"Password"];
-	}
-	
-	userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
-	[userInput setBackgroundColor:[UIColor whiteColor]];
-	[userInput setText:theUser];
-	[userInput setClearsOnBeginEditing:YES];
-	
-	passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
-	[passInput setBackgroundColor:[UIColor whiteColor]];
-	[passInput setText:thePass];
-	[passInput setClearsOnBeginEditing:YES];
-	
-	[alertDialog addSubview:userInput];
-	[alertDialog addSubview:passInput];
-	[alertDialog show];
-	[alertDialog release];
-}
-
-/******************************************************************************
- * This method is overridden as part of the UIAlertViewDelegate protocol. This method
- * uses the title of the buttons on an alert, and the programmer decides what to do with it.
- */
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	
-	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-	
-	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
-	if ([buttonTitle isEqualToString:@"ok"])
-	{
-		NSString *UserName = userInput.text;
-		NSString *PassWord = passInput.text;
-		
-		UserNameLabel = UserName;
-		
-		label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
-		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  UserName,
-							  @"UserName", 
-							  PassWord,
-							  @"Password", 
-							  nil];
-		
-		[dict writeToFile:file atomically: TRUE];
-		NSLog(@"File saved");
-		self.navigationItem.rightBarButtonItem = nil;
-		
-		UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
-		self.navigationItem.rightBarButtonItem = anotherButton;
-		[anotherButton release];
-	}
-	else if([buttonTitle isEqualToString:@"clear file"])
-	{
-		if(test)
-		{
-			NSFileManager *fileManager = [NSFileManager defaultManager];
-			[fileManager removeItemAtPath:file error:NULL];
-			NSLog(@"The file has been cleared.");
-		}
-		else 
-		{
-			NSLog(@"File was never created");
-		}
-	}
+	LoginAlertViewDelegate *log = [[LoginAlertViewDelegate alloc] initWithController:self];
+	[log ShowAlert];
 }
 
 -(void)SetUpLoginButton
@@ -551,8 +476,8 @@
 {
 	[self SetUpLoginButton];
 	
-	UserNameLabel = nil;
-	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+	LoginAlertViewDelegate *log = [[LoginAlertViewDelegate alloc] initWithController:self];
+	[log LogoutClicked];
 }
 
 - (void)dealloc {

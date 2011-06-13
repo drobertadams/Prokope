@@ -24,6 +24,7 @@
 		94030D42139D951C00454502 /* StoneBook.png in Resources */ = {isa = PBXBuildFile; fileRef = 94030D41139D951C00454502 /* StoneBook.png */; };
 		944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D113F138AF36100DEF8B2 /* SecondNavigation.m */; };
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
+		94828D3E13A6CF3200442BF4 /* LoginAlertViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94828D3D13A6CF3200442BF4 /* LoginAlertViewDelegate.m */; };
 		94AE4B9A1399BAD000827A1E /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4B991399BAD000827A1E /* Author.m */; };
 		94AE4D061399DAB100827A1E /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4D051399DAB100827A1E /* Work.m */; };
 		94B372F4139D4EB60039CC52 /* BookCase.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 94B372F2139D4EB60039CC52 /* BookCase.jpg */; };
@@ -57,6 +58,8 @@
 		944D113E138AF36100DEF8B2 /* SecondNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondNavigation.h; sourceTree = "<group>"; };
 		944D113F138AF36100DEF8B2 /* SecondNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondNavigation.m; sourceTree = "<group>"; };
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
+		94828D3C13A6CF3200442BF4 /* LoginAlertViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginAlertViewDelegate.h; sourceTree = "<group>"; };
+		94828D3D13A6CF3200442BF4 /* LoginAlertViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginAlertViewDelegate.m; sourceTree = "<group>"; };
 		94AE4B981399BAD000827A1E /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Author.h; sourceTree = "<group>"; };
 		94AE4B991399BAD000827A1E /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Author.m; sourceTree = "<group>"; };
 		94AE4D041399DAB100827A1E /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Work.h; sourceTree = "<group>"; };
@@ -162,6 +165,8 @@
 				94AE4B991399BAD000827A1E /* Author.m */,
 				94AE4D041399DAB100827A1E /* Work.h */,
 				94AE4D051399DAB100827A1E /* Work.m */,
+				94828D3C13A6CF3200442BF4 /* LoginAlertViewDelegate.h */,
+				94828D3D13A6CF3200442BF4 /* LoginAlertViewDelegate.m */,
 			);
 			name = "Data Classes";
 			sourceTree = "<group>";
@@ -246,6 +251,7 @@
 				944D1141138AF36100DEF8B2 /* SecondNavigation.m in Sources */,
 				94AE4B9A1399BAD000827A1E /* Author.m in Sources */,
 				94AE4D061399DAB100827A1E /* Work.m in Sources */,
+				94828D3E13A6CF3200442BF4 /* LoginAlertViewDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

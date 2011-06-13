@@ -9,6 +9,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoginAlertViewDelegate.h"
 
 /* Implementing the UITableViewDelegate and the UITableViewDataSource protocols allows this class
 to implement the necessary methods for a table view to respond to actions and load data into the
@@ -41,6 +42,8 @@ table.
 	NSString *UserNameLabel;
 
 	UILabel *label2;
+			
+	LoginAlertViewDelegate *log;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
@@ -48,6 +51,7 @@ table.
 @property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
 @property (nonatomic, retain) IBOutlet UIScrollView *FirstShelf;
+@property (nonatomic, retain) UILabel *label2;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 
@@ -56,6 +60,7 @@ table.
 -(void)ThirdShelfButtonClicked:(id)sender;
 
 -(void)PopulateScroll;
+-(void)setUpNavBar;
 
 -(void)ClearFirstShelfFonts;
 -(void)ClearSecondShelf;
@@ -64,6 +69,8 @@ table.
 -(void)ShowAlert;
 -(void)SetUpLoginButton;
 -(void)LogoutButtonClicked;
+-(UILabel *)getLabel2;
+-(NSString *)geUserNameLabel;
 
 @end
 

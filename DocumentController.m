@@ -175,7 +175,10 @@
 	NSString *js = [NSString stringWithFormat: 
 							  @"show_only('%@');", id];
 	[commentary stringByEvaluatingJavaScriptFromString:js];	
-	[vocabulary stringByEvaluatingJavaScriptFromString:js];	
+	[vocabulary stringByEvaluatingJavaScriptFromString:js];
+	
+	NSLog(@"Clicked was : %@", id);
+	NSLog(@"On poem %@", URL);
 }
 
 
