@@ -15,7 +15,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2, UserNameLabel;
+@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2;
 
 
 /******************************************************************************
@@ -183,7 +183,7 @@
 
 -(void)setUpNavBar
 {
-	UserNameLabel = @"";
+	UserNameLabel = nil;
 
 	UIView *NavBarView = [[UIView alloc] init];
 	NavBarView.frame = CGRectMake(0, 0, 320, 40);
@@ -315,12 +315,11 @@
 	if(MyAuth.workURL != nil)
 	{
 		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-		NSLog(@"User : %@", UserNameLabel);
 		
 		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
-	//	NSLog(@"User : %@", UserNameLabel);
-	//	doc.UserName = UserNameLabel;
+	
+		//doc.UserName = UserNameLabel;
 		
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];
@@ -547,7 +546,6 @@
 			//	NSLog(@"File was never created");
 		}
 	}
-	NSLog(UserNameLabel);
 }
 
 -(void)SetUpLoginButton

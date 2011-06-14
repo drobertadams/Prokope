@@ -158,10 +158,9 @@
 	label2.adjustsFontSizeToFitWidth = YES;
 	label2.textAlignment = UITextAlignmentRight;
 	label2.textColor = [UIColor blackColor];
-	NSLog(@"%@", UserName);
 	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
 	label2.highlightedTextColor = [UIColor blackColor];
-	[NavBarView addSubview:label2];
+//	[NavBarView addSubview:label2];
 	[label2 release];
 	
 	self.navigationItem.titleView = NavBarView;
