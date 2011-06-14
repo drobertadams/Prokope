@@ -9,10 +9,11 @@
 #import "DocumentController.h"
 #import "DocumentViewerDelegate.h"
 #import "WebViewController.h"
+#import "LoginAlertViewDelegate.h"
 
 @implementation DocumentController
 
-@synthesize document, commentary, vocabulary, sidebar;
+@synthesize document, commentary, vocabulary, sidebar, label2, Title;
 
 /******************************************************************************
  * Closes this view.
@@ -123,10 +124,48 @@
 	vocabulary.delegate = self;
 	sidebar.delegate = self;
 	
+	[self setUpNavBar];
+	
 	// Go fetch and display the document.
 	[self fetchDocumentData];
 }
 
+-(void)setUpNavBar
+{
+	
+	UIView *NavBarView = [[UIView alloc] init];
+	NavBarView.frame = CGRectMake(0, 0, 320, 40);
+	
+	UILabel *label;
+	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 300, 16)];
+	label.tag = 1;
+	label.backgroundColor = [UIColor clearColor];
+	label.font = [UIFont boldSystemFontOfSize:17];
+	label.adjustsFontSizeToFitWidth = NO;
+	label.textAlignment = UITextAlignmentCenter;
+	label.textColor = [UIColor grayColor];
+	label.text = Title;
+	label.highlightedTextColor = [UIColor blackColor];
+	[NavBarView addSubview:label];
+	[label release];
+	
+	
+	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(-350, 10, 350, 16)];
+	label2 = [[UILabel alloc] initWithFrame:CGRectMake(305, 10, 295, 16)];
+	label2.tag = 2;
+	label2.backgroundColor = [UIColor clearColor];
+	label2.font = [UIFont boldSystemFontOfSize:17];
+	label2.adjustsFontSizeToFitWidth = YES;
+	label2.textAlignment = UITextAlignmentRight;
+	label2.textColor = [UIColor blackColor];
+	label2.text = [NSString stringWithFormat:@"Welcome : %@", log.userNameLabel];
+	label2.highlightedTextColor = [UIColor blackColor];
+	[NavBarView addSubview:label2];
+	[label2 release];
+	
+	self.navigationItem.titleView = NavBarView;
+	
+}
 
 /* **********************************************************************************************************************
  * Called when any of the webviews (except document) wants to load a URL.
@@ -163,6 +202,12 @@
 	URL = StringURL;
 }
 
+-(UILabel *)getLabel2
+{
+	return label2;
+}
+
+
 /* **********************************************************************************************************************
  * Called by DocumentViewerDelegate when the user clicks on a word.
  */
@@ -182,8 +227,39 @@
 }
 
 
+-(void)viewWillAppear:(BOOL)animated {
+	[log GetLatestLoginData];
+}
 
+-(void)setLoginViewDelegate:(LoginAlertViewDelegate *) delegate
+{
+	log = delegate;
+}
 
+/******************************************************************************
+ * This alert get shown when this view is first launched. There are two UITextFields
+ * that are created and then added to the alert. Two buttons are also created in the 
+ * initialization code. Furthermore the message is set to "\n\n\n..." to 'stretch' the 
+ * alertView's boundries to include the two UITextFields.
+ */
+-(void)ShowAlert
+{
+	[log ShowAlert];
+}
+
+-(void)SetUpLoginButton
+{
+	self.navigationItem.rightBarButtonItem = nil;
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
+	self.navigationItem.rightBarButtonItem = anotherButton;
+	[anotherButton release];	
+}
+
+-(void)LogoutButtonClicked
+{
+	[self SetUpLoginButton];
+	[log LogoutClicked];
+}
 
 
 

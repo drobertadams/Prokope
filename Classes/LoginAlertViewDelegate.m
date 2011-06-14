@@ -8,25 +8,54 @@
 
 #import "LoginAlertViewDelegate.h"
 #import "ProkopeViewController.h"
+#import "DocumentController.h"
 
 @implementation LoginAlertViewDelegate
+
+@synthesize userNameLabel;
 
 -(LoginAlertViewDelegate*) initWithController: (UIViewController *) c {
     self = [super init];
 	
-    if ( self ) {
-        if ([c isKindOfClass:[ProkopeViewController class]]) {
+    if ( self )
+	{
+        if ([c isKindOfClass:[ProkopeViewController class]])
+		{
 			controller = (ProkopeViewController *) c;
-			NSLog(@"PROKOPE VIEW CONTROLLER");
 		}
-		else {
+		else
+		{
 			NSLog(@"!!!!! PROKOPE VIEW CONTROLLER");
 		}
+		label2 = [controller getLabel2];
     }
 	
     return self;
 }
 
+-(void)SwitchControllers: (UIViewController *) newController
+{
+	if([controller isKindOfClass: [ProkopeViewController class]])
+	{
+		controller = (ProkopeViewController *) newController;
+		NSLog(@"A Prokope Controller");
+	}
+	else if([controller isKindOfClass: [DocumentController class]])
+	{
+		controller = (DocumentController *) newController;
+		NSLog(@"A document controller");
+	}
+	
+	label2 = [controller getLabel2];
+	
+}
+
+/******************************************************************************
+ * This alert get shown when this view is first launched. There are two UITextFields
+ * that are created and then added to the alert. Two buttons are also created in the 
+ * initialization code. Furthermore the message is set to "\n\n\n..." to 'stretch' the 
+ * alertView's boundries to include the two UITextFields.
+ */
 -(void)ShowAlert
 {
 	UIAlertView *alertDialog;
@@ -43,7 +72,7 @@
 	
 	if(!test)
 	{
-		NSLog(@"File has not been created");
+	//	NSLog(@"File has not been created");
 	}
 	else
 	{
@@ -68,21 +97,55 @@
 	
 }
 
--(void)LogoutClicked
+-(void)GetLatestLoginData
 {
 	label2 = [controller getLabel2];
-	userNameLabel = [controller geUserNameLabel];
+	
+	if (userNameLabel == nil) {
+		[controller SetUpLoginButton];
+		NSLog(@"USER NAME is null");
+	}
+	else {
+		
+		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+		NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+		
+		// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+		
+		if(!test)
+		{
+			NSLog(@"File has not been created");
+		}
+		else
+		{
+			NSLog(@"File has been created");
+			NSString *theUser = @"User Name";
+			NSString *thePass = @"Pass Word";
+			
+			theUser = [test objectForKey:@"UserName"];
+			thePass = [test objectForKey:@"Password"];
+			
+			label2.text = [NSString stringWithFormat:@"Welcome : %@", theUser];
+			
+			controller.navigationItem.rightBarButtonItem = nil;
+			
+			UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:controller action:@selector(LogoutButtonClicked)];          
+			controller.navigationItem.rightBarButtonItem = anotherButton;
+			[anotherButton release];
+		}
+	}
+	NSLog(@"BLAHH %@", userNameLabel);
+}
 
+-(void)LogoutClicked
+{
 	userNameLabel = nil;
 	label2.text = [NSString stringWithFormat:@"Welcome : %@", userNameLabel];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	label2 = [controller getLabel2];
-	userNameLabel = [controller geUserNameLabel];
-	
-	NSLog(@"Hello");
+{	
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
 	
@@ -99,6 +162,8 @@
 		
 		label2.text = [NSString stringWithFormat:@"Welcome : %@", userNameLabel];
 		
+		NSLog(userNameLabel);
+		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  UserName,
 							  @"UserName", 
@@ -107,7 +172,6 @@
 							  nil];
 		
 		[dict writeToFile:file atomically: TRUE];
-		NSLog(@"File saved");
 		controller.navigationItem.rightBarButtonItem = nil;
 		
 		UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:controller action:@selector(LogoutButtonClicked)];          
@@ -120,11 +184,10 @@
 		{
 			NSFileManager *fileManager = [NSFileManager defaultManager];
 			[fileManager removeItemAtPath:file error:NULL];
-			NSLog(@"The file has been cleared.");
 		}
 		else 
 		{
-			NSLog(@"File was never created");
+		//	NSLog(@"File was never created");
 		}
 	}
 }

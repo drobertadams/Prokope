@@ -10,7 +10,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "LoginAlertViewDelegate.h"
 
 @interface DocumentController : UIViewController <UIWebViewDelegate>
 {	
@@ -19,9 +19,13 @@
 		*commentary,	// where the commentary is displayed
 		*vocabulary,	// where the vocabulary is displayed
 		*sidebar;		// the sidebar
+	
+	LoginAlertViewDelegate *log;
+	NSString *URL;
+	NSString *Title;
+	UILabel *label2;
 }
 
-NSString *URL;
 
 // Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
@@ -31,10 +35,15 @@ NSString *URL;
 -(void)setStringURL:(NSString *)StringURL;
 
 - (IBAction) close; // close this view
+-(UILabel *)getLabel2;
+
+-(void)setLoginViewDelegate:(LoginAlertViewDelegate *) delegate;
 
 @property (nonatomic, retain) IBOutlet UIWebView *document;
 @property (nonatomic, retain) IBOutlet UIWebView *commentary;
 @property (nonatomic, retain) IBOutlet UIWebView *vocabulary;
 @property (nonatomic, retain) IBOutlet UIWebView *sidebar;
+@property (nonatomic, retain) UILabel *label2;
+@property (nonatomic, retain) NSString *Title;
 
 @end

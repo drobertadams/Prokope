@@ -29,12 +29,6 @@ table.
 	IBOutlet UIScrollView *ThirdShelfScroll;
 			
 	UIImage *BookSpine;
-	
-	// userInput is the UITextField added to the AlertView to capture the user's name.
-	UITextField *userInput;
-	
-	// passInput is the UITextField added to the AlertView to capture the user's password.
-	UITextField *passInput;
 
 	NSString *CurrentAuthor;
 	NSString *CurrentWork;

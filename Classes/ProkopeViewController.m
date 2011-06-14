@@ -152,11 +152,11 @@
 	ProkopeTableView.dataSource = self;
 	
 	[self setUpNavBar];
-	[self SetUpLoginButton];
-	
-	[self ShowAlert];
+//	[self SetUpLoginButton];
 	
 	log = [[LoginAlertViewDelegate alloc] initWithController:self];
+	
+	[self ShowAlert];
 	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
 	
@@ -319,9 +319,13 @@
 	{
 		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
 		[doc setStringURL:MyAuth.workURL];
-		[doc setTitle:MyAuth.name];
-	
+	//	[doc setTitle:MyAuth.name];
+		doc.Title = MyAuth.name;
+		[doc setLoginViewDelegate:log];
+		
 		[self.navigationController pushViewController:doc animated:YES];
+		[log SwitchControllers:doc];
+		[log GetLatestLoginData];
 		[doc release];
 	}
 	else 
@@ -379,6 +383,7 @@
 	[doc setTitle:MyAuth.name];
 	
 	[self.navigationController pushViewController:doc animated:YES];
+	[log SwitchControllers:doc];
 	[doc release];
 }
 
@@ -452,6 +457,14 @@
 	}
 }
 
+-(void)viewWillAppear:(BOOL)animated { 
+	if (log)
+	{
+		[log GetLatestLoginData];
+	}
+}
+
+
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields
  * that are created and then added to the alert. Two buttons are also created in the 
@@ -460,7 +473,6 @@
  */
 -(void)ShowAlert
 {
-	LoginAlertViewDelegate *log = [[LoginAlertViewDelegate alloc] initWithController:self];
 	[log ShowAlert];
 }
 
@@ -475,8 +487,6 @@
 -(void)LogoutButtonClicked
 {
 	[self SetUpLoginButton];
-	
-	LoginAlertViewDelegate *log = [[LoginAlertViewDelegate alloc] initWithController:self];
 	[log LogoutClicked];
 }
 

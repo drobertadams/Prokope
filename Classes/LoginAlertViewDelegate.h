@@ -23,9 +23,13 @@
 	NSString *userNameLabel;
 }
 
+@property (nonatomic, retain) NSString *userNameLabel;
+
 -(LoginAlertViewDelegate*) initWithController: (UIViewController *) c;
 -(void)ShowAlert;
 -(void)LogoutClicked;
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+-(void)GetLatestLoginData;
+-(void)SwitchControllers: (UIViewController *) newController;
 
 @end
