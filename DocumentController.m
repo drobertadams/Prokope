@@ -197,16 +197,6 @@
 	return FALSE;
 }
 
--(void)setStringURL:(NSString *)StringURL
-{
-	URL = StringURL;
-}
-
--(UILabel *)getLabel2
-{
-	return label2;
-}
-
 
 /* **********************************************************************************************************************
  * Called by DocumentViewerDelegate when the user clicks on a word.

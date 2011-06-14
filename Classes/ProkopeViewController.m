@@ -246,7 +246,20 @@
 	
 	int x_cord = 10;
 
-	NSURL *url = [NSURL URLWithString: MyAuth.iconURL]; 
+	NSString *newULR;
+	
+	if (MyAuth.iconURL = nil)
+	{
+		newULR = MyAuth.iconURL;
+	}
+	else
+	{
+		// Just get a default URL to see the 'bookholder' in action.
+		newULR = @"http://www.departments.bucknell.edu/history/carnegie/plato/plato_bust.jpg";
+	}
+
+	
+	NSURL *url = [NSURL URLWithString: newULR]; 
 	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
 	UIImageView *myi = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 110, 100, 100)];
 	[myi setImage:image];
@@ -378,7 +391,7 @@
 	
 	doc.URL = MyAuth.workURL;
 	doc.Title = MyAuth.name;
-	doc.UserName = UserNameLabel;
+	//doc.UserName = UserNameLabel;
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];
