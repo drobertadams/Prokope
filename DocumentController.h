@@ -20,9 +20,9 @@
 		*vocabulary,	// where the vocabulary is displayed
 		*sidebar;		// the sidebar
 	
-	LoginAlertViewDelegate *log;
 	NSString *URL;
 	NSString *Title;
+	NSString *UserName;
 	UILabel *label2;
 }
 
@@ -31,19 +31,14 @@
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
-- (void) wordClicked:(NSString *)id;
--(void)setStringURL:(NSString *)StringURL;
-
-- (IBAction) close; // close this view
--(UILabel *)getLabel2;
-
--(void)setLoginViewDelegate:(LoginAlertViewDelegate *) delegate;
+-(void)wordClicked:(NSString *)id;
 
 @property (nonatomic, retain) IBOutlet UIWebView *document;
 @property (nonatomic, retain) IBOutlet UIWebView *commentary;
 @property (nonatomic, retain) IBOutlet UIWebView *vocabulary;
 @property (nonatomic, retain) IBOutlet UIWebView *sidebar;
-@property (nonatomic, retain) UILabel *label2;
+@property (nonatomic, retain) NSString *URL;
 @property (nonatomic, retain) NSString *Title;
+@property (nonatomic, retain) NSString *UserName;
 
 @end

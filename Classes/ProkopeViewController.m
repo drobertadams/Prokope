@@ -15,7 +15,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2;
+@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2, UserNameLabel;
 
 
 /******************************************************************************
@@ -152,15 +152,11 @@
 	ProkopeTableView.dataSource = self;
 	
 	[self setUpNavBar];
-//	[self SetUpLoginButton];
-	
-	log = [[LoginAlertViewDelegate alloc] initWithController:self];
+	[self SetUpLoginButton];
 	
 	[self ShowAlert];
 	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
-	
-	UserNameLabel = @"";
 	
 	int x_cord = -70 + 10;
 	// This loop populates the 'top shelf' of the BookShelfImage.
@@ -187,6 +183,7 @@
 
 -(void)setUpNavBar
 {
+	UserNameLabel = @"";
 
 	UIView *NavBarView = [[UIView alloc] init];
 	NavBarView.frame = CGRectMake(0, 0, 320, 40);
@@ -318,14 +315,14 @@
 	if(MyAuth.workURL != nil)
 	{
 		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-		[doc setStringURL:MyAuth.workURL];
-	//	[doc setTitle:MyAuth.name];
+		NSLog(@"User : %@", UserNameLabel);
+		
+		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
-		[doc setLoginViewDelegate:log];
+	//	NSLog(@"User : %@", UserNameLabel);
+	//	doc.UserName = UserNameLabel;
 		
 		[self.navigationController pushViewController:doc animated:YES];
-		[log SwitchControllers:doc];
-		[log GetLatestLoginData];
 		[doc release];
 	}
 	else 
@@ -379,11 +376,12 @@
 		}
 	}
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-	[doc setStringURL:MyAuth.workURL];
-	[doc setTitle:MyAuth.name];
+	
+	doc.URL = MyAuth.workURL;
+	doc.Title = MyAuth.name;
+	doc.UserName = UserNameLabel;
 	
 	[self.navigationController pushViewController:doc animated:YES];
-	[log SwitchControllers:doc];
 	[doc release];
 }
 
@@ -457,13 +455,6 @@
 	}
 }
 
--(void)viewWillAppear:(BOOL)animated { 
-	if (log)
-	{
-		[log GetLatestLoginData];
-	}
-}
-
 
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields
@@ -473,7 +464,90 @@
  */
 -(void)ShowAlert
 {
-	[log ShowAlert];
+	UIAlertView *alertDialog;
+	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"clear file", nil];
+	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
+	NSString *theUser = @"User Name";
+	NSString *thePass = @"Pass Word";
+	
+	if(!test)
+	{
+		//	NSLog(@"File has not been created");
+	}
+	else
+	{
+		theUser = [test objectForKey:@"UserName"];
+		thePass = [test objectForKey:@"Password"];
+	}
+	
+	userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
+	[userInput setBackgroundColor:[UIColor whiteColor]];
+	[userInput setText:theUser];
+	[userInput setClearsOnBeginEditing:YES];
+	
+	passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
+	[passInput setBackgroundColor:[UIColor whiteColor]];
+	[passInput setText:thePass];
+	[passInput setClearsOnBeginEditing:YES];
+	
+	[alertDialog addSubview:userInput];
+	[alertDialog addSubview:passInput];
+	[alertDialog show];
+	[alertDialog release];
+	
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
+	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
+	if ([buttonTitle isEqualToString:@"ok"])
+	{
+		NSString *UserName = userInput.text;
+		NSString *PassWord = passInput.text;
+		
+		UserNameLabel = UserName;
+		
+		label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+		
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  UserName,
+							  @"UserName", 
+							  PassWord,
+							  @"Password", 
+							  nil];
+		
+		[dict writeToFile:file atomically: TRUE];
+		self.navigationItem.rightBarButtonItem = nil;
+		
+		UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
+		self.navigationItem.rightBarButtonItem = anotherButton;
+		[anotherButton release];
+	}
+	else if([buttonTitle isEqualToString:@"clear file"])
+	{
+		if(test)
+		{
+			NSFileManager *fileManager = [NSFileManager defaultManager];
+			[fileManager removeItemAtPath:file error:NULL];
+		}
+		else 
+		{
+			//	NSLog(@"File was never created");
+		}
+	}
+	NSLog(UserNameLabel);
 }
 
 -(void)SetUpLoginButton
@@ -487,7 +561,9 @@
 -(void)LogoutButtonClicked
 {
 	[self SetUpLoginButton];
-	[log LogoutClicked];
+	
+	UserNameLabel = nil;
+	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
 }
 
 - (void)dealloc {

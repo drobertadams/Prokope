@@ -97,7 +97,7 @@
 	
 }
 
--(void)GetLatestLoginData
+/*-(void)GetLatestLoginData
 {
 	label2 = [controller getLabel2];
 	
@@ -135,8 +135,8 @@
 			[anotherButton release];
 		}
 	}
-	NSLog(@"BLAHH %@", userNameLabel);
 }
+*/
 
 -(void)LogoutClicked
 {
@@ -158,7 +158,7 @@
 		NSString *UserName = userInput.text;
 		NSString *PassWord = passInput.text;
 		
-		userNameLabel = UserName;
+	//	controller.UserNameLabel = UserName;
 		
 		label2.text = [NSString stringWithFormat:@"Welcome : %@", userNameLabel];
 		

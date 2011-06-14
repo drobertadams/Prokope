@@ -13,7 +13,7 @@
 
 @implementation DocumentController
 
-@synthesize document, commentary, vocabulary, sidebar, label2, Title;
+@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName;
 
 /******************************************************************************
  * Closes this view.
@@ -158,7 +158,8 @@
 	label2.adjustsFontSizeToFitWidth = YES;
 	label2.textAlignment = UITextAlignmentRight;
 	label2.textColor = [UIColor blackColor];
-	label2.text = [NSString stringWithFormat:@"Welcome : %@", log.userNameLabel];
+	NSLog(@"%@", UserName);
+	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
 	label2.highlightedTextColor = [UIColor blackColor];
 	[NavBarView addSubview:label2];
 	[label2 release];
@@ -227,15 +228,6 @@
 }
 
 
--(void)viewWillAppear:(BOOL)animated {
-	[log GetLatestLoginData];
-}
-
--(void)setLoginViewDelegate:(LoginAlertViewDelegate *) delegate
-{
-	log = delegate;
-}
-
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields
  * that are created and then added to the alert. Two buttons are also created in the 
@@ -254,17 +246,6 @@
 	self.navigationItem.rightBarButtonItem = anotherButton;
 	[anotherButton release];	
 }
-
--(void)LogoutButtonClicked
-{
-	[self SetUpLoginButton];
-	[log LogoutClicked];
-}
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

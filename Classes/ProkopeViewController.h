@@ -28,6 +28,12 @@ table.
 	IBOutlet UIScrollView *SecondShelf;
 	IBOutlet UIScrollView *ThirdShelfScroll;
 			
+	// userInput is the UITextField added to the AlertView to capture the user's name.
+	UITextField *userInput;
+			
+	// passInput is the UITextField added to the AlertView to capture the user's password.
+	UITextField *passInput;		
+			
 	UIImage *BookSpine;
 
 	NSString *CurrentAuthor;
@@ -37,7 +43,6 @@ table.
 
 	UILabel *label2;
 			
-	LoginAlertViewDelegate *log;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
@@ -45,6 +50,7 @@ table.
 @property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
 @property (nonatomic, retain) IBOutlet UIScrollView *FirstShelf;
+@property (nonatomic, retain) NSString *UserNameLabel;
 @property (nonatomic, retain) UILabel *label2;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
@@ -63,8 +69,7 @@ table.
 -(void)ShowAlert;
 -(void)SetUpLoginButton;
 -(void)LogoutButtonClicked;
--(UILabel *)getLabel2;
--(NSString *)geUserNameLabel;
+
 
 @end
 
