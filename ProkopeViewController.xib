@@ -74,7 +74,7 @@
 					<object class="IBUIScrollView" id="762718893">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{10, 39}, {451, 177}}</string>
+						<string key="NSFrame">{{10, 38}, {451, 177}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -218,7 +218,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>ProkopeViewController</string>
 					<string>UIResponder</string>
-					<string>{{0, 70}, {1039, 686}}</string>
+					<string>{{337, 46}, {1039, 686}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
