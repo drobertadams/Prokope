@@ -50,7 +50,7 @@ table.
 @property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
 @property (nonatomic, retain) IBOutlet UIScrollView *FirstShelf;
-//@property (nonatomic, retain) NSString *UserNameLabel;
+@property (nonatomic, retain) NSString *UserNameLabel;
 @property (nonatomic, retain) UILabel *label2;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
@@ -69,7 +69,7 @@ table.
 -(void)ShowAlert;
 -(void)SetUpLoginButton;
 -(void)LogoutButtonClicked;
-
+-(void)ClearUserSettings;
 
 @end
 

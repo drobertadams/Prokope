@@ -15,7 +15,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2;
+@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2, UserNameLabel;
 
 
 /******************************************************************************
@@ -40,16 +40,6 @@
 -(void)SetDataArray:(NSMutableArray *)dataArray
 {
 	AuthorsArray = dataArray;
-}
-
--(UILabel *)getLabel2
-{
-	return self.label2;
-}
-
--(NSString *)geUserNameLabel
-{
-	return UserNameLabel;
 }
 
 /******************************************************************************
@@ -154,8 +144,6 @@
 	[self setUpNavBar];
 	[self SetUpLoginButton];
 	
-	[self ShowAlert];
-	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
 	
 	int x_cord = -70 + 10;
@@ -181,10 +169,11 @@
 	[self PopulateScroll];
 }
 
+/******************************************************************************
+ * This method is called when the view is loaded. It sets up some subviews for the navigation bar.
+ */
 -(void)setUpNavBar
-{
-	UserNameLabel = nil;
-
+{	
 	UIView *NavBarView = [[UIView alloc] init];
 	NavBarView.frame = CGRectMake(0, 0, 320, 40);
 	
@@ -217,6 +206,25 @@
 	
 	self.navigationItem.titleView = NavBarView;
 	
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
+	self.navigationItem.leftBarButtonItem = anotherButton;
+	[anotherButton release];
+	
+}
+
+/******************************************************************************
+ * This method is the selector for the clear user settings button. It makes an alertview where the user can opt 
+ * out if they want.
+ */
+-(void)ClearUserSettings
+{	
+	
+	UIAlertView *alertDialog;
+	alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear User Settings ?" message:@"Are you sure you want to clear your settings" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+	alertDialog.tag = 2;
+
+	[alertDialog show];
+	[alertDialog release];
 }
 
 /******************************************************************************
@@ -280,6 +288,8 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
 		[ProgramButton addTarget:self action:@selector(SecondShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		
+		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[SecondShelf addSubview:ProgramButton];
 		x_cord += 45;
@@ -331,8 +341,12 @@
 		
 		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
-	
-		//doc.UserName = UserNameLabel;
+
+		NSLog(UserNameLabel);
+		
+		NSLog(@" %@", [label2 text]);
+		doc.UserName = [label2 text];
+		NSLog(doc.UserName);
 		
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];
@@ -352,6 +366,8 @@
 			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
 			[ProgramButton addTarget:self action:@selector(ThirdShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+			
+			// This line of code rotates the button to be facing vertical.
 			ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 			[ThirdShelfScroll addSubview:ProgramButton];
 			x_cord += 45;
@@ -392,6 +408,8 @@
 	doc.URL = MyAuth.workURL;
 	doc.Title = MyAuth.name;
 	//doc.UserName = UserNameLabel;
+	
+//	NSLog(UserNameLabel);
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];
@@ -477,7 +495,8 @@
 -(void)ShowAlert
 {
 	UIAlertView *alertDialog;
-	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"clear file", nil];
+	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+	alertDialog.tag = 1;
 	
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
@@ -515,6 +534,9 @@
 	
 }
 
+/******************************************************************************
+ * This method gets called when an alertview's button gets clicked. 
+ */
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {	
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -524,39 +546,46 @@
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
 	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
-	if ([buttonTitle isEqualToString:@"ok"])
+	if(alertView.tag == 1)
 	{
-		NSString *UserName = userInput.text;
-		NSString *PassWord = passInput.text;
+		if ([buttonTitle isEqualToString:@"ok"])
+		{
+			NSString *UserName = [userInput text];
+			NSString *PassWord = [passInput text];
 		
-		UserNameLabel = UserName;
+			UserNameLabel = UserName;
 		
-		label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+			label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
 		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  UserName,
 							  @"UserName", 
 							  PassWord,
 							  @"Password", 
 							  nil];
 		
-		[dict writeToFile:file atomically: TRUE];
-		self.navigationItem.rightBarButtonItem = nil;
+			[dict writeToFile:file atomically: TRUE];
+			self.navigationItem.rightBarButtonItem = nil;
 		
-		UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
-		self.navigationItem.rightBarButtonItem = anotherButton;
-		[anotherButton release];
-	}
-	else if([buttonTitle isEqualToString:@"clear file"])
-	{
-		if(test)
-		{
-			NSFileManager *fileManager = [NSFileManager defaultManager];
-			[fileManager removeItemAtPath:file error:NULL];
+			UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
+			self.navigationItem.rightBarButtonItem = anotherButton;
+			[anotherButton release];
 		}
-		else 
+	}
+	else if (alertView.tag == 2)
+	{
+		if([buttonTitle isEqualToString:@"ok"])
 		{
-			//	NSLog(@"File was never created");
+			if(test)
+			{
+				NSFileManager *fileManager = [NSFileManager defaultManager];
+				[fileManager removeItemAtPath:file error:NULL];
+			}
+			else 
+			{
+				NSLog(@"File was never created");
+			}
+			UserNameLabel = @"";
 		}
 	}
 }
@@ -573,7 +602,7 @@
 {
 	[self SetUpLoginButton];
 	
-	UserNameLabel = nil;
+	UserNameLabel = @"";
 	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
 }
 

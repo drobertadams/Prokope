@@ -13,6 +13,7 @@
 	
 	NSString *name;
 	NSString *iconURL;
+	NSString *bio;
 	NSMutableArray *WorksArray;
 	
 }
@@ -20,5 +21,6 @@
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *iconURL;
 @property (nonatomic, retain) NSMutableArray *WorksArray;
+@property (nonatomic, retain) NSString *bio;
 
 @end
