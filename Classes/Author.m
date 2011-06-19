@@ -11,7 +11,7 @@
 
 @implementation Author
 
-@synthesize name, iconURL, WorksArray;
+@synthesize name, iconURL, bio, WorksArray;
 
 -(id)init
 {

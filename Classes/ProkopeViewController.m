@@ -15,7 +15,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, FirstShelf, label2, UserNameLabel;
+@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, CommentaryView, FirstShelf, label2, UserNameLabel;
 
 
 /******************************************************************************
@@ -145,6 +145,8 @@
 	[self SetUpLoginButton];
 	
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
+	
+	[CommentaryView setBackgroundColor:[UIColor clearColor]];
 	
 	int x_cord = -70 + 10;
 	// This loop populates the 'top shelf' of the BookShelfImage.
@@ -303,6 +305,11 @@
 	[SecondShelf setScrollEnabled:YES];
 	[SecondShelf setShowsHorizontalScrollIndicator:YES];
 	[SecondShelf setContentSize:CGSizeMake(x_cord + 110, SecondShelf.frame.size.height)];
+	
+	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", newULR]; 
+	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
+	
+	[CommentaryView loadHTMLString:HTML baseURL:nil];
 }
 
 /******************************************************************************
@@ -342,11 +349,10 @@
 		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
 
-		NSLog(UserNameLabel);
+		NSString *str = [label2 text];
 		
-		NSLog(@" %@", [label2 text]);
-		doc.UserName = [label2 text];
-		NSLog(doc.UserName);
+		NSString *TheName = [str substringFromIndex:10];
+		doc.UserName = TheName;
 		
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];
@@ -407,9 +413,11 @@
 	
 	doc.URL = MyAuth.workURL;
 	doc.Title = MyAuth.name;
-	//doc.UserName = UserNameLabel;
 	
-//	NSLog(UserNameLabel);
+	NSString *str = [label2 text];
+	
+	NSString *TheName = [str substringFromIndex:10];
+	doc.UserName = TheName;
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];
@@ -552,10 +560,8 @@
 		{
 			NSString *UserName = [userInput text];
 			NSString *PassWord = [passInput text];
-		
-			UserNameLabel = UserName;
-		
-			label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+				
+			label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
 		
 			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  UserName,
@@ -585,7 +591,6 @@
 			{
 				NSLog(@"File was never created");
 			}
-			UserNameLabel = @"";
 		}
 	}
 }

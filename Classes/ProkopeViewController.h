@@ -27,6 +27,9 @@ table.
 	IBOutlet UIScrollView *FirstShelf;
 	IBOutlet UIScrollView *SecondShelf;
 	IBOutlet UIScrollView *ThirdShelfScroll;
+	
+	// This WebView holds the commentary of the bio.
+	IBOutlet UIWebView *CommentaryView;
 			
 	// userInput is the UITextField added to the AlertView to capture the user's name.
 	UITextField *userInput;
@@ -50,6 +53,7 @@ table.
 @property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
 @property (nonatomic, retain) IBOutlet UIScrollView *FirstShelf;
+@property (nonatomic, retain) IBOutlet UIWebView *CommentaryView;
 @property (nonatomic, retain) NSString *UserNameLabel;
 @property (nonatomic, retain) UILabel *label2;
 

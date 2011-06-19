@@ -214,6 +214,7 @@
 	
 	NSLog(@"Clicked was : %@", id);
 	NSLog(@"On poem %@", URL);
+	NSLog(@"By user : %@", UserName);
 }
 
 

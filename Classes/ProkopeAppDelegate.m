@@ -29,9 +29,9 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 	
-	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
+	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
 	
-	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
+	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
 	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
@@ -83,7 +83,9 @@
 		
 		newAuthor.name = thename;
 		newAuthor.iconURL = icon;
-		newAuthor.bio =	@"Cicero was a <i>great</i>speaker."
+		newAuthor.bio =	@"Cicero was a <i>great</i>speaker.";
+		
+		NSLog(newAuthor.bio);
 		
 		[AuthorsArray addObject:newAuthor];
 		
