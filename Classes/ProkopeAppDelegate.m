@@ -78,11 +78,12 @@
 		Author *newAuthor = [[Author alloc] init];
 		NSString *thename = [attributeDict objectForKey:@"name"];
 		NSString *icon = [attributeDict objectForKey:@"icon"];
-		//NSString *bio = [attributeDict objectForKey:@"bio"];
 		
 		newAuthor.name = thename;
 		newAuthor.iconURL = icon;
-		newAuthor.bio =	@"Cicero was a <i>great</i>speaker.";
+		newAuthor.bio =	@"Cicero was a <i>great</i> speaker. He had many important works, and was well liked by"
+			"all of his peers. His works continue to inspire people. Check out his <strong> wikipedia </strong>"
+			"page for more info.";
 		
 		[AuthorsArray addObject:newAuthor];
 		

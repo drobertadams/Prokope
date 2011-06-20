@@ -189,15 +189,10 @@
 	CurrentAuthor = resultButton.currentTitle;
 	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:30.0];
 	resultButton.titleLabel.font = myFont;
-
-	CGPoint offset = SecondShelf.contentOffset;
-    offset.x = 0;
-    offset.y = 0;
-    [SecondShelf setContentOffset:offset animated:NO];
 	
-	NSLog(@"#####");
-	[LeftArrowImage removeFromSuperview];
-	[RightArrowImage removeFromSuperview];
+//	NSLog(@"#####");
+//	[LeftArrowImage removeFromSuperview];
+//	[RightArrowImage removeFromSuperview];
 	
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
@@ -264,17 +259,15 @@
 	[SecondShelf setShowsHorizontalScrollIndicator:YES];
 	[SecondShelf setContentSize:CGSizeMake(x_cord, SecondShelf.frame.size.height)];
 	
-	if (x_cord > SecondShelf.frame.size.width)
-	{
-		[SecondShelf setScrollEnabled:YES];
-	}
-	else
-	{
-		[SecondShelf setScrollEnabled:NO];
-	}
+	CGPoint offset = SecondShelf.contentOffset;
+    offset.x = -10;
+    offset.y = 0;
+    [SecondShelf setContentOffset:offset animated:NO];
 	
-	CGRect finalRect = CGRectMake(0, 0, 0, 0);
-	[self.SecondShelf scrollRectToVisible:finalRect animated:YES];
+	offset = SecondShelf.contentOffset;
+    offset.x = 0;
+    offset.y = 0;
+    [SecondShelf setContentOffset:offset animated:NO];
 	
 	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", newULR]; 
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
@@ -491,6 +484,7 @@
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
 	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
+	// The alertview with tag == 1 is the one that contains the dialog to log users in.
 	if(alertView.tag == 1)
 	{
 		if ([buttonTitle isEqualToString:@"ok"])
@@ -510,11 +504,13 @@
 			[dict writeToFile:file atomically: TRUE];
 			self.navigationItem.rightBarButtonItem = nil;
 		
+			// Once the user is loged in, we can now switch the button to log the user out. See the selector to see the corresponding method that gets called. 
 			UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
 			self.navigationItem.rightBarButtonItem = anotherButton;
 			[anotherButton release];
 		}
 	}
+	// The alertView that has the tag == 2 is the one that clears the contents of the AppUserData.plist file. 
 	else if (alertView.tag == 2)
 	{
 		if([buttonTitle isEqualToString:@"ok"])
@@ -532,6 +528,9 @@
 	}
 }
 
+/******************************************************************************
+ * This method populates the login button for the navigation bar. 
+ */
 -(void)SetUpLoginButton
 {
 	self.navigationItem.rightBarButtonItem = nil;
@@ -540,6 +539,9 @@
 	[anotherButton release];	
 }
 
+/******************************************************************************
+ * This method gets called when the logout button is clicked. 
+ */
 -(void)LogoutButtonClicked
 {
 	[self SetUpLoginButton];
@@ -548,6 +550,12 @@
 	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
 }
 
+/******************************************************************************
+ * This method is one of the central methods for the UIScrollView delegate protocol.
+ * This gets called whenever a scrollview has scrolled. This code responds to different
+ * events such as displaying images based on the position of the current scroll position.
+ * This is found by getting the contentOffset for that ScrollView. 
+ */
 - (void)scrollViewDidScroll:(UIScrollView *)inscrollView
 {
 	CGPoint	p = inscrollView.contentOffset;
@@ -555,6 +563,14 @@
 	[LeftArrowImage removeFromSuperview];
 	[RightArrowImage removeFromSuperview];
 	
+	// if the x_cord is < than the frame then there is nothing to scroll.
+	if(x_cord < SecondShelf.frame.size.width)
+	{
+		[RightArrowImage removeFromSuperview];
+		[LeftArrowImage removeFromSuperview];
+		return;
+	}
+	// This means it is in there is content to the right and to the left of the contentOffset.
 	if( (SecondShelf.frame.size.width + p.x < x_cord) && (p.x > 0) )
 	{
 		LeftArrowImage.frame = CGRectMake(p.x + 10, 100, 30, 30);
@@ -562,30 +578,24 @@
 		
 		RightArrowImage.frame = CGRectMake( (SecondShelf.frame.size.width + p.x) - 50, 100, 30, 30);
 		[SecondShelf addSubview:RightArrowImage];
-		NSLog(@"Both Images");
 		return;
 	}
-	
+	// This means the content offset is at the right side of the scroll view.
 	if ( SecondShelf.frame.size.width + p.x >= x_cord )
 	{
-		NSLog(@"Right");
 		[RightArrowImage removeFromSuperview];
 	
 		LeftArrowImage.frame = CGRectMake(p.x + 10, 100, 30, 30);
-		NSLog(@"%i", RightArrowImage.frame.origin.x);
 		[SecondShelf addSubview:LeftArrowImage];
 	}
+	// This means the content offset is at 0 (or lower), and therefore on the left side of the screen.
 	else if (p.x <= 0)
 	{
 		[LeftArrowImage removeFromSuperview];
 		
 		RightArrowImage.frame = CGRectMake( (SecondShelf.frame.size.width + p.x) - 50, 100, 30, 30);
-		NSLog(@"%i", RightArrowImage.frame.origin.x);
 		[SecondShelf addSubview:RightArrowImage];
 	}
-	NSLog(@"Done");
-	NSLog(@"%f", p.x);
-	NSLog(@"%i", x_cord);
 }
 
 - (void)dealloc {
