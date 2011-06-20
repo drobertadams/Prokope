@@ -16,17 +16,16 @@ to implement the necessary methods for a table view to respond to actions and lo
 table. 
  */
 @interface ProkopeViewController : UIViewController 
-		<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIAlertViewDelegate> {
+		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate> {
 
 	NSMutableArray *AuthorsArray;
 			
-	IBOutlet UITableView *ProkopeTableView;
 	IBOutlet UIImageView *BookShelfImage;
 	
 	// Three IBOutlet UIScrollView's that hold the three layers of the bookshelf.
 	IBOutlet UIScrollView *FirstShelf;
 	IBOutlet UIScrollView *SecondShelf;
-	IBOutlet UIScrollView *ThirdShelfScroll;
+	IBOutlet UIScrollView *ThirdShelf;
 	
 	// This WebView holds the commentary of the bio.
 	IBOutlet UIWebView *CommentaryView;
@@ -41,20 +40,22 @@ table.
 
 	NSString *CurrentAuthor;
 	NSString *CurrentWork;
-			
-	NSString *UserNameLabel;
 
 	UILabel *label2;
 			
+	UIImageView *LeftArrowImage;
+	UIImageView *RightArrowImage;
+			
+	int x_cord;		
 }
 
-@property (nonatomic, retain) IBOutlet UITableView *ProkopeTableView;
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
-@property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
-@property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelfScroll;
+
 @property (nonatomic, retain) IBOutlet UIScrollView *FirstShelf;
+@property (nonatomic, retain) IBOutlet UIScrollView *SecondShelf;
+@property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelf;
+
 @property (nonatomic, retain) IBOutlet UIWebView *CommentaryView;
-@property (nonatomic, retain) NSString *UserNameLabel;
 @property (nonatomic, retain) UILabel *label2;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
@@ -66,10 +67,9 @@ table.
 -(void)PopulateScroll;
 -(void)setUpNavBar;
 
--(void)ClearFirstShelfFonts;
--(void)ClearSecondShelf;
--(void)ClearSecondShelfFonts;
--(void)ClearThirdShelf;
+-(void)ClearShelfFonts:(UIScrollView *)BookShelfScrollView;
+-(void)ClearShelf:(UIScrollView *)BookShelfScrollView;
+
 -(void)ShowAlert;
 -(void)SetUpLoginButton;
 -(void)LogoutButtonClicked;

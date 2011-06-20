@@ -10,7 +10,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LoginAlertViewDelegate.h"
 
 @interface DocumentController : UIViewController <UIWebViewDelegate>
 {	

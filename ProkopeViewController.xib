@@ -12,7 +12,6 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -38,7 +37,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="766721923">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -97,7 +96,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{1024, 704}</string>
-				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
@@ -135,14 +133,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">ThirdShelfScroll</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="288219203"/>
-					</object>
-					<int key="connectionID">28</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">SecondShelf</string>
 						<reference key="source" ref="841351856"/>
 						<reference key="destination" ref="501475555"/>
@@ -164,6 +154,14 @@
 						<reference key="destination" ref="533096293"/>
 					</object>
 					<int key="connectionID">34</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">ThirdShelf</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="288219203"/>
+					</object>
+					<int key="connectionID">35</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -285,7 +283,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">34</int>
+			<int key="maxID">35</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -341,7 +339,7 @@
 							<string>FirstShelf</string>
 							<string>ProkopeTableView</string>
 							<string>SecondShelf</string>
-							<string>ThirdShelfScroll</string>
+							<string>ThirdShelf</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -362,7 +360,7 @@
 							<string>FirstShelf</string>
 							<string>ProkopeTableView</string>
 							<string>SecondShelf</string>
-							<string>ThirdShelfScroll</string>
+							<string>ThirdShelf</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -387,7 +385,7 @@
 								<string key="candidateClassName">UIScrollView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">ThirdShelfScroll</string>
+								<string key="name">ThirdShelf</string>
 								<string key="candidateClassName">UIScrollView</string>
 							</object>
 						</object>

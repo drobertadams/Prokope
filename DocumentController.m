@@ -9,7 +9,6 @@
 #import "DocumentController.h"
 #import "DocumentViewerDelegate.h"
 #import "WebViewController.h"
-#import "LoginAlertViewDelegate.h"
 
 @implementation DocumentController
 

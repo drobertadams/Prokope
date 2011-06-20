@@ -15,24 +15,8 @@
 
 @implementation ProkopeViewController
 
-@synthesize ProkopeTableView, BookShelfImage, SecondShelf, ThirdShelfScroll, CommentaryView, FirstShelf, label2, UserNameLabel;
+@synthesize BookShelfImage, SecondShelf, ThirdShelf, CommentaryView, FirstShelf, label2;
 
-
-/******************************************************************************
- * This determines how many dividing sections there are in the table view 
- */
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
-}
-
-/******************************************************************************
- * This determines how many cells are in the table. Only allocate what is needed.
- */
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return [AuthorsArray count];
-}
 
 /******************************************************************************
  * This method is used by the ProkopeAppDelegate to populate this Array.
@@ -42,49 +26,6 @@
 	AuthorsArray = dataArray;
 }
 
-/******************************************************************************
- * Sets the name of the cell to name of the author, and the Image to the image 
- * using the url of the author.
- */
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-	// Retrive the author for that specific cell.
-	Author *a = [AuthorsArray objectAtIndex:indexPath.row];
-	
-	NSString *url = a.iconURL;
-	NSData *mydata = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
-	UIImage *myimage = [[UIImage alloc] initWithData:mydata];
-	cell.imageView.image = myimage;
-	
-    cell.textLabel.text = a.name;
-	
-    return cell;
-}
-
-/******************************************************************************
- * This method is called when something in the table was clicked. It creates a SecondNavigation
- * object and sets its array to the WorksArray of the corresponding cell that was clicked.
- */
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	[ProkopeTableView deselectRowAtIndexPath:indexPath animated:YES];
-	
-	Author *a = [AuthorsArray objectAtIndex:indexPath.row];
-	SecondNavigation *secondNav = [[SecondNavigation alloc] initWithNibName:@"SecondNavigation" bundle:nil];
-	[secondNav setTitle:a.name];
-	[secondNav SetDataArray:a.WorksArray];
-	
-	// Pushes the view controller on the navigation stack. The navigation controller takes care of the rest. 
-	[self.navigationController pushViewController:secondNav animated:YES];
-	[secondNav release];
-}
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -121,11 +62,11 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
-		[ThirdShelfScroll addSubview:ProgramButton];
+		[ThirdShelf addSubview:ProgramButton];
 		x_cord += 50;
 	}
-	[ThirdShelfScroll setScrollEnabled:YES];
-	[ThirdShelfScroll setContentSize:CGSizeMake(x_cord + 40, ThirdShelfScroll.frame.size.height)];
+	[ThirdShelf setScrollEnabled:YES];
+	[ThirdShelf setContentSize:CGSizeMake(x_cord + 40, ThirdShelf.frame.size.height)];
 }
 
 /******************************************************************************
@@ -136,10 +77,8 @@
 {
 	self.title = @"Prokope - Intermediate Latin Reader";
 	[super viewDidLoad];
-		
-	// You must set the delegate and dataSource of the table to self, otherwise it will just be an empty table.
-	ProkopeTableView.delegate = self;
-	ProkopeTableView.dataSource = self;
+	
+	SecondShelf.delegate = self;
 	
 	[self setUpNavBar];
 	[self SetUpLoginButton];
@@ -147,6 +86,11 @@
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
 	
 	[CommentaryView setBackgroundColor:[UIColor clearColor]];
+	
+	
+	UIImage *image = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
+	LeftArrowImage = [[UIImageView alloc]initWithImage:image];
+	RightArrowImage = [[UIImageView alloc]initWithImage:image];
 	
 	int x_cord = -70 + 10;
 	// This loop populates the 'top shelf' of the BookShelfImage.
@@ -201,6 +145,7 @@
 	label2.adjustsFontSizeToFitWidth = YES;
 	label2.textAlignment = UITextAlignmentRight;
 	label2.textColor = [UIColor blackColor];
+	NSString *UserNameLabel = @"";
 	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
 	label2.highlightedTextColor = [UIColor blackColor];
 	[NavBarView addSubview:label2];
@@ -235,14 +180,24 @@
  */
 -(void)FirstShelfButtonClicked:(id)sender
 {
-	[self ClearSecondShelf];
-	[self ClearThirdShelf];
-	[self ClearFirstShelfFonts];
-
+	
+	[self ClearShelf:self.SecondShelf];
+	[self ClearShelf:self.ThirdShelf];
+	[self ClearShelfFonts:self.FirstShelf];
+	
 	UIButton *resultButton = (UIButton *)sender;
 	CurrentAuthor = resultButton.currentTitle;
 	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:30.0];
 	resultButton.titleLabel.font = myFont;
+
+	CGPoint offset = SecondShelf.contentOffset;
+    offset.x = 0;
+    offset.y = 0;
+    [SecondShelf setContentOffset:offset animated:NO];
+	
+	NSLog(@"#####");
+	[LeftArrowImage removeFromSuperview];
+	[RightArrowImage removeFromSuperview];
 	
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
@@ -254,7 +209,7 @@
 		}
 	}
 	
-	int x_cord = 10;
+	x_cord = 10;
 
 	NSString *newULR;
 	
@@ -289,6 +244,7 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
+		// The selector is set to SecondShelfButtonClicked method in this class. 
 		[ProgramButton addTarget:self action:@selector(SecondShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 		
 		// This line of code rotates the button to be facing vertical.
@@ -302,9 +258,23 @@
 	[myi2 setImage:image];
 	[SecondShelf addSubview:myi2];
 	
+	x_cord += 110;
+	
 	[SecondShelf setScrollEnabled:YES];
 	[SecondShelf setShowsHorizontalScrollIndicator:YES];
-	[SecondShelf setContentSize:CGSizeMake(x_cord + 110, SecondShelf.frame.size.height)];
+	[SecondShelf setContentSize:CGSizeMake(x_cord, SecondShelf.frame.size.height)];
+	
+	if (x_cord > SecondShelf.frame.size.width)
+	{
+		[SecondShelf setScrollEnabled:YES];
+	}
+	else
+	{
+		[SecondShelf setScrollEnabled:NO];
+	}
+	
+	CGRect finalRect = CGRectMake(0, 0, 0, 0);
+	[self.SecondShelf scrollRectToVisible:finalRect animated:YES];
 	
 	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", newULR]; 
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
@@ -320,8 +290,8 @@
  */
 -(void)SecondShelfButtonClicked:(id)sender
 {
-	[self ClearThirdShelf];
-	[self ClearSecondShelfFonts];
+	[self ClearShelfFonts:self.SecondShelf];
+	[self ClearShelf:self.ThirdShelf];
 	
 	UIButton *resultButton = (UIButton *)sender;
 	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
@@ -351,6 +321,7 @@
 
 		NSString *str = [label2 text];
 		
+		// strips away the 'Welcome : ' part of the user login label.
 		NSString *TheName = [str substringFromIndex:10];
 		doc.UserName = TheName;
 		
@@ -375,11 +346,11 @@
 			
 			// This line of code rotates the button to be facing vertical.
 			ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
-			[ThirdShelfScroll addSubview:ProgramButton];
+			[ThirdShelf addSubview:ProgramButton];
 			x_cord += 45;
 		}
-		[ThirdShelfScroll setScrollEnabled:YES];
-		[ThirdShelfScroll setContentSize:CGSizeMake(x_cord + 40, ThirdShelfScroll.frame.size.height)];
+		[ThirdShelf setScrollEnabled:YES];
+		[ThirdShelf setContentSize:CGSizeMake(x_cord + 40, ThirdShelf.frame.size.height)];
 	}
 
 }
@@ -428,9 +399,9 @@
  * This method is needed to reset the fonts of the first shelf. Once a button is
  * clicked. 
  */
--(void)ClearFirstShelfFonts
+-(void)ClearShelfFonts:(UIScrollView *)BookShelfScrollView
 {
-	NSArray *viewsToChange = [self.FirstShelf subviews];
+	NSArray *viewsToChange = [BookShelfScrollView subviews];
 	for (UIView *v in viewsToChange)
 	{
 		if ([v isKindOfClass: [UIButton class]])
@@ -451,48 +422,14 @@
  * necessary to clear the shelf and load the new books when another 'book' on the
  * shelf is clicked.
  */
--(void)ClearSecondShelf
+-(void)ClearShelf:(UIScrollView *)BookShelfScrollView
 {
-	NSArray *viewsToRemove = [self.SecondShelf subviews];
+	NSArray *viewsToRemove = [BookShelfScrollView subviews];
 	for (UIView *v in viewsToRemove)
 	{
 		[v removeFromSuperview];
 	}
 }
-
-/******************************************************************************
- * This method is needed to reset the fonts of the second shelf once a button is
- * clicked. 
- */
--(void)ClearSecondShelfFonts
-{
-	NSArray *viewsToChange = [self.SecondShelf subviews];
-	for (UIView *v in viewsToChange)
-	{
-		if ([v isKindOfClass: [UIButton class]])
-		{
-			UIButton *button = (UIButton *)v;
-			UIFont *font = [UIFont systemFontOfSize:25.0];
-			button.titleLabel.font = font;
-		}
-		else if ([v isKindOfClass: [UIImageView class]]){
-		//	NSLog(@"OTHER");
-		}		
-	}	
-}
-
-/******************************************************************************
- * This method is needed to clear the third shelf of all the buttons in it.
- */
--(void)ClearThirdShelf
-{
-	NSArray *viewsToChange = [self.ThirdShelfScroll subviews];
-	for (UIView *v in viewsToChange)
-	{
-		[v removeFromSuperview];
-	}
-}
-
 
 /******************************************************************************
  * This alert get shown when this view is first launched. There are two UITextFields
@@ -607,8 +544,48 @@
 {
 	[self SetUpLoginButton];
 	
-	UserNameLabel = @"";
+	NSString *UserNameLabel = @"";
 	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)inscrollView
+{
+	CGPoint	p = inscrollView.contentOffset;
+	
+	[LeftArrowImage removeFromSuperview];
+	[RightArrowImage removeFromSuperview];
+	
+	if( (SecondShelf.frame.size.width + p.x < x_cord) && (p.x > 0) )
+	{
+		LeftArrowImage.frame = CGRectMake(p.x + 10, 100, 30, 30);
+		[SecondShelf addSubview:LeftArrowImage];
+		
+		RightArrowImage.frame = CGRectMake( (SecondShelf.frame.size.width + p.x) - 50, 100, 30, 30);
+		[SecondShelf addSubview:RightArrowImage];
+		NSLog(@"Both Images");
+		return;
+	}
+	
+	if ( SecondShelf.frame.size.width + p.x >= x_cord )
+	{
+		NSLog(@"Right");
+		[RightArrowImage removeFromSuperview];
+	
+		LeftArrowImage.frame = CGRectMake(p.x + 10, 100, 30, 30);
+		NSLog(@"%i", RightArrowImage.frame.origin.x);
+		[SecondShelf addSubview:LeftArrowImage];
+	}
+	else if (p.x <= 0)
+	{
+		[LeftArrowImage removeFromSuperview];
+		
+		RightArrowImage.frame = CGRectMake( (SecondShelf.frame.size.width + p.x) - 50, 100, 30, 30);
+		NSLog(@"%i", RightArrowImage.frame.origin.x);
+		[SecondShelf addSubview:RightArrowImage];
+	}
+	NSLog(@"Done");
+	NSLog(@"%f", p.x);
+	NSLog(@"%i", x_cord);
 }
 
 - (void)dealloc {

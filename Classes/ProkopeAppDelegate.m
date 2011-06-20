@@ -29,14 +29,14 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 	
-	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
+	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
 	
-	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
+	// This is a test URL that displays more data. 
+	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
 	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
-	NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-	NSLog(theString);
+//	NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 	
 	// Set the parser's delgate to this class, since it implements the NSXMLParserDelegate protocol.
 	[parser setDelegate:self];
@@ -78,14 +78,11 @@
 		Author *newAuthor = [[Author alloc] init];
 		NSString *thename = [attributeDict objectForKey:@"name"];
 		NSString *icon = [attributeDict objectForKey:@"icon"];
-		NSString *bio = [attributeDict objectForKey:@"bio"];
-		NSLog(bio);
+		//NSString *bio = [attributeDict objectForKey:@"bio"];
 		
 		newAuthor.name = thename;
 		newAuthor.iconURL = icon;
 		newAuthor.bio =	@"Cicero was a <i>great</i>speaker.";
-		
-		NSLog(newAuthor.bio);
 		
 		[AuthorsArray addObject:newAuthor];
 		
