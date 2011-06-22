@@ -88,9 +88,11 @@
 	[CommentaryView setBackgroundColor:[UIColor clearColor]];
 	
 	
-	UIImage *image = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
-	LeftArrowImage = [[UIImageView alloc]initWithImage:image];
-	RightArrowImage = [[UIImageView alloc]initWithImage:image];
+	UIImage *image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
+	RightArrowImage = [[UIImageView alloc]initWithImage:image_right];
+	
+	UIImage *image_left = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon-left" ofType:@"png"]];
+	LeftArrowImage = [[UIImageView alloc]initWithImage:image_left];
 	
 	int x_cord = -70 + 10;
 	// This loop populates the 'top shelf' of the BookShelfImage.
