@@ -8,7 +8,6 @@
 
 #import "DocumentController.h"
 #import "ProkopeViewController.h"
-#import "SecondNavigation.h"
 #import "Author.h"
 #import "Work.h"
 #import "LoginAlertViewDelegate.h"
