@@ -23,7 +23,7 @@
 	int AuthorCount;
 	int WorkCount;
 	
-	UIBarButtonItem *addButton;
+	NSString *CurrentTag;
 	
 }
 

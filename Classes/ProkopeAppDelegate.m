@@ -36,7 +36,11 @@
 	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
-//	NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+	NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+	//NSLog(theString);
+	
+	// The current tag keeps track of what the current element is in the parser. 
+	CurrentTag = @"";
 	
 	// Set the parser's delgate to this class, since it implements the NSXMLParserDelegate protocol.
 	[parser setDelegate:self];
@@ -86,6 +90,7 @@
 			"page for more info.";
 		
 		[AuthorsArray addObject:newAuthor];
+		CurrentTag = @"author";
 		
 	}
 	else if ([elementName isEqualToString:@"work"])
@@ -100,6 +105,7 @@
 		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
 		[a.WorksArray addObject:w];
 		[w release];
+		CurrentTag = @"work";
 	}
 	else if ([elementName isEqualToString:@"chapter"])
 	{	
@@ -116,13 +122,30 @@
 		newOne.workURL = url;
 		
 		[w.ChaptersArray addObject:newOne];
+		CurrentTag = @"chapter";
+	}
+	else if ([elementName isEqualToString:@"bio"])
+	{
+	    CurrentTag = @"bio";
 	}
 	else
 	{
-	//	NSLog(@"Unknown XML Element");
+		CurrentTag = @"nothing";
 	}
 }
 
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if ([CurrentTag isEqualToString:@"bio"])
+	{
+	    Author *a = [AuthorsArray objectAtIndex:AuthorCount];
+		a.bio = string;
+		
+		[AuthorsArray replaceObjectAtIndex:AuthorCount withObject:a];
+		[a release];
+	}
+}
+		 
 /******************************************************************************
  * This method is used by the NSXMLParserDelegate protocol and it keeps track of
  * what the current author and work are. 
@@ -143,6 +166,10 @@
 	else if ([elementName isEqualToString:@"work"])
 	{
 		WorkCount ++;
+	}
+	else if ([elementName isEqualToString:@"bio"])
+	{
+		CurrentTag = @"";
 	}
 }
 

@@ -218,6 +218,8 @@
 		if([auth.name isEqualToString:resultButton.currentTitle])
 		{
 			MyAuth = auth;
+			NSLog(auth.bio);
+			NSLog(auth.iconURL);
 			break;
 		}
 	}
@@ -226,15 +228,17 @@
 
 	NSString *newULR;
 	
-	if (MyAuth.iconURL = nil)
+	if (MyAuth.iconURL != nil)
 	{
 		newULR = MyAuth.iconURL;
+		newULR = @"http://www.departments.bucknell.edu/history/carnegie/plato/plato_bust.jpg";
 	}
 	else
 	{
 		// Just get a default URL to see the 'bookholder' in action.
 		newULR = @"http://www.departments.bucknell.edu/history/carnegie/plato/plato_bust.jpg";
 	}
+	NSLog(newULR);
 	
 	// This loop adds the books on the second level of the book shelf.
 	for (Work *work in MyAuth.WorksArray)
@@ -589,6 +593,16 @@
 	}
 }
 
+/******************************************************************************
+ * This method handels the calls from the ScrollViewDidScroll method. This method allows for 
+ * each scroll view to recieve the same action. The parameters are as follows. 
+ * 1) the offset. It is always set to the currentOffset of the scroll view. See method above.
+ * 2) The ScrollView. 
+ * 3 & 4) Left and Right Images. Each scroll view has this pair of images. These are sent as parameters so the method can 
+ * add/remove the correct UIImageViews.
+ * 5) The size of the current scroll view is kept in int variables for each of the three scrolls. These values will change
+ * all the time so we need to always pass in the latest values.
+ */
 -(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
 	LeftImage:(UIImageView *)LeftImage RightImage:(UIImageView *)RightImage ShelfCord:(int)ShelfCord
 {
