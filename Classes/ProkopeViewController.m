@@ -48,11 +48,11 @@
  */
 -(void)PopulateScroll
 {
-	int x_cord = -65;
+	third_shelf_x_cord = -65;
 	for (int i = 0; i <= 25; i++)
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(x_cord, 75, 182, 40);
+		ProgramButton.frame = CGRectMake(third_shelf_x_cord, 75, 190, 40);
 		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:30]];
 		[ProgramButton setTitle:[NSString stringWithFormat:@"Title %i", i] forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
@@ -62,10 +62,11 @@
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[ThirdShelf addSubview:ProgramButton];
-		x_cord += 50;
+		third_shelf_x_cord += 50;
 	}
+	third_shelf_x_cord += 40;
 	[ThirdShelf setScrollEnabled:YES];
-	[ThirdShelf setContentSize:CGSizeMake(x_cord + 40, ThirdShelf.frame.size.height)];
+	[ThirdShelf setContentSize:CGSizeMake(third_shelf_x_cord, ThirdShelf.frame.size.height)];
 }
 
 /******************************************************************************
@@ -77,7 +78,14 @@
 	self.title = @"Prokope - Intermediate Latin Reader";
 	[super viewDidLoad];
 	
+	FirstShelf.tag = 1;
+	FirstShelf.delegate = self;
+	
+	SecondShelf.tag = 2;
 	SecondShelf.delegate = self;
+	
+	ThirdShelf.tag = 3;
+	ThirdShelf.delegate = self;
 	
 	[self setUpNavBar];
 	[self SetUpLoginButton];
@@ -86,19 +94,24 @@
 	
 	[CommentaryView setBackgroundColor:[UIColor clearColor]];
 	
-	
-	UIImage *image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
-	RightArrowImage = [[UIImageView alloc]initWithImage:image_right];
-	
 	UIImage *image_left = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon-left" ofType:@"png"]];
-	LeftArrowImage = [[UIImageView alloc]initWithImage:image_left];
+	UIImage *image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
 	
-	int x_cord = -70 + 10;
+	SecondShelfLeftImage = [[UIImageView alloc]initWithImage:image_left];
+	SecondShelfRightImage = [[UIImageView alloc]initWithImage:image_right];
+	
+	FirstShelfLeftImage = [[UIImageView alloc] initWithImage:image_left];
+	FirstShelfRightImage = [[UIImageView alloc] initWithImage:image_right];
+	
+	ThirdShelfLeftImage = [[UIImageView alloc] initWithImage:image_left];
+	ThirdShelfRightImage = [[UIImageView alloc] initWithImage:image_right];
+	
+	first_shelf_x_cord = -55;
 	// This loop populates the 'top shelf' of the BookShelfImage.
 	for (Author *a in AuthorsArray)
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(x_cord, 70, FirstShelf.frame.size.height, 40);
+		ProgramButton.frame = CGRectMake(first_shelf_x_cord, 60, FirstShelf.frame.size.height, 60);
 		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
 		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
@@ -111,8 +124,16 @@
 		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[FirstShelf addSubview:ProgramButton];
-		x_cord += 50;
+		first_shelf_x_cord += 65;
 	}
+	first_shelf_x_cord += 55;
+	
+	[FirstShelf setScrollEnabled:YES];
+	[FirstShelf setShowsHorizontalScrollIndicator:YES];
+	[FirstShelf setContentSize:CGSizeMake(first_shelf_x_cord, FirstShelf.frame.size.height)];
+	
+	[self ForceScroll:FirstShelf];
+	
 	[self PopulateScroll];
 }
 
@@ -154,9 +175,9 @@
 	
 	self.navigationItem.titleView = NavBarView;
 	
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
-	self.navigationItem.leftBarButtonItem = anotherButton;
-	[anotherButton release];
+	//UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
+	//self.navigationItem.leftBarButtonItem = anotherButton;
+	//[anotherButton release];
 	
 }
 
@@ -191,10 +212,6 @@
 	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:30.0];
 	resultButton.titleLabel.font = myFont;
 	
-//	NSLog(@"#####");
-//	[LeftArrowImage removeFromSuperview];
-//	[RightArrowImage removeFromSuperview];
-	
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
 	{
@@ -205,7 +222,7 @@
 		}
 	}
 	
-	x_cord = 10;
+	second_shelf_x_cord = -75;
 
 	NSString *newULR;
 	
@@ -218,21 +235,12 @@
 		// Just get a default URL to see the 'bookholder' in action.
 		newULR = @"http://www.departments.bucknell.edu/history/carnegie/plato/plato_bust.jpg";
 	}
-
-	
-	NSURL *url = [NSURL URLWithString: newULR]; 
-	UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
-	UIImageView *myi = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 110, 100, 100)];
-	[myi setImage:image];
-	[SecondShelf addSubview:myi];
-	
-	x_cord += 20;
 	
 	// This loop adds the books on the second level of the book shelf.
 	for (Work *work in MyAuth.WorksArray)
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(x_cord, 85, 200, 40);
+		ProgramButton.frame = CGRectMake(second_shelf_x_cord, 85, 200, 40);
 		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
 		[ProgramButton setTitle:work.name forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
@@ -246,34 +254,40 @@
 		// This line of code rotates the button to be facing vertical.
 		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 		[SecondShelf addSubview:ProgramButton];
-		x_cord += 45;
+		second_shelf_x_cord += 45;
 	}
-	x_cord += 75;
-	
-	UIImageView *myi2 = [[UIImageView alloc] initWithFrame:CGRectMake(x_cord, 110, 100, 100)];
-	[myi2 setImage:image];
-	[SecondShelf addSubview:myi2];
-	
-	x_cord += 110;
+	second_shelf_x_cord += 80;
 	
 	[SecondShelf setScrollEnabled:YES];
 	[SecondShelf setShowsHorizontalScrollIndicator:YES];
-	[SecondShelf setContentSize:CGSizeMake(x_cord, SecondShelf.frame.size.height)];
+	[SecondShelf setContentSize:CGSizeMake(second_shelf_x_cord, SecondShelf.frame.size.height)];
 	
-	CGPoint offset = SecondShelf.contentOffset;
-    offset.x = -10;
-    offset.y = 0;
-    [SecondShelf setContentOffset:offset animated:NO];
-	
-	offset = SecondShelf.contentOffset;
-    offset.x = 0;
-    offset.y = 0;
-    [SecondShelf setContentOffset:offset animated:NO];
+	[self ForceScroll:SecondShelf];
 	
 	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", newULR]; 
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
 	
 	[CommentaryView loadHTMLString:HTML baseURL:nil];
+}
+
+/******************************************************************************
+ * The idea behind the force scroll method is twofold :
+ * 1) It will automatically set the contentOffset to 0, which will set it to the scroll to the original position.
+ * 2) by changing the scollview's position programmatically it will kickoff the viewdidscoll method for that 
+ * scrollview. That method will kickoff the method to display the images if there is scrollable content. These images
+ * are loaded before the user has even touched the scroll bar.
+ */
+-(void)ForceScroll:(UIScrollView *)scroll
+{
+	CGPoint offset = scroll.contentOffset;
+    offset.x = -10;
+    offset.y = 0;
+    [scroll setContentOffset:offset animated:NO];
+	
+	offset = scroll.contentOffset;
+    offset.x = 0;
+    offset.y = 0;
+    [scroll setContentOffset:offset animated:NO];
 }
 
 /******************************************************************************
@@ -559,44 +573,61 @@
  */
 - (void)scrollViewDidScroll:(UIScrollView *)inscrollView
 {
+
 	CGPoint	p = inscrollView.contentOffset;
-	
-	[LeftArrowImage removeFromSuperview];
-	[RightArrowImage removeFromSuperview];
+	if (inscrollView.tag == 1)
+	{
+	    [self DisplayHelperImage:p.x scrollView:FirstShelf LeftImage:FirstShelfLeftImage RightImage:FirstShelfRightImage ShelfCord:first_shelf_x_cord];	
+	}
+	else if (inscrollView.tag == 2)
+	{
+		[self DisplayHelperImage:p.x scrollView:SecondShelf LeftImage:SecondShelfLeftImage RightImage:SecondShelfRightImage ShelfCord:second_shelf_x_cord];
+	}
+	else if (inscrollView.tag == 3)
+	{
+		[self DisplayHelperImage:p.x scrollView:ThirdShelf LeftImage:ThirdShelfLeftImage RightImage:ThirdShelfRightImage ShelfCord:third_shelf_x_cord];
+	}
+}
+
+-(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
+	LeftImage:(UIImageView *)LeftImage RightImage:(UIImageView *)RightImage ShelfCord:(int)ShelfCord
+{
+	int size = 30;
+	int y_placement = (scroll.frame.size.height / 2) - (size / 2);
 	
 	// if the x_cord is < than the frame then there is nothing to scroll.
-	if(x_cord < SecondShelf.frame.size.width)
+	if(ShelfCord < scroll.frame.size.width)
 	{
-		[RightArrowImage removeFromSuperview];
-		[LeftArrowImage removeFromSuperview];
+		[LeftImage removeFromSuperview];
+		[RightImage removeFromSuperview];
 		return;
 	}
 	// This means it is in there is content to the right and to the left of the contentOffset.
-	if( (SecondShelf.frame.size.width + p.x < x_cord) && (p.x > 0) )
+	if( (scroll.frame.size.width + offset < ShelfCord) && (offset > 0) )
 	{
-		LeftArrowImage.frame = CGRectMake(p.x + 10, 100, 30, 30);
-		[SecondShelf addSubview:LeftArrowImage];
+		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
+		[scroll addSubview:LeftImage];
 		
-		RightArrowImage.frame = CGRectMake( (SecondShelf.frame.size.width + p.x) - 50, 100, 30, 30);
-		[SecondShelf addSubview:RightArrowImage];
+		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
+		[scroll addSubview:RightImage];
 		return;
 	}
 	// This means the content offset is at the right side of the scroll view.
-	if ( SecondShelf.frame.size.width + p.x >= x_cord )
+	if ( scroll.frame.size.width + offset >= ShelfCord )
 	{
-		[RightArrowImage removeFromSuperview];
-	
-		LeftArrowImage.frame = CGRectMake(p.x + 10, 100, 30, 30);
-		[SecondShelf addSubview:LeftArrowImage];
+		[RightImage removeFromSuperview];
+		
+		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
+		[scroll addSubview:LeftImage];
 	}
 	// This means the content offset is at 0 (or lower), and therefore on the left side of the screen.
-	else if (p.x <= 0)
+	else if (offset <= 0)
 	{
-		[LeftArrowImage removeFromSuperview];
+		[LeftImage removeFromSuperview];
 		
-		RightArrowImage.frame = CGRectMake( (SecondShelf.frame.size.width + p.x) - 50, 100, 30, 30);
-		[SecondShelf addSubview:RightArrowImage];
-	}
+		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
+		[scroll addSubview:RightImage];
+	} 
 }
 
 - (void)dealloc {

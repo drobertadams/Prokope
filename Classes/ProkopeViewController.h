@@ -42,10 +42,18 @@ table.
 
 	UILabel *label2;
 			
-	UIImageView *LeftArrowImage;
-	UIImageView *RightArrowImage;
+	UIImageView *FirstShelfLeftImage;
+	UIImageView *FirstShelfRightImage;		
 			
-	int x_cord;		
+	UIImageView *SecondShelfLeftImage;
+	UIImageView *SecondShelfRightImage;
+	
+	UIImageView *ThirdShelfLeftImage;
+	UIImageView *ThirdShelfRightImage;		
+			
+	int first_shelf_x_cord;
+	int second_shelf_x_cord;
+	int third_shelf_x_cord;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
@@ -63,6 +71,8 @@ table.
 -(void)SecondShelfButtonClicked:(id)sender;
 -(void)ThirdShelfButtonClicked:(id)sender;
 
+-(void)ForceScroll:(UIScrollView *)scroll;
+
 -(void)PopulateScroll;
 -(void)setUpNavBar;
 
@@ -73,6 +83,9 @@ table.
 -(void)SetUpLoginButton;
 -(void)LogoutButtonClicked;
 -(void)ClearUserSettings;
+
+-(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
+	LeftImage:(UIImageView *)LeftImage RightImage:(UIImageView *)RightImage ShelfCord:(int)ShelfCord;
 
 @end
 

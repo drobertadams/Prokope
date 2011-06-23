@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="33"/>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -50,13 +50,13 @@
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">StoneBook.png</string>
+							<string key="NSResourceName">StoneBook3.png</string>
 						</object>
 					</object>
 					<object class="IBUIScrollView" id="288219203">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{10, 462}, {689, 185}}</string>
+						<string key="NSFrame">{{23, 461}, {675, 185}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -65,7 +65,7 @@
 					<object class="IBUIScrollView" id="501475555">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{10, 234}, {689, 206}}</string>
+						<string key="NSFrame">{{22, 230}, {675, 206}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -74,7 +74,7 @@
 					<object class="IBUIScrollView" id="762718893">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{10, 38}, {451, 177}}</string>
+						<string key="NSFrame">{{23, 37}, {151, 175}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -247,7 +247,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>ProkopeViewController</string>
 					<string>UIResponder</string>
-					<string>{{0, 70}, {1039, 686}}</string>
+					<string>{{241, 70}, {1039, 686}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -602,7 +602,7 @@
 		<string key="IBDocument.LastKnownRelativeProjectPath">Prokope.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">StoneBook.png</string>
+			<string key="NS.key.0">StoneBook3.png</string>
 			<string key="NS.object.0">{700, 675}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">141</string>
