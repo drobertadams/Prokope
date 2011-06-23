@@ -693,6 +693,7 @@
 {
 	int size = 30;
 	int x_left_placement = offset + 10;
+	int x_right_placement = (scroll.frame.size.width + offset) - 50;
 	int y_placement = (scroll.frame.size.height / 2) - (size / 2);
 	
 	// if the x_cord is < than the frame then there is nothing to scroll.
@@ -708,7 +709,7 @@
 		LeftImage.frame = CGRectMake(x_left_placement, y_placement, size, size);
 		LeftImage.hidden = NO;
 		
-		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
+		RightImage.frame = CGRectMake(x_right_placement, y_placement, size, size);
 		RightImage.hidden = NO;
 		
 		[scroll bringSubviewToFront:LeftImage];
@@ -729,7 +730,7 @@
 	{
 		LeftImage.hidden = YES;
 
-		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
+		RightImage.frame = CGRectMake(x_right_placement, y_placement, size, size);
 		RightImage.hidden = NO;
 		[scroll bringSubviewToFront:RightImage];
 	}	
