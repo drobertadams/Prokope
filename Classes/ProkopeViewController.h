@@ -54,6 +54,9 @@ table.
 	int first_shelf_x_cord;
 	int second_shelf_x_cord;
 	int third_shelf_x_cord;
+			
+	UIFont *ClickedFont;
+	UIFont *ControlFont;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
@@ -72,8 +75,6 @@ table.
 -(void)ThirdShelfButtonClicked:(id)sender;
 
 -(void)ForceScroll:(UIScrollView *)scroll;
-
--(void)PopulateScroll;
 -(void)setUpNavBar;
 
 -(void)ClearShelfFonts:(UIScrollView *)BookShelfScrollView;

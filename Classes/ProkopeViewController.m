@@ -44,37 +44,15 @@
 }
 
 /******************************************************************************
- * This method used to demo a horizontal scroll bar.
- */
--(void)PopulateScroll
-{
-	third_shelf_x_cord = -65;
-	for (int i = 0; i <= 25; i++)
-	{
-		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(third_shelf_x_cord, 75, 190, 40);
-		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:30]];
-		[ProgramButton setTitle:[NSString stringWithFormat:@"Title %i", i] forState:UIControlStateNormal];
-		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
-		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
-		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
-		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
-		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
-		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
-		[ThirdShelf addSubview:ProgramButton];
-		third_shelf_x_cord += 50;
-	}
-	third_shelf_x_cord += 40;
-	[ThirdShelf setScrollEnabled:YES];
-	[ThirdShelf setContentSize:CGSizeMake(third_shelf_x_cord, ThirdShelf.frame.size.height)];
-}
-
-/******************************************************************************
  * This method is called when the view is loaded. Custom code is called to configure
  * the application.
  */
 -(void)viewDidLoad
 {
+	
+	ClickedFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
+	ControlFont = [UIFont systemFontOfSize:25];
+	
 	self.title = @"Prokope - Intermediate Latin Reader";
 	[super viewDidLoad];
 	
@@ -112,7 +90,7 @@
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 		ProgramButton.frame = CGRectMake(first_shelf_x_cord, 60, FirstShelf.frame.size.height, 60);
-		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
+		[ProgramButton.titleLabel setFont:ControlFont];
 		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
 		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
@@ -133,8 +111,6 @@
 	[FirstShelf setContentSize:CGSizeMake(first_shelf_x_cord, FirstShelf.frame.size.height)];
 	
 	[self ForceScroll:FirstShelf];
-	
-	[self PopulateScroll];
 }
 
 /******************************************************************************
@@ -175,6 +151,7 @@
 	
 	self.navigationItem.titleView = NavBarView;
 	
+	// This button will be added later on.
 	//UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
 	//self.navigationItem.leftBarButtonItem = anotherButton;
 	//[anotherButton release];
@@ -187,7 +164,6 @@
  */
 -(void)ClearUserSettings
 {	
-	
 	UIAlertView *alertDialog;
 	alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear User Settings ?" message:@"Are you sure you want to clear your settings" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
 	alertDialog.tag = 2;
@@ -209,8 +185,7 @@
 	
 	UIButton *resultButton = (UIButton *)sender;
 	CurrentAuthor = resultButton.currentTitle;
-	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:30.0];
-	resultButton.titleLabel.font = myFont;
+	resultButton.titleLabel.font = ClickedFont;
 	
 	Author *MyAuth;
 	for (Author *auth in AuthorsArray)
@@ -218,37 +193,20 @@
 		if([auth.name isEqualToString:resultButton.currentTitle])
 		{
 			MyAuth = auth;
-			NSLog(auth.bio);
-			NSLog(auth.iconURL);
 			break;
 		}
 	}
 	
-	second_shelf_x_cord = -75;
-
-	NSString *newULR;
-	
-	if (MyAuth.iconURL != nil)
-	{
-		newULR = MyAuth.iconURL;
-		newULR = @"http://www.departments.bucknell.edu/history/carnegie/plato/plato_bust.jpg";
-	}
-	else
-	{
-		// Just get a default URL to see the 'bookholder' in action.
-		newULR = @"http://www.departments.bucknell.edu/history/carnegie/plato/plato_bust.jpg";
-	}
-	NSLog(newULR);
+	second_shelf_x_cord = -80;
 	
 	// This loop adds the books on the second level of the book shelf.
 	for (Work *work in MyAuth.WorksArray)
 	{
 		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(second_shelf_x_cord, 85, 200, 40);
-		[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
+		ProgramButton.frame = CGRectMake(second_shelf_x_cord, 85, SecondShelf.frame.size.height, 40);
+		[ProgramButton.titleLabel setFont:ControlFont];
 		[ProgramButton setTitle:work.name forState:UIControlStateNormal];
 		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
-		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
@@ -268,7 +226,7 @@
 	
 	[self ForceScroll:SecondShelf];
 	
-	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", newULR]; 
+	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", MyAuth.iconURL]; 
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
 	
 	[CommentaryView loadHTMLString:HTML baseURL:nil];
@@ -306,8 +264,7 @@
 	[self ClearShelf:self.ThirdShelf];
 	
 	UIButton *resultButton = (UIButton *)sender;
-	UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
-	resultButton.titleLabel.font = myFont;
+	resultButton.titleLabel.font = ClickedFont;
 	
 	CurrentWork = resultButton.currentTitle;
 	
@@ -342,27 +299,28 @@
 	}
 	else 
 	{
-		int x_cord = 10;
+		third_shelf_x_cord = -75;
 		for (Work *work in MyAuth.ChaptersArray)
 		{
 			UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-			ProgramButton.frame = CGRectMake(x_cord, 85, 200, 40);
-			[ProgramButton.titleLabel setFont:[UIFont systemFontOfSize:25]];
+			ProgramButton.frame = CGRectMake(third_shelf_x_cord, 75, ThirdShelf.frame.size.height, 40);
+			[ProgramButton.titleLabel setFont:ControlFont];
 			[ProgramButton setTitle:work.name forState:UIControlStateNormal];
 			[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
-			[ProgramButton setBackgroundColor:[UIColor cyanColor]];
 			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
 			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
 			[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
 			[ProgramButton addTarget:self action:@selector(ThirdShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 			
-			// This line of code rotates the button to be facing vertical.
 			ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
 			[ThirdShelf addSubview:ProgramButton];
-			x_cord += 45;
+			third_shelf_x_cord += 45;
 		}
+		third_shelf_x_cord += 75;
 		[ThirdShelf setScrollEnabled:YES];
-		[ThirdShelf setContentSize:CGSizeMake(x_cord + 40, ThirdShelf.frame.size.height)];
+		[ThirdShelf setContentSize:CGSizeMake(third_shelf_x_cord, ThirdShelf.frame.size.height)];
+		
+		[self ForceScroll:ThirdShelf];
 	}
 
 }
@@ -419,8 +377,7 @@
 		if ([v isKindOfClass: [UIButton class]])
 		{
 			UIButton *button = (UIButton *)v;
-			UIFont *font = [UIFont systemFontOfSize:25.0];
-			button.titleLabel.font = font;
+			button.titleLabel.font = ControlFont;
 		}
 		else if ([v isKindOfClass: [UIImageView class]]){
 		//	NSLog(@"OTHER");

@@ -1,0 +1,168 @@
+<prokope>
+
+<author name="Ciscero" icon="http://www.stenudd.com/myth/greek/images/plato.jpg">
+   <bio>This is a sample bio for Ciscero</bio>
+   <work name="Ciscero Work 0">
+   <chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle End" url="www.AristotleWork1Chap2.com"></chapter>
+   </work>
+   <work name="Ciscero 1" url="http://www.CisceroWork2.com"></work>
+   <work name="Ciscero 2" url="http://www.CisceroWork3.com"></work>
+   <work name="Ciscero Work 3">
+		<chapter name="Ciscero Work 4 Chap. 1" url="www.CisceroWork4Chap1.com"></chapter>
+		<chapter name="Ciscero Work 4 Chap. 2" url="www.CisceroWork4Chap2.com"></chapter>
+   </work>
+   <work name="Ciscero 4" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 5" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 6" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 7" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 8" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 9" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 10" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 11" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 12" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 13" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 14" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 15" url="http://www.CisceroWork5.com"></work>
+   <work name="Ciscero 16" url="http://www.CisceroWork5.com"></work>
+</author>
+
+<author name="Plato" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+    <bio>This is a sample bio for Plato</bio>
+   <work name="Plato" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Socrates" icon="http://www.stenudd.com/myth/greek/images/plato3.jpg">
+   <work name="Socrates Work 1" url="http://www.SocratesWork1.com"></work>
+</author>
+
+<author name="Aristotle" icon="http://www.stenudd.com/myth/greek/images/plato4.jpg">
+   <work name="Aristotle Work 1">
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
+		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+		<chapter name="Aristotle End" url="www.AristotleWork1Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platox" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platoq" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platow" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platoe" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Plator" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platoy" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platou" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platoi" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+<author name="Platop" icon="http://www.stenudd.com/myth/greek/images/plato2.jpg">
+   <work name="Plato Work 1" url="http://www.PlatoWork1.com"></work>
+   <work name="Plato Work 2" url="http://www.PlatoWork2.com"></work>
+   <work name="Plato Work 3">
+		<chapter name="Plato Work 3 Chap. 1" url="www.PlatoWork3Chap1.com"></chapter>
+		<chapter name="Plato Work 3 Chap. 2" url="www.PlatoWork3Chap2.com"></chapter>
+   </work>
+</author>
+
+</prokope>
