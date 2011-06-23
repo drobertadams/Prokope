@@ -98,10 +98,7 @@ table.
 -(void)ClearUserSettings;
 
 -(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
-	LeftImage:(UIImageView *)LeftImage RightImage:(UIImageView *)RightImage ShelfCord:(int)ShelfCord;
-
--(void)DisplayHelperImage2:(int)offset scrollView:(UIScrollView *)scroll 
-				LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord;
+	LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord;
 
 @end
 

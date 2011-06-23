@@ -514,7 +514,7 @@
 		{
 		     UIButton *b = (UIButton*)v;
 			 int t = [b tag]; 
-			 if (t == 22 || t == 23 || t == 24 || t == 25 || t == 26)
+			 if (t== 21 || t == 22 || t == 23 || t == 24 || t == 25 || t == 26)
 			 {
 				 NSLog(@"Except %i", t);
 			 }
@@ -524,9 +524,8 @@
 			 }
 		}
 	}
-	second_shelf_x_cord = 0;
 	third_shelf_x_cord = 0;
-	[BookShelfScrollView setContentSize:CGSizeMake(0, 0)];
+	[ThirdShelf setContentSize:CGSizeMake(0, 0)];
 }
 
 /******************************************************************************
@@ -667,27 +666,33 @@
 	CGPoint	p = inscrollView.contentOffset;
 	if (inscrollView.tag == 1)
 	{
-	//    [self DisplayHelperImage:p.x scrollView:FirstShelf LeftImage:FirstShelfLeftImage RightImage:FirstShelfRightImage ShelfCord:first_shelf_x_cord];
-		[self DisplayHelperImage2:p.x scrollView:FirstShelf LeftImage:FirstLeftButton RightImage:FirstRightButton ShelfCord:first_shelf_x_cord];	
-
+		[self DisplayHelperImage:p.x scrollView:FirstShelf LeftImage:FirstLeftButton RightImage:FirstRightButton ShelfCord:first_shelf_x_cord];	
 	}
 	else if (inscrollView.tag == 2)
 	{
-	//	[self DisplayHelperImage:p.x scrollView:SecondShelf LeftImage:SecondShelfLeftImage RightImage:SecondShelfRightImage ShelfCord:second_shelf_x_cord];
-		[self DisplayHelperImage2:p.x scrollView:SecondShelf LeftImage:SecondLeftButton RightImage:SecondRightButton ShelfCord:second_shelf_x_cord];
-
+		[self DisplayHelperImage:p.x scrollView:SecondShelf LeftImage:SecondLeftButton RightImage:SecondRightButton ShelfCord:second_shelf_x_cord];
 	}
 	else if (inscrollView.tag == 3)
 	{
-	//	[self DisplayHelperImage:p.x scrollView:ThirdShelf LeftImage:ThirdShelfLeftImage RightImage:ThirdShelfRightImage ShelfCord:third_shelf_x_cord];
-		[self DisplayHelperImage2:p.x scrollView:ThirdShelf LeftImage:ThirdLeftButton RightImage:ThirdRightButton ShelfCord:third_shelf_x_cord];
+		[self DisplayHelperImage:p.x scrollView:ThirdShelf LeftImage:ThirdLeftButton RightImage:ThirdRightButton ShelfCord:third_shelf_x_cord];
 	}
 }
 
--(void)DisplayHelperImage2:(int)offset scrollView:(UIScrollView *)scroll 
+/******************************************************************************
+ * This method handels the calls from the ScrollViewDidScroll method. This method allows for 
+ * each scroll view to recieve the same action. The parameters are as follows. 
+ * 1) the offset. It is always set to the currentOffset of the scroll view. See method above.
+ * 2) The ScrollView. 
+ * 3 & 4) Left and Right Images. Each scroll view has this pair of images. These are sent as parameters so the method can 
+ * add/remove the correct UIImageViews.
+ * 5) The size of the current scroll view is kept in int variables for each of the three scrolls. These values will change
+ * all the time so we need to always pass in the latest values.
+ */
+-(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
 	LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord
 {
 	int size = 30;
+	int x_left_placement = offset + 10;
 	int y_placement = (scroll.frame.size.height / 2) - (size / 2);
 	
 	// if the x_cord is < than the frame then there is nothing to scroll.
@@ -700,7 +705,7 @@
 	// This means it is in there is content to the right and to the left of the contentOffset.
 	if( (scroll.frame.size.width + offset < ShelfCord) && (offset > 0) )
 	{
-		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
+		LeftImage.frame = CGRectMake(x_left_placement, y_placement, size, size);
 		LeftImage.hidden = NO;
 		
 		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
@@ -710,13 +715,12 @@
 		[scroll bringSubviewToFront:RightImage];
 		return;
 	}
-	
 	// This means the content offset is at the right side of the scroll view.
 	if ( scroll.frame.size.width + offset >= ShelfCord )
 	{
 		RightImage.hidden = YES;
 		
-		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
+		LeftImage.frame = CGRectMake(x_left_placement, y_placement, size, size);
 		LeftImage.hidden = NO;
         [scroll bringSubviewToFront:LeftImage];
 	}
@@ -731,57 +735,6 @@
 	}	
 }
 
-/******************************************************************************
- * This method handels the calls from the ScrollViewDidScroll method. This method allows for 
- * each scroll view to recieve the same action. The parameters are as follows. 
- * 1) the offset. It is always set to the currentOffset of the scroll view. See method above.
- * 2) The ScrollView. 
- * 3 & 4) Left and Right Images. Each scroll view has this pair of images. These are sent as parameters so the method can 
- * add/remove the correct UIImageViews.
- * 5) The size of the current scroll view is kept in int variables for each of the three scrolls. These values will change
- * all the time so we need to always pass in the latest values.
- */
--(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
-	LeftImage:(UIImageView *)LeftImage RightImage:(UIImageView *)RightImage ShelfCord:(int)ShelfCord
-{
-	int size = 30;
-	int y_placement = (scroll.frame.size.height / 2) - (size / 2);
-	
-	// if the x_cord is < than the frame then there is nothing to scroll.
-	if(ShelfCord < scroll.frame.size.width)
-	{
-		[LeftImage removeFromSuperview];
-		[RightImage removeFromSuperview];
-		return;
-	}
-	// This means it is in there is content to the right and to the left of the contentOffset.
-	if( (scroll.frame.size.width + offset < ShelfCord) && (offset > 0) )
-	{
-		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
-		[scroll addSubview:LeftImage];
-		
-		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
-		[scroll addSubview:RightImage];
-		
-		return;
-	}
-	// This means the content offset is at the right side of the scroll view.
-	if ( scroll.frame.size.width + offset >= ShelfCord )
-	{
-		[RightImage removeFromSuperview];
-		
-		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
-		[scroll addSubview:LeftImage];
-	}
-	// This means the content offset is at 0 (or lower), and therefore on the left side of the screen.
-	else if (offset <= 0)
-	{
-		[LeftImage removeFromSuperview];
-		
-		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
-		[scroll addSubview:RightImage];
-	} 
-}
 
 - (void)dealloc {
     [super dealloc];
