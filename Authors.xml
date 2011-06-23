@@ -1,9 +1,9 @@
 <prokope>
 
-<author name="Ciscero" icon="http://www.stenudd.com/myth/greek/images/plato.jpg">
+<author name="Ciscero" icon="http://www.jimpoz.com/quotes/speakers/martial.jpg">
    <bio>This is a sample bio for Ciscero</bio>
    <work name="Ciscero Work 0">
-   <chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
+        <chapter name="Ciscero Link" url="http://www.cis.gvsu.edu/~prokope/index.php/rest/document/3"></chapter>
 		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>
 		<chapter name="Aristotle Work 1 Chap. 1" url="www.AristotleWork1Chap1.com"></chapter>
 		<chapter name="Aristotle Work 1 Chap. 2" url="www.AristotleWork1Chap2.com"></chapter>

@@ -266,6 +266,8 @@
 	UIButton *resultButton = (UIButton *)sender;
 	resultButton.titleLabel.font = ClickedFont;
 	
+	//[FirstShelf setContentOffset:CGPointMake(first_shelf_x_cord, 0)];
+	
 	CurrentWork = resultButton.currentTitle;
 	
 	Work *MyAuth;

@@ -138,8 +138,8 @@
 				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				473349651381A73A003F323B /* WebViewController.xib */,
-				478B7173137A174600163956 /* README */,
 				8D1107310486CEB800E47090 /* Prokope-Info.plist */,
+				478B7173137A174600163956 /* README */,
 				948D03C613B2DD96007BFFAD /* Authors.xml */,
 			);
 			name = Resources;

@@ -29,8 +29,7 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 	
-	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
-	
+//	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];	
 	
 	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
 	NSData* data = [NSData dataWithContentsOfFile: path];
