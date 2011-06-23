@@ -57,6 +57,15 @@ table.
 			
 	UIFont *ClickedFont;
 	UIFont *ControlFont;
+			
+	UIButton *FirstRightButton;
+	UIButton *FirstLeftButton;
+			
+	UIButton *SecondLeftButton;
+	UIButton *SecondRightButton;
+	
+	UIButton *ThirdLeftButton;
+	UIButton *ThirdRightButton;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
@@ -77,6 +86,9 @@ table.
 -(void)ForceScroll:(UIScrollView *)scroll;
 -(void)setUpNavBar;
 
+-(void)accelorateRight:(id)sender;
+-(void)accelorateLeft:(id)sender;
+
 -(void)ClearShelfFonts:(UIScrollView *)BookShelfScrollView;
 -(void)ClearShelf:(UIScrollView *)BookShelfScrollView;
 
@@ -87,6 +99,9 @@ table.
 
 -(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
 	LeftImage:(UIImageView *)LeftImage RightImage:(UIImageView *)RightImage ShelfCord:(int)ShelfCord;
+
+-(void)DisplayHelperImage2:(int)offset scrollView:(UIScrollView *)scroll 
+				LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord;
 
 @end
 

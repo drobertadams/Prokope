@@ -110,7 +110,120 @@
 	[FirstShelf setShowsHorizontalScrollIndicator:YES];
 	[FirstShelf setContentSize:CGSizeMake(first_shelf_x_cord, FirstShelf.frame.size.height)];
 	
+	FirstLeftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[FirstLeftButton setBackgroundImage:image_left forState:UIControlStateNormal];
+	[FirstLeftButton setBackgroundImage:image_left forState:UIControlStateHighlighted];
+	[FirstLeftButton setBackgroundImage:image_left forState:UIControlStateSelected];
+	[FirstLeftButton addTarget:self action:@selector(accelorateLeft:) forControlEvents:UIControlEventTouchUpInside];
+	FirstLeftButton.tag=21;	
+	
+	FirstRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[FirstRightButton setBackgroundImage:image_right forState:UIControlStateNormal];
+	[FirstRightButton setBackgroundImage:image_right forState:UIControlStateHighlighted];
+	[FirstRightButton setBackgroundImage:image_right forState:UIControlStateSelected];
+	[FirstRightButton addTarget:self action:@selector(accelorateRight:) forControlEvents:UIControlEventTouchUpInside];
+	FirstRightButton.tag=22;	
+	
+	SecondLeftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[SecondLeftButton setBackgroundImage:image_left forState:UIControlStateNormal];
+	[SecondLeftButton setBackgroundImage:image_left forState:UIControlStateHighlighted];
+	[SecondLeftButton setBackgroundImage:image_left forState:UIControlStateSelected];
+	[SecondLeftButton addTarget:self action:@selector(accelorateLeft:) forControlEvents:UIControlEventTouchUpInside];
+	SecondLeftButton.tag=23;	
+	
+	SecondRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[SecondRightButton setBackgroundImage:image_right forState:UIControlStateNormal];
+	[SecondRightButton setBackgroundImage:image_right forState:UIControlStateHighlighted];
+	[SecondRightButton setBackgroundImage:image_right forState:UIControlStateSelected];
+	[SecondRightButton addTarget:self action:@selector(accelorateRight:) forControlEvents:UIControlEventTouchUpInside];
+	SecondRightButton.tag=24;	
+	
+	ThirdLeftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[ThirdLeftButton setBackgroundImage:image_left forState:UIControlStateNormal];
+	[ThirdLeftButton setBackgroundImage:image_left forState:UIControlStateHighlighted];
+	[ThirdLeftButton setBackgroundImage:image_left forState:UIControlStateSelected];
+	[ThirdLeftButton addTarget:self action:@selector(accelorateLeft:) forControlEvents:UIControlEventTouchUpInside];
+	ThirdLeftButton.tag=25;	
+	
+	ThirdRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[ThirdRightButton setBackgroundImage:image_right forState:UIControlStateNormal];
+	[ThirdRightButton setBackgroundImage:image_right forState:UIControlStateHighlighted];
+	[ThirdRightButton setBackgroundImage:image_right forState:UIControlStateSelected];
+	[ThirdRightButton addTarget:self action:@selector(accelorateRight:) forControlEvents:UIControlEventTouchUpInside];
+	ThirdRightButton.tag=26;
+	
+	[FirstShelf addSubview:FirstLeftButton];
+	[FirstShelf addSubview:FirstRightButton];
+	[SecondShelf addSubview:SecondLeftButton];
+	[SecondShelf addSubview:SecondRightButton];
+	[ThirdShelf addSubview:ThirdLeftButton];
+	[ThirdShelf addSubview:ThirdRightButton];
+	
 	[self ForceScroll:FirstShelf];
+}
+
+-(void)accelorateLeft:(id)sender
+{
+	UIScrollView *scroll;
+	int x_cord;
+	
+	int tid = [sender tag]; 
+	if (tid == 21)
+	{
+		scroll = FirstShelf;
+		x_cord = first_shelf_x_cord;
+	}
+	else if (tid == 23)
+	{
+		scroll = SecondShelf;
+		x_cord = second_shelf_x_cord;
+	}
+    else if (tid == 25)
+	{
+		scroll = ThirdShelf;
+		x_cord = third_shelf_x_cord;
+	}
+	else
+	{
+		return;
+	}
+	
+	CGPoint offset = scroll.contentOffset;
+    offset.x = 0;
+    offset.y = 0;
+    [scroll setContentOffset:offset animated:YES];	
+}
+
+-(void)accelorateRight:(id)sender
+{	
+	UIScrollView *scroll;
+	int x_cord;
+	
+	int tid = [sender tag]; 
+	if (tid == 22)
+	{
+		scroll = FirstShelf;
+		x_cord = first_shelf_x_cord;
+	}
+	else if (tid == 24)
+	{
+		scroll = SecondShelf;
+		x_cord = second_shelf_x_cord;
+	}
+	else if (tid == 26)
+	{
+		scroll = ThirdShelf;
+		x_cord = third_shelf_x_cord;
+	}
+	else
+	{
+		return;
+	}
+	
+	CGPoint offset = scroll.contentOffset;
+    offset.x = x_cord - scroll.frame.size.width;
+    offset.y = 0;
+    [scroll setContentOffset:offset animated:YES];
 }
 
 /******************************************************************************
@@ -225,6 +338,7 @@
 	[SecondShelf setContentSize:CGSizeMake(second_shelf_x_cord, SecondShelf.frame.size.height)];
 	
 	[self ForceScroll:SecondShelf];
+	[self ForceScroll:ThirdShelf];
 	
 	NSString *ShelfImage = [NSString stringWithFormat:@"<img width='100px' height='100px' align ='left' style='padding:5px' src='%@' />", MyAuth.iconURL]; 
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
@@ -265,8 +379,6 @@
 	
 	UIButton *resultButton = (UIButton *)sender;
 	resultButton.titleLabel.font = ClickedFont;
-	
-	//[FirstShelf setContentOffset:CGPointMake(first_shelf_x_cord, 0)];
 	
 	CurrentWork = resultButton.currentTitle;
 	
@@ -398,8 +510,23 @@
 	NSArray *viewsToRemove = [BookShelfScrollView subviews];
 	for (UIView *v in viewsToRemove)
 	{
-		[v removeFromSuperview];
+		if ([v isKindOfClass: [UIButton class]])
+		{
+		     UIButton *b = (UIButton*)v;
+			 int t = [b tag]; 
+			 if (t == 22 || t == 23 || t == 24 || t == 25 || t == 26)
+			 {
+				 NSLog(@"Except %i", t);
+			 }
+			 else
+			 {
+				 [b removeFromSuperview];
+			 }
+		}
 	}
+	second_shelf_x_cord = 0;
+	third_shelf_x_cord = 0;
+	[BookShelfScrollView setContentSize:CGSizeMake(0, 0)];
 }
 
 /******************************************************************************
@@ -540,16 +667,68 @@
 	CGPoint	p = inscrollView.contentOffset;
 	if (inscrollView.tag == 1)
 	{
-	    [self DisplayHelperImage:p.x scrollView:FirstShelf LeftImage:FirstShelfLeftImage RightImage:FirstShelfRightImage ShelfCord:first_shelf_x_cord];	
+	//    [self DisplayHelperImage:p.x scrollView:FirstShelf LeftImage:FirstShelfLeftImage RightImage:FirstShelfRightImage ShelfCord:first_shelf_x_cord];
+		[self DisplayHelperImage2:p.x scrollView:FirstShelf LeftImage:FirstLeftButton RightImage:FirstRightButton ShelfCord:first_shelf_x_cord];	
+
 	}
 	else if (inscrollView.tag == 2)
 	{
-		[self DisplayHelperImage:p.x scrollView:SecondShelf LeftImage:SecondShelfLeftImage RightImage:SecondShelfRightImage ShelfCord:second_shelf_x_cord];
+	//	[self DisplayHelperImage:p.x scrollView:SecondShelf LeftImage:SecondShelfLeftImage RightImage:SecondShelfRightImage ShelfCord:second_shelf_x_cord];
+		[self DisplayHelperImage2:p.x scrollView:SecondShelf LeftImage:SecondLeftButton RightImage:SecondRightButton ShelfCord:second_shelf_x_cord];
+
 	}
 	else if (inscrollView.tag == 3)
 	{
-		[self DisplayHelperImage:p.x scrollView:ThirdShelf LeftImage:ThirdShelfLeftImage RightImage:ThirdShelfRightImage ShelfCord:third_shelf_x_cord];
+	//	[self DisplayHelperImage:p.x scrollView:ThirdShelf LeftImage:ThirdShelfLeftImage RightImage:ThirdShelfRightImage ShelfCord:third_shelf_x_cord];
+		[self DisplayHelperImage2:p.x scrollView:ThirdShelf LeftImage:ThirdLeftButton RightImage:ThirdRightButton ShelfCord:third_shelf_x_cord];
 	}
+}
+
+-(void)DisplayHelperImage2:(int)offset scrollView:(UIScrollView *)scroll 
+	LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord
+{
+	int size = 30;
+	int y_placement = (scroll.frame.size.height / 2) - (size / 2);
+	
+	// if the x_cord is < than the frame then there is nothing to scroll.
+	if(ShelfCord < scroll.frame.size.width)
+	{
+		LeftImage.hidden = YES;
+		RightImage.hidden = YES;
+		return;
+	} 
+	// This means it is in there is content to the right and to the left of the contentOffset.
+	if( (scroll.frame.size.width + offset < ShelfCord) && (offset > 0) )
+	{
+		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
+		LeftImage.hidden = NO;
+		
+		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
+		RightImage.hidden = NO;
+		
+		[scroll bringSubviewToFront:LeftImage];
+		[scroll bringSubviewToFront:RightImage];
+		return;
+	}
+	
+	// This means the content offset is at the right side of the scroll view.
+	if ( scroll.frame.size.width + offset >= ShelfCord )
+	{
+		RightImage.hidden = YES;
+		
+		LeftImage.frame = CGRectMake(offset + 10, y_placement, size, size);
+		LeftImage.hidden = NO;
+        [scroll bringSubviewToFront:LeftImage];
+	}
+	// This means the content offset is at 0 (or lower), and therefore on the left side of the screen.
+	else if (offset <= 0)
+	{
+		LeftImage.hidden = YES;
+
+		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
+		RightImage.hidden = NO;
+		[scroll bringSubviewToFront:RightImage];
+	}	
 }
 
 /******************************************************************************
@@ -583,6 +762,7 @@
 		
 		RightImage.frame = CGRectMake( (scroll.frame.size.width + offset) - 50, y_placement, size, size);
 		[scroll addSubview:RightImage];
+		
 		return;
 	}
 	// This means the content offset is at the right side of the scroll view.
