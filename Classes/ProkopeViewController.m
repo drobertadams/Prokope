@@ -11,6 +11,7 @@
 #import "Author.h"
 #import "Work.h"
 #import "LoginAlertViewDelegate.h"
+#import "RegistrationController.h"
 
 @implementation ProkopeViewController
 
@@ -74,15 +75,6 @@
 	
 	UIImage *image_left = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon-left" ofType:@"png"]];
 	UIImage *image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
-	
-	SecondShelfLeftImage = [[UIImageView alloc]initWithImage:image_left];
-	SecondShelfRightImage = [[UIImageView alloc]initWithImage:image_right];
-	
-	FirstShelfLeftImage = [[UIImageView alloc] initWithImage:image_left];
-	FirstShelfRightImage = [[UIImageView alloc] initWithImage:image_right];
-	
-	ThirdShelfLeftImage = [[UIImageView alloc] initWithImage:image_left];
-	ThirdShelfRightImage = [[UIImageView alloc] initWithImage:image_right];
 	
 	first_shelf_x_cord = -55;
 	// This loop populates the 'top shelf' of the BookShelfImage.
@@ -265,9 +257,9 @@
 	self.navigationItem.titleView = NavBarView;
 	
 	// This button will be added later on.
-	//UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
-	//self.navigationItem.leftBarButtonItem = anotherButton;
-	//[anotherButton release];
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
+	self.navigationItem.leftBarButtonItem = anotherButton;
+	[anotherButton release];
 	
 }
 
@@ -277,12 +269,17 @@
  */
 -(void)ClearUserSettings
 {	
-	UIAlertView *alertDialog;
-	alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear User Settings ?" message:@"Are you sure you want to clear your settings" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
-	alertDialog.tag = 2;
+//	UIAlertView *alertDialog;
+//	alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear User Settings ?" message:@"Are you sure you want to clear your settings" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+//	alertDialog.tag = 2;
 
-	[alertDialog show];
-	[alertDialog release];
+//	[alertDialog show];
+//	[alertDialog release];
+	
+	RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
+	
+	[self.navigationController pushViewController:reg animated:YES];
+	[reg release];
 }
 
 /******************************************************************************
@@ -536,45 +533,73 @@
  */
 -(void)ShowAlert
 {
-	UIAlertView *alertDialog;
-	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
-	alertDialog.tag = 1;
-	
-	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-	
-	NSString *theUser = @"User Name";
-	NSString *thePass = @"Pass Word";
-	
-	if(!test)
-	{
-		//	NSLog(@"File has not been created");
-	}
-	else
-	{
-		theUser = [test objectForKey:@"UserName"];
-		thePass = [test objectForKey:@"Password"];
-	}
-	
-	userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
-	[userInput setBackgroundColor:[UIColor whiteColor]];
-	[userInput setText:theUser];
-	[userInput setClearsOnBeginEditing:YES];
-	
-	passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
-	[passInput setBackgroundColor:[UIColor whiteColor]];
-	[passInput setText:thePass];
-	[passInput setClearsOnBeginEditing:YES];
-	
-	[alertDialog addSubview:userInput];
-	[alertDialog addSubview:passInput];
-	[alertDialog show];
-	[alertDialog release];
-	
+	[self showActionSheet];
 }
+
+-(void)showActionSheet
+{
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:@"Other Button 1", @"Other Button 2", @"Login", nil];
+    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+    [popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+    [popupQuery release];
+}
+
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0)
+	{
+         UIAlertView *alertDialog;
+		 alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+		 alertDialog.tag = 1;
+		 
+		 NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+		 NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+		 
+		 // initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+		 NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+		 
+		 NSString *theUser = @"User Name";
+		 NSString *thePass = @"Pass Word";
+		 
+		 if(!test)
+		 {
+		 //	NSLog(@"File has not been created");
+		 }
+		 else
+		 {
+		 theUser = [test objectForKey:@"UserName"];
+		 thePass = [test objectForKey:@"Password"];
+		 }
+		 
+		 userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
+		 [userInput setBackgroundColor:[UIColor whiteColor]];
+		 [userInput setText:theUser];
+		 [userInput setClearsOnBeginEditing:YES];
+		 
+		 passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
+		 [passInput setBackgroundColor:[UIColor whiteColor]];
+		 [passInput setText:thePass];
+		 [passInput setClearsOnBeginEditing:YES];
+		 
+		 [alertDialog addSubview:userInput];
+		 [alertDialog addSubview:passInput];
+		 [alertDialog show];
+		 [alertDialog release]; 
+	}
+	else if (buttonIndex == 1)
+	{
+		NSLog(@"Button 1 clicked");
+    }
+	else if (buttonIndex == 2)
+	{
+        NSLog(@"Button 2 clicked");
+	}
+	else if (buttonIndex == 3)
+	{
+        NSLog(@"Button 3 clicked");
+	}
+}
+
 
 /******************************************************************************
  * This method gets called when an alertview's button gets clicked. 

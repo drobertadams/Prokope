@@ -28,6 +28,8 @@
 		948D021713B2AC4E007BFFAD /* StoneBook3.png in Resources */ = {isa = PBXBuildFile; fileRef = 948D021613B2AC4E007BFFAD /* StoneBook3.png */; };
 		948D03C713B2DD96007BFFAD /* Authors.xml in Resources */ = {isa = PBXBuildFile; fileRef = 948D03C613B2DD96007BFFAD /* Authors.xml */; };
 		948D06A213B3EF2D007BFFAD /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 948D06A113B3EF2D007BFFAD /* logo.png */; };
+		948D06D513B3F7D7007BFFAD /* RegistrationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 948D06D313B3F7D7007BFFAD /* RegistrationController.m */; };
+		948D06D613B3F7D7007BFFAD /* RegistrationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 948D06D413B3F7D7007BFFAD /* RegistrationController.xib */; };
 		94AE4B9A1399BAD000827A1E /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4B991399BAD000827A1E /* Author.m */; };
 		94AE4D061399DAB100827A1E /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4D051399DAB100827A1E /* Work.m */; };
 		94B372F5139D4EB60039CC52 /* BookSpine2.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B372F3139D4EB60039CC52 /* BookSpine2.png */; };
@@ -63,6 +65,9 @@
 		948D021613B2AC4E007BFFAD /* StoneBook3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoneBook3.png; sourceTree = "<group>"; };
 		948D03C613B2DD96007BFFAD /* Authors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Authors.xml; sourceTree = "<group>"; };
 		948D06A113B3EF2D007BFFAD /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		948D06D213B3F7D7007BFFAD /* RegistrationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationController.h; sourceTree = "<group>"; };
+		948D06D313B3F7D7007BFFAD /* RegistrationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationController.m; sourceTree = "<group>"; };
+		948D06D413B3F7D7007BFFAD /* RegistrationController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RegistrationController.xib; path = Classes/RegistrationController.xib; sourceTree = "<group>"; };
 		94AE4B981399BAD000827A1E /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Author.h; sourceTree = "<group>"; };
 		94AE4B991399BAD000827A1E /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Author.m; sourceTree = "<group>"; };
 		94AE4D041399DAB100827A1E /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Work.h; sourceTree = "<group>"; };
@@ -98,6 +103,8 @@
 				474766C21388AC94004FEFB2 /* DocumentViewerDelegate.m */,
 				473349631381A73A003F323B /* WebViewController.h */,
 				473349641381A73A003F323B /* WebViewController.m */,
+				948D06D213B3F7D7007BFFAD /* RegistrationController.h */,
+				948D06D313B3F7D7007BFFAD /* RegistrationController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -140,6 +147,7 @@
 				944D1140138AF36100DEF8B2 /* SecondNavigation.xib */,
 				47B06D1E1379EC67008BFF61 /* DocumentController.xib */,
 				473349651381A73A003F323B /* WebViewController.xib */,
+				948D06D413B3F7D7007BFFAD /* RegistrationController.xib */,
 				8D1107310486CEB800E47090 /* Prokope-Info.plist */,
 				478B7173137A174600163956 /* README */,
 				948D03C613B2DD96007BFFAD /* Authors.xml */,
@@ -246,6 +254,7 @@
 				948D021713B2AC4E007BFFAD /* StoneBook3.png in Resources */,
 				948D03C713B2DD96007BFFAD /* Authors.xml in Resources */,
 				948D06A213B3EF2D007BFFAD /* logo.png in Resources */,
+				948D06D613B3F7D7007BFFAD /* RegistrationController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +273,7 @@
 				474766C31388AC94004FEFB2 /* DocumentViewerDelegate.m in Sources */,
 				94AE4B9A1399BAD000827A1E /* Author.m in Sources */,
 				94AE4D061399DAB100827A1E /* Work.m in Sources */,
+				948D06D513B3F7D7007BFFAD /* RegistrationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

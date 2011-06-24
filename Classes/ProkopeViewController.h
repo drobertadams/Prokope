@@ -15,7 +15,7 @@ to implement the necessary methods for a table view to respond to actions and lo
 table. 
  */
 @interface ProkopeViewController : UIViewController 
-		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate> {
+		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate> {
 
 	NSMutableArray *AuthorsArray;
 			
@@ -41,15 +41,6 @@ table.
 	NSString *CurrentWork;
 
 	UILabel *label2;
-			
-	UIImageView *FirstShelfLeftImage;
-	UIImageView *FirstShelfRightImage;		
-			
-	UIImageView *SecondShelfLeftImage;
-	UIImageView *SecondShelfRightImage;
-	
-	UIImageView *ThirdShelfLeftImage;
-	UIImageView *ThirdShelfRightImage;		
 			
 	int first_shelf_x_cord;
 	int second_shelf_x_cord;
@@ -78,6 +69,7 @@ table.
 @property (nonatomic, retain) UILabel *label2;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
+-(void)showActionSheet;
 
 -(void)FirstShelfButtonClicked:(id)sender;
 -(void)SecondShelfButtonClicked:(id)sender;
