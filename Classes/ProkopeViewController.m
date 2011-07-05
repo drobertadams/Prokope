@@ -394,6 +394,8 @@
 	
 	if(MyAuth.workURL != nil)
 	{
+		[self ForceScroll:ThirdShelf];
+		
 		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
 		
 		doc.URL = MyAuth.workURL;
@@ -538,7 +540,7 @@
 
 -(void)showActionSheet
 {
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:@"Other Button 1", @"Other Button 2", @"Login", nil];
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:@"Login", @"Logout", @"User Profile", nil];
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
     [popupQuery release];

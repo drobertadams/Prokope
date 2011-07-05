@@ -11,6 +11,8 @@
 
 @implementation RegistrationController
 
+@synthesize UserNameText, PassWordText, EmailText, ProfessorText;
+
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -29,6 +31,19 @@
 }
 */
 
+-(IBAction)RegisterButtonClicked:(id)sender
+{
+    NSString *u_Name = [UserNameText text];
+	NSString *p_Name = [PassWordText text];
+	NSString *e_Name = [EmailText text];
+	NSString *professor_Name = [ProfessorText text];
+	
+	
+	NSLog(u_Name);
+	NSLog(p_Name);
+	NSLog(e_Name);
+	NSLog(professor_Name);
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
