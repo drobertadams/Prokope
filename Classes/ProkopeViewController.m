@@ -152,6 +152,20 @@
 	[ThirdShelf addSubview:ThirdRightButton];
 	
 	[self ForceScroll:FirstShelf];
+	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
+	if(!test)
+	{	
+		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
+		
+		[self.navigationController pushViewController:reg animated:YES];
+		[reg release];
+	}
 }
 
 -(void)accelorateLeft:(id)sender
@@ -257,9 +271,9 @@
 	self.navigationItem.titleView = NavBarView;
 	
 	// This button will be added later on.
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
-	self.navigationItem.leftBarButtonItem = anotherButton;
-	[anotherButton release];
+//	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
+//	self.navigationItem.leftBarButtonItem = anotherButton;
+//	[anotherButton release];
 	
 }
 
@@ -276,10 +290,7 @@
 //	[alertDialog show];
 //	[alertDialog release];
 	
-	RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
-	
-	[self.navigationController pushViewController:reg animated:YES];
-	[reg release];
+
 }
 
 /******************************************************************************
@@ -540,7 +551,7 @@
 
 -(void)showActionSheet
 {
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:@"Login", @"Logout", @"User Profile", nil];
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:@"Login", @"Clear Profile", @"User Profile", nil];
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
     [popupQuery release];
@@ -548,17 +559,17 @@
 
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0)
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
+	if (buttonIndex == 0)
 	{
          UIAlertView *alertDialog;
 		 alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
 		 alertDialog.tag = 1;
-		 
-		 NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-		 NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-		 
-		 // initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-		 NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 		 
 		 NSString *theUser = @"User Name";
 		 NSString *thePass = @"Pass Word";
@@ -569,8 +580,10 @@
 		 }
 		 else
 		 {
-		 theUser = [test objectForKey:@"UserName"];
-		 thePass = [test objectForKey:@"Password"];
+			 theUser = [test objectForKey:@"UserName"];
+			 thePass = [test objectForKey:@"Password"];
+			 NSLog([test objectForKey:@"Password"]);
+			 NSLog([test objectForKey:@"Professor"]);
 		 }
 		 
 		 userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
@@ -591,10 +604,22 @@
 	else if (buttonIndex == 1)
 	{
 		NSLog(@"Button 1 clicked");
+		if(test)
+		{
+			NSFileManager *fileManager = [NSFileManager defaultManager];
+			[fileManager removeItemAtPath:file error:NULL];
+		}
+		else 
+		{
+			NSLog(@"File was never created");
+		}
     }
 	else if (buttonIndex == 2)
 	{
-        NSLog(@"Button 2 clicked");
+		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
+		
+		[self.navigationController pushViewController:reg animated:YES];
+		[reg release];
 	}
 	else if (buttonIndex == 3)
 	{
@@ -633,12 +658,12 @@
 							  nil];
 		
 			[dict writeToFile:file atomically: TRUE];
-			self.navigationItem.rightBarButtonItem = nil;
+		//	self.navigationItem.rightBarButtonItem = nil;
 		
-			// Once the user is loged in, we can now switch the button to log the user out. See the selector to see the corresponding method that gets called. 
-			UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
-			self.navigationItem.rightBarButtonItem = anotherButton;
-			[anotherButton release];
+		//  Once the user is loged in, we can now switch the button to log the user out. See the selector to see the corresponding method that gets called. 
+		//	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
+		//	self.navigationItem.rightBarButtonItem = anotherButton;
+		//	[anotherButton release];
 		}
 	}
 	// The alertView that has the tag == 2 is the one that clears the contents of the AppUserData.plist file. 
@@ -646,15 +671,7 @@
 	{
 		if([buttonTitle isEqualToString:@"ok"])
 		{
-			if(test)
-			{
-				NSFileManager *fileManager = [NSFileManager defaultManager];
-				[fileManager removeItemAtPath:file error:NULL];
-			}
-			else 
-			{
-				NSLog(@"File was never created");
-			}
+
 		}
 	}
 }
