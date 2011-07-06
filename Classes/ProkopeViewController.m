@@ -617,6 +617,8 @@
 	else if (buttonIndex == 2)
 	{
 		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
+		[reg DisplayHelperImage:[test objectForKey:@"UserName"] Password:[test objectForKey:@"Password"] 
+				Email:[test objectForKey:@"E-mail"] Professor:[test objectForKey:@"Professor"]];
 		
 		[self.navigationController pushViewController:reg animated:YES];
 		[reg release];
@@ -657,7 +659,7 @@
 							  @"Password", 
 							  nil];
 		
-			[dict writeToFile:file atomically: TRUE];
+		//	[dict writeToFile:file atomically: TRUE];
 		//	self.navigationItem.rightBarButtonItem = nil;
 		
 		//  Once the user is loged in, we can now switch the button to log the user out. See the selector to see the corresponding method that gets called. 

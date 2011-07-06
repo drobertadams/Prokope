@@ -24,12 +24,25 @@
 }
 */
 
-/*
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+	[UserNameText setText:name];
+	[PassWordText setText:pass];
+	[EmailText setText:mail];
+	[ProfessorText setText:prof];
 }
-*/
+
+
+-(void)DisplayHelperImage:(NSString *)u_name Password:(NSString *)p_word
+		Email:(NSString *)e_mail Professor:(NSString *)professor_word
+{
+	name = u_name;
+	pass = p_word;
+	mail = e_mail;
+	prof = professor_word;
+}
 
 -(IBAction)RegisterButtonClicked:(id)sender
 {
@@ -38,12 +51,6 @@
 	NSString *e_Name = [EmailText text];
 	NSString *professor_Name = [ProfessorText text];
 	
-	
-	NSLog(u_Name);
-	NSLog(p_Name);
-	NSLog(e_Name);
-	NSLog(professor_Name);
-	
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
 	
@@ -51,14 +58,10 @@
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-						  u_Name,
-						  @"UserName", 
-						  p_Name,
-						  @"Password",
-						  e_Name,
-						  @"E-mail", 
-						  professor_Name,
-						  @"Professor",
+						  u_Name, @"UserName", 
+					      p_Name, @"Password",
+						  e_Name, @"E-mail", 
+						  professor_Name, @"Professor",
 						  nil];
 	
 	[dict writeToFile:file atomically: TRUE];
