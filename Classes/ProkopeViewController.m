@@ -267,28 +267,8 @@
 	
 	self.navigationItem.titleView = NavBarView;
 	
-	// This button will be added later on.
-//	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear User Info" style:UIBarButtonItemStylePlain target:self action:@selector(ClearUserSettings)];          
-//	self.navigationItem.leftBarButtonItem = anotherButton;
-//	[anotherButton release];
-	
 }
 
-/******************************************************************************
- * This method is the selector for the clear user settings button. It makes an alertview where the user can opt 
- * out if they want.
- */
--(void)ClearUserSettings
-{	
-//	UIAlertView *alertDialog;
-//	alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear User Settings ?" message:@"Are you sure you want to clear your settings" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
-//	alertDialog.tag = 2;
-
-//	[alertDialog show];
-//	[alertDialog release];
-	
-
-}
 
 /******************************************************************************
  * This method is called when something in the table was clicked. It creates a SecondNavigation
@@ -552,7 +532,6 @@
 	if(logedin == TRUE)
 	{
 		NSString *login_name = [self.navigationItem.rightBarButtonItem title];
-		NSLog(login_name);
 	    login_string = @"Logout";
 		register_string = [NSString stringWithFormat:@"Edit Profile (%@)", login_name];
 	}
@@ -562,10 +541,13 @@
 		register_string = @"Register Profile";
 	}
 	
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, nil];
-    popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-    [popupQuery release];
+	if(!popupQuery)
+	{
+		popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, @"forget me", nil];
+		popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+		[popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+		[popupQuery release];
+	}
 }
 
 
@@ -625,17 +607,16 @@
 	
 		if(logedin == TRUE)
 		{
-			NSLog(@"AAAA");
 			[reg DisplayHelperImage:[test objectForKey:@"UserName"] Password:[test objectForKey:@"Password"] 
 				Email:[test objectForKey:@"E-mail"] Professor:[test objectForKey:@"Professor"]];
 			[reg UserLogedIn:YES];
 		}
-
-		
 		[self.navigationController pushViewController:reg animated:YES];
 		[reg release];
-		
-	/*	if(test)
+	}
+	else if (buttonIndex == 2)
+	{
+	    if(test)
 		{
 			NSFileManager *fileManager = [NSFileManager defaultManager];
 			[fileManager removeItemAtPath:file error:NULL];
@@ -643,8 +624,9 @@
 		else 
 		{
 			NSLog(@"File was never created");
-		} */
+		} 
     }
+	popupQuery = nil;
 }
 
 
@@ -667,25 +649,45 @@
 		{
 			NSString *UserName = [userInput text];
 			NSString *PassWord = [passInput text];
+			
+			NSString *theUser = [test objectForKey:@"UserName"];
+			NSString *thePass = [test objectForKey:@"Password"];
+			
+			if ([[userInput text] isEqualToString:theUser])
+			{
+				NSLog(@"Match");
+			}
+			else
+			{
+				UIAlertView *alertDialog;
+				NSString *dialog_message = [NSString stringWithFormat:@"%@ is not the default profile, would you like it to be ?", UserName];
+				alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+				alertDialog.tag = 5;
 				
-	//		label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
-		
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  UserName,
-							  @"UserName", 
-							  PassWord,
-							  @"Password", 
-							  nil];
-		
+				[alertDialog show];
+				[alertDialog release];
+			}
 			logedin = TRUE;
 			[self.navigationItem.rightBarButtonItem setTitle:UserName];
-		//	[dict writeToFile:file atomically: TRUE];
-		//	self.navigationItem.rightBarButtonItem = nil;
-		
-		//  Once the user is loged in, we can now switch the button to log the user out. See the selector to see the corresponding method that gets called. 
-		//	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
-		//	self.navigationItem.rightBarButtonItem = anotherButton;
-		//	[anotherButton release];
+		}
+	}
+	else if(alertView.tag == 5)
+	{
+		if ([buttonTitle isEqualToString:@"YES"])
+		{
+			
+			NSString *UserName = [userInput text];
+			NSString *PassWord = [passInput text];
+			
+			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+								  UserName,
+								  @"UserName", 
+								  PassWord,
+								  @"Password", 
+								  nil];
+			
+			[self.navigationItem.rightBarButtonItem setTitle:UserName];
+			[dict writeToFile:file atomically: TRUE];
 		}
 	}
 }
@@ -701,16 +703,6 @@
 	[anotherButton release];	
 }
 
-/******************************************************************************
- * This method gets called when the logout button is clicked. 
- */
--(void)LogoutButtonClicked
-{
-	[self SetUpLoginButton];
-	
-	NSString *UserNameLabel = @"";
-	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
-}
 
 /******************************************************************************
  * This method is one of the central methods for the UIScrollView delegate protocol.

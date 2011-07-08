@@ -32,6 +32,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *RegisterButton;
 
 -(IBAction)RegisterButtonClicked:(id)sender;
+
 -(void)DisplayHelperImage:(NSString *)u_name Password:(NSString *)p_word
 		Email:(NSString *)e_mail Professor:(NSString *)professor_word;
 

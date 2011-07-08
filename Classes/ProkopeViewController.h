@@ -29,6 +29,8 @@ table.
 	// This WebView holds the commentary of the bio.
 	IBOutlet UIWebView *CommentaryView;
 			
+	UIActionSheet *popupQuery;		
+			
 	// userInput is the UITextField added to the AlertView to capture the user's name.
 	UITextField *userInput;
 			

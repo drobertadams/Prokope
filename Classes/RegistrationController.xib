@@ -45,7 +45,7 @@
 					<object class="IBUIButton" id="451224323">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{353, 296}, {85, 37}}</string>
+						<string key="NSFrame">{{353, 294}, {85, 37}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -435,11 +435,11 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABCggAAw4SAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{241, 70}, {1039, 686}}</string>
+					<string>{{241, 68}, {1039, 688}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDtAAAw6UAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABDsIAAw72AAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -465,7 +465,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">20</int>
+			<int key="maxID">26</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -474,14 +474,35 @@
 					<string key="className">RegistrationController</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">RegisterButtonClicked:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>RegisterButtonClicked:</string>
+							<string>SwitchSegmentedControlText:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">RegisterButtonClicked:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">RegisterButtonClicked:</string>
-							<string key="candidateClassName">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>RegisterButtonClicked:</string>
+							<string>SwitchSegmentedControlText:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">RegisterButtonClicked:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">SwitchSegmentedControlText:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -492,6 +513,7 @@
 							<string>PassWordText</string>
 							<string>ProfessorText</string>
 							<string>RegisterButton</string>
+							<string>SaveProfile</string>
 							<string>UserNameText</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -500,6 +522,7 @@
 							<string>UITextField</string>
 							<string>UITextField</string>
 							<string>UIButton</string>
+							<string>UISegmentedControl</string>
 							<string>UITextField</string>
 						</object>
 					</object>
@@ -511,6 +534,7 @@
 							<string>PassWordText</string>
 							<string>ProfessorText</string>
 							<string>RegisterButton</string>
+							<string>SaveProfile</string>
 							<string>UserNameText</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -530,6 +554,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">RegisterButton</string>
 								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">SaveProfile</string>
+								<string key="candidateClassName">UISegmentedControl</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">UserNameText</string>
@@ -679,6 +707,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">UIKit.framework/Headers/UISearchDisplayController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">UISegmentedControl</string>
+					<string key="superclassName">UIControl</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">UIKit.framework/Headers/UISegmentedControl.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

@@ -37,6 +37,10 @@
 	{
 		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
 	}
+	else
+	{
+		//<#statements#>
+	}
 }
 
 -(void)UserLogedIn:(BOOL)u_logged
@@ -55,12 +59,37 @@
 
 -(IBAction)RegisterButtonClicked:(id)sender
 {	
-	NSLog(@"A click");
-	UIAlertView *alertDialog;
-	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"Make this the default profile for this device ?" delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
-	alertDialog.tag = 1;
-	[alertDialog show];
-	[alertDialog release];
+	NSString *u_Name = [UserNameText text];
+	NSString *p_Name = [PassWordText text];
+	NSString *e_Name = [EmailText text];
+	NSString *professor_Name = [ProfessorText text];
+	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
+	NSString *url = [NSString stringWithFormat:@"http:www.prokope.com/test?username=%@&password=%@&professor=&%@", u_Name, p_Name, professor_Name];
+	NSLog(url);
+	
+	NSString *theUser = [test objectForKey:@"UserName"];
+	NSString *thePass = [test objectForKey:@"Password"];
+	
+	if ([u_Name isEqualToString:theUser])
+	{
+		NSLog(@"Match");
+	}
+	else
+	{	
+		NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", u_Name];
+		
+		UIAlertView *alertDialog;
+		alertDialog = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+		alertDialog.tag = 1;
+		[alertDialog show];
+		[alertDialog release];
+	}
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -98,9 +127,11 @@
 	}
 	else if ([buttonTitle isEqualToString:@"NO"])
 	{
-	    NSLog(@"NoOOO");	
+	  // for now we simply dismiss this, but we might want to add something later. 
+	  //  NSLog(@"Dismiss");	
 	}
 }
+
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
