@@ -301,6 +301,14 @@
 					</object>
 					<int key="connectionID">19</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">RegisterButton</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="451224323"/>
+					</object>
+					<int key="connectionID">20</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -427,7 +435,7 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABCggAAw4SAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{241, 68}, {1039, 688}}</string>
+					<string>{{241, 70}, {1039, 686}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -457,7 +465,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">19</int>
+			<int key="maxID">20</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -483,6 +491,7 @@
 							<string>EmailText</string>
 							<string>PassWordText</string>
 							<string>ProfessorText</string>
+							<string>RegisterButton</string>
 							<string>UserNameText</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -490,6 +499,7 @@
 							<string>UITextField</string>
 							<string>UITextField</string>
 							<string>UITextField</string>
+							<string>UIButton</string>
 							<string>UITextField</string>
 						</object>
 					</object>
@@ -500,6 +510,7 @@
 							<string>EmailText</string>
 							<string>PassWordText</string>
 							<string>ProfessorText</string>
+							<string>RegisterButton</string>
 							<string>UserNameText</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -515,6 +526,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">ProfessorText</string>
 								<string key="candidateClassName">UITextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">RegisterButton</string>
+								<string key="candidateClassName">UIButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">UserNameText</string>

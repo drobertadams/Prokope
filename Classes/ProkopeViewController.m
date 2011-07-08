@@ -26,6 +26,9 @@
 	AuthorsArray = dataArray;
 }
 
+// Look into why scrolls doesn't work for i-pad.
+// salting on the i-pad.
+
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -159,13 +162,7 @@
 	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
-	if(!test)
-	{	
-		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
-		
-		[self.navigationController pushViewController:reg animated:YES];
-		[reg release];
-	}
+	logedin = FALSE;
 }
 
 -(void)accelorateLeft:(id)sender
@@ -255,18 +252,18 @@
 	
 	
 	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(-350, 10, 350, 16)];
-	label2 = [[UILabel alloc] initWithFrame:CGRectMake(305, 10, 295, 16)];
-	label2.tag = 2;
-	label2.backgroundColor = [UIColor clearColor];
-	label2.font = [UIFont boldSystemFontOfSize:17];
-	label2.adjustsFontSizeToFitWidth = YES;
-	label2.textAlignment = UITextAlignmentRight;
-	label2.textColor = [UIColor blackColor];
-	NSString *UserNameLabel = @"";
-	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
-	label2.highlightedTextColor = [UIColor blackColor];
-	[NavBarView addSubview:label2];
-	[label2 release];
+	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(305, 10, 295, 16)];
+	//label2.tag = 2;
+	//label2.backgroundColor = [UIColor clearColor];
+	//label2.font = [UIFont boldSystemFontOfSize:17];
+	//label2.adjustsFontSizeToFitWidth = YES;
+	//label2.textAlignment = UITextAlignmentRight;
+	//label2.textColor = [UIColor blackColor];
+	//NSString *UserNameLabel = @"";
+	//label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
+	//label2.highlightedTextColor = [UIColor blackColor];
+	//[NavBarView addSubview:label2];
+	//[label2 release];
 	
 	self.navigationItem.titleView = NavBarView;
 	
@@ -506,7 +503,6 @@
 		else if ([v isKindOfClass: [UIImageView class]]){
 		//	NSLog(@"OTHER");
 		}
-		
 	}	
 }
 
@@ -551,7 +547,22 @@
 
 -(void)showActionSheet
 {
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:@"Login", @"Clear Profile", @"User Profile", nil];
+	NSString *login_string;
+	NSString *register_string;
+	if(logedin == TRUE)
+	{
+		NSString *login_name = [self.navigationItem.rightBarButtonItem title];
+		NSLog(login_name);
+	    login_string = @"Logout";
+		register_string = [NSString stringWithFormat:@"Edit Profile (%@)", login_name];
+	}
+	else
+	{
+		login_string = @"Login";
+		register_string = @"Register Profile";
+	}
+	
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, nil];
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
     [popupQuery release];
@@ -567,44 +578,64 @@
 	
 	if (buttonIndex == 0)
 	{
-         UIAlertView *alertDialog;
-		 alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
-		 alertDialog.tag = 1;
-		 
-		 NSString *theUser = @"User Name";
-		 NSString *thePass = @"Pass Word";
-		 
-		 if(!test)
-		 {
-		 //	NSLog(@"File has not been created");
-		 }
-		 else
-		 {
-			 theUser = [test objectForKey:@"UserName"];
-			 thePass = [test objectForKey:@"Password"];
-			 NSLog([test objectForKey:@"Password"]);
-			 NSLog([test objectForKey:@"Professor"]);
-		 }
-		 
-		 userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
-		 [userInput setBackgroundColor:[UIColor whiteColor]];
-		 [userInput setText:theUser];
-		 [userInput setClearsOnBeginEditing:YES];
-		 
-		 passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
-		 [passInput setBackgroundColor:[UIColor whiteColor]];
-		 [passInput setText:thePass];
-		 [passInput setClearsOnBeginEditing:YES];
-		 
-		 [alertDialog addSubview:userInput];
-		 [alertDialog addSubview:passInput];
-		 [alertDialog show];
-		 [alertDialog release]; 
+		if(logedin == TRUE)
+		{
+			logedin = FALSE;
+			[self.navigationItem.rightBarButtonItem setTitle:@"Profile"];
+		}
+		else 
+		{
+			UIAlertView *alertDialog;
+			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+			alertDialog.tag = 1;
+			 
+			NSString *theUser = @"User Name";
+			NSString *thePass = @"Pass Word";
+			
+			if(!test)
+			{
+			//	NSLog(@"File has not been created");
+			}
+			else
+			{
+				theUser = [test objectForKey:@"UserName"];
+				thePass = [test objectForKey:@"Password"];
+			}
+			 
+			userInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 20.0, 260.0, 25.0)];
+			[userInput setBackgroundColor:[UIColor whiteColor]];
+			[userInput setText:theUser];
+			[userInput setClearsOnBeginEditing:YES];
+			 
+			passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
+			[passInput setBackgroundColor:[UIColor whiteColor]];
+			[passInput setText:thePass];
+			[passInput setClearsOnBeginEditing:YES];
+			 
+			[alertDialog addSubview:userInput];
+			[alertDialog addSubview:passInput];
+			[alertDialog show];
+			[alertDialog release];
+		}
 	}
 	else if (buttonIndex == 1)
 	{
-		NSLog(@"Button 1 clicked");
-		if(test)
+		
+		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
+	
+		if(logedin == TRUE)
+		{
+			NSLog(@"AAAA");
+			[reg DisplayHelperImage:[test objectForKey:@"UserName"] Password:[test objectForKey:@"Password"] 
+				Email:[test objectForKey:@"E-mail"] Professor:[test objectForKey:@"Professor"]];
+			[reg UserLogedIn:YES];
+		}
+
+		
+		[self.navigationController pushViewController:reg animated:YES];
+		[reg release];
+		
+	/*	if(test)
 		{
 			NSFileManager *fileManager = [NSFileManager defaultManager];
 			[fileManager removeItemAtPath:file error:NULL];
@@ -612,21 +643,8 @@
 		else 
 		{
 			NSLog(@"File was never created");
-		}
+		} */
     }
-	else if (buttonIndex == 2)
-	{
-		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
-		[reg DisplayHelperImage:[test objectForKey:@"UserName"] Password:[test objectForKey:@"Password"] 
-				Email:[test objectForKey:@"E-mail"] Professor:[test objectForKey:@"Professor"]];
-		
-		[self.navigationController pushViewController:reg animated:YES];
-		[reg release];
-	}
-	else if (buttonIndex == 3)
-	{
-        NSLog(@"Button 3 clicked");
-	}
 }
 
 
@@ -650,7 +668,7 @@
 			NSString *UserName = [userInput text];
 			NSString *PassWord = [passInput text];
 				
-			label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
+	//		label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
 		
 			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  UserName,
@@ -659,6 +677,8 @@
 							  @"Password", 
 							  nil];
 		
+			logedin = TRUE;
+			[self.navigationItem.rightBarButtonItem setTitle:UserName];
 		//	[dict writeToFile:file atomically: TRUE];
 		//	self.navigationItem.rightBarButtonItem = nil;
 		
@@ -666,14 +686,6 @@
 		//	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(LogoutButtonClicked)];          
 		//	self.navigationItem.rightBarButtonItem = anotherButton;
 		//	[anotherButton release];
-		}
-	}
-	// The alertView that has the tag == 2 is the one that clears the contents of the AppUserData.plist file. 
-	else if (alertView.tag == 2)
-	{
-		if([buttonTitle isEqualToString:@"ok"])
-		{
-
 		}
 	}
 }
@@ -684,7 +696,7 @@
 -(void)SetUpLoginButton
 {
 	self.navigationItem.rightBarButtonItem = nil;
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Profile" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
 	self.navigationItem.rightBarButtonItem = anotherButton;
 	[anotherButton release];	
 }

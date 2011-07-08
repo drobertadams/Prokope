@@ -55,6 +55,7 @@
 						<int key="IBUIContentMode">9</int>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<bool key="IBUIScalesPageToFit">YES</bool>
 					</object>
 					<object class="IBUIWebView" id="1015389768">
 						<reference key="NSNextResponder" ref="766721923"/>
@@ -64,8 +65,6 @@
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIDataDetectorTypes">1</int>
-						<bool key="IBUIDetectsPhoneNumbers">YES</bool>
 					</object>
 					<object class="IBUIWebView" id="895383566">
 						<reference key="NSNextResponder" ref="766721923"/>
@@ -75,8 +74,6 @@
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIDataDetectorTypes">1</int>
-						<bool key="IBUIDetectsPhoneNumbers">YES</bool>
 					</object>
 					<object class="IBUIWebView" id="10031264">
 						<reference key="NSNextResponder" ref="766721923"/>
@@ -86,8 +83,6 @@
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIDataDetectorTypes">1</int>
-						<bool key="IBUIDetectsPhoneNumbers">YES</bool>
 					</object>
 				</object>
 				<string key="NSFrameSize">{1024, 704}</string>
@@ -228,7 +223,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>DocumentController</string>
 					<string>UIResponder</string>
-					<string>{{13, 68}, {1039, 688}}</string>
+					<string>{{13, 70}, {1039, 686}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -272,17 +267,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">DocumentController</string>
 					<string key="superclassName">UIViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">close</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">close</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">close</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">

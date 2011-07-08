@@ -57,6 +57,8 @@ table.
 	
 	UIButton *ThirdLeftButton;
 	UIButton *ThirdRightButton;
+			
+	BOOL logedin;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
@@ -91,6 +93,8 @@ table.
 
 -(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
 	LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord;
+
+-(void)updateRightNavigationBar;
 
 @end
 

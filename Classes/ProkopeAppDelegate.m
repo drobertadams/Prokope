@@ -34,8 +34,8 @@
 	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
 	NSData* data = [NSData dataWithContentsOfFile: path];
 	
-	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
-	//NSData *data = [NSData dataWithContentsOfURL:url]; 
+//	NSURL *url = [NSURL URLWithString:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
+//	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
 	//NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];

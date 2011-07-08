@@ -32,8 +32,17 @@
 	[PassWordText setText:pass];
 	[EmailText setText:mail];
 	[ProfessorText setText:prof];
+	
+	if (logedin)
+	{
+		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
+	}
 }
 
+-(void)UserLogedIn:(BOOL)u_logged
+{
+	logedin = u_logged;
+}
 
 -(void)DisplayHelperImage:(NSString *)u_name Password:(NSString *)p_word
 		Email:(NSString *)e_mail Professor:(NSString *)professor_word
@@ -45,28 +54,13 @@
 }
 
 -(IBAction)RegisterButtonClicked:(id)sender
-{
-    NSString *u_Name = [UserNameText text];
-	NSString *p_Name = [PassWordText text];
-	NSString *e_Name = [EmailText text];
-	NSString *professor_Name = [ProfessorText text];
-	
-	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-	
-	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-						  u_Name, @"UserName", 
-					      p_Name, @"Password",
-						  e_Name, @"E-mail", 
-						  professor_Name, @"Professor",
-						  nil];
-	
-	[dict writeToFile:file atomically: TRUE];
-	
-	
+{	
+	NSLog(@"A click");
+	UIAlertView *alertDialog;
+	alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"Make this the default profile for this device ?" delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+	alertDialog.tag = 1;
+	[alertDialog show];
+	[alertDialog release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -74,6 +68,39 @@
     return YES;
 }
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+
+	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
+	
+	if ([buttonTitle isEqualToString:@"YES"])
+	{
+	
+		NSString *u_Name = [UserNameText text];
+		NSString *p_Name = [PassWordText text];
+		NSString *e_Name = [EmailText text];
+		NSString *professor_Name = [ProfessorText text];
+		
+		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+		NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+		
+		// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+		
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  u_Name, @"UserName", 
+							  p_Name, @"Password",
+							  e_Name, @"E-mail", 
+							  professor_Name, @"Professor",
+							  nil];
+		
+		[dict writeToFile:file atomically: TRUE];
+	}
+	else if ([buttonTitle isEqualToString:@"NO"])
+	{
+	    NSLog(@"NoOOO");	
+	}
+}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
