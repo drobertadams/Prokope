@@ -59,36 +59,80 @@
 
 -(IBAction)RegisterButtonClicked:(id)sender
 {	
-	NSString *u_Name = [UserNameText text];
-	NSString *p_Name = [PassWordText text];
-	NSString *e_Name = [EmailText text];
-	NSString *professor_Name = [ProfessorText text];
-	
-	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-	
-	NSString *url = [NSString stringWithFormat:@"http:www.prokope.com/test?username=%@&password=%@&professor=&%@", u_Name, p_Name, professor_Name];
-	NSLog(url);
-	
-	NSString *theUser = [test objectForKey:@"UserName"];
-	NSString *thePass = [test objectForKey:@"Password"];
-	
-	if ([u_Name isEqualToString:theUser])
+	UIButton *resultButton = (UIButton *)sender;
+	NSString *ButtonTitle = [resultButton currentTitle];
+	if ([ButtonTitle isEqualToString:@"Register"])
 	{
-		NSLog(@"Match");
+	
+		NSString *u_Name = [UserNameText text];
+		NSString *p_Name = [PassWordText text];
+		NSString *e_Name = [EmailText text];
+		NSString *professor_Name = [ProfessorText text];
+		
+		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+		NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+		
+		// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+		
+		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
+			"username/%@/password/%@/professor/%@", u_Name, p_Name, professor_Name]];
+		
+		//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/username/true/password/1234/professor/adams"];
+		NSData *data = [NSData dataWithContentsOfURL: url];
+		
+		NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
+		[parser setDelegate:self];
+		[parser parse];
+		[parser release];
+		
+		NSString *theUser = [test objectForKey:@"UserName"];
+		NSString *thePass = [test objectForKey:@"Password"];
+		
+		if ([u_Name isEqualToString:theUser])
+		{
+			NSLog(@"Match");
+		}
+		else
+		{	
+			NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", u_Name];
+			
+			UIAlertView *alertDialog;
+			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+			alertDialog.tag = 1;
+			[alertDialog show];
+			[alertDialog release];
+		}
+    }
+	else if([ButtonTitle isEqualToString:@"Update"])
+	{
+	    NSLog(@"Update");	
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if ([CurrentTag isEqualToString:@"result"])
+	{
+		NSLog(string);
+		if ([string isEqualToString:@"1"])
+		{
+			NSLog(@"There already is a profile");
+		}
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
+  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
+	attributes:(NSDictionary *)attributeDict
+{	
+	if([elementName isEqualToString:@"result"])
+	{
+		CurrentTag = @"result";
 	}
 	else
-	{	
-		NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", u_Name];
-		
-		UIAlertView *alertDialog;
-		alertDialog = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
-		alertDialog.tag = 1;
-		[alertDialog show];
-		[alertDialog release];
+	{
+		NSLog(@"Others");
 	}
 }
 

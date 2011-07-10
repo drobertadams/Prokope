@@ -38,8 +38,30 @@
 
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
+	NSString *script = 
+	@"<script lang=\"text/javascript\">"
+	"function highlightword(ref)"
+	"{"
+	"   var words = document.getElementsByTagName('a');"
+	"   for(i = 0; i < words.length; i++)"
+	"   {"
+	"       if ( words[i].getAttribute('href') == ref )"
+	"       {"       
+	"	         words[i].style.backgroundColor = '#F55550';"
+	"       }"
+	"       else"
+	"       {"
+	"            words[i].style.backgroundColor = '#FFFFFF';"
+	"       }"
+	"    }"
+	"}"
+	"</script>";
+	
+	doc = [doc stringByAppendingString:script];
+	
 	// Find the content of the document itself.
 	doc = [doc stringByAppendingString:[self getXMLElement:@"<body>" endElement:@"</body>" fromData:data]];
+	
 	[document loadHTMLString:doc baseURL:nil];	
 
 	// Find the content of the commentary.
@@ -54,10 +76,16 @@
 		"	var comments = document.getElementsByTagName('li');"
 		"	for (i = 0; i < comments.length; i++) {"
 		"		if ( comments[i].getAttribute('ref') == ref ) {"
-		"			comments[i].style.display = 'list-item';"
+		"			 comments[i].style.display = 'list-item';"
+	    "            var selectedPosX=0;"
+	    "			 var selectedPosY=0;"
+	    "            comments[i].style.backgroundColor = '#F55550';"
+	    "            selectedPosX+=comments[i].offsetLeft;"
+	    "            selectedPosY+=comments[i].offsetTop;"
+	    "            window.scrollTo(selectedPosX,selectedPosY);"
 		"		}"
 		"		else {"
-		"			comments[i].style.display = 'none';"
+		"			comments[i].style.backgroundColor = '#FFFFFF';"
 		"		}"
 		"	}"
 		"}"
@@ -122,6 +150,7 @@
 	commentary.delegate = self;
 	vocabulary.delegate = self;
 	sidebar.delegate = self;
+	
 	
 	[self setUpNavBar];
 	
@@ -210,6 +239,9 @@
 							  @"show_only('%@');", id];
 	[commentary stringByEvaluatingJavaScriptFromString:js];	
 	[vocabulary stringByEvaluatingJavaScriptFromString:js];
+	
+	js = [NSString stringWithFormat:@"highlightword('%@')", id];
+	[document stringByEvaluatingJavaScriptFromString:js];
 	
 	NSLog(@"Clicked was : %@", id);
 	NSLog(@"On poem %@", URL);

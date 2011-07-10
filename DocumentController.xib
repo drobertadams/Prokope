@@ -45,7 +45,7 @@
 					<object class="IBUIWebView" id="947363872">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{481, 538}</string>
+						<string key="NSFrame">{{0, 9}, {481, 529}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="280161330">
 							<int key="NSColorSpace">1</int>
@@ -60,20 +60,22 @@
 					<object class="IBUIWebView" id="1015389768">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{489, 0}, {369, 538}}</string>
+						<string key="NSFrame">{{489, 9}, {369, 529}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<bool key="IBUIScalesPageToFit">YES</bool>
 					</object>
 					<object class="IBUIWebView" id="895383566">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{866, 0}, {158, 748}}</string>
+						<string key="NSFrame">{{866, 9}, {158, 739}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<bool key="IBUIScalesPageToFit">YES</bool>
 					</object>
 					<object class="IBUIWebView" id="10031264">
 						<reference key="NSNextResponder" ref="766721923"/>
@@ -83,6 +85,7 @@
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<bool key="IBUIScalesPageToFit">YES</bool>
 					</object>
 				</object>
 				<string key="NSFrameSize">{1024, 704}</string>
@@ -223,7 +226,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>DocumentController</string>
 					<string>UIResponder</string>
-					<string>{{13, 70}, {1039, 686}}</string>
+					<string>{{0, 73}, {1039, 683}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface RegistrationController : UIViewController <UIAlertViewDelegate> {
+@interface RegistrationController : UIViewController <UIAlertViewDelegate, NSXMLParserDelegate> {
 
 	IBOutlet UITextField *UserNameText;
 	IBOutlet UITextField *PassWordText;
@@ -23,6 +23,8 @@
 	NSString *prof;
 	
 	BOOL logedin;
+	
+	NSString *CurrentTag;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *UserNameText;
