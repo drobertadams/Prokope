@@ -90,21 +90,42 @@
 	"function show_only(ref)"
 	"{"
 	"	var comments = document.getElementsByTagName('li');"
+	"   var found = false;"
 	"	for (i = 0; i < comments.length; i++) {"
-	"		if ( comments[i].getAttribute('ref') == ref ) {"
-	"			 comments[i].style.display = 'list-item';"
-	"            var selectedPosX=0;"
-	"			 var selectedPosY=0;"
+	"		comments[i].style.display = 'list-item';"
+	"		if ( comments[i].getAttribute('ref') == ref) {"
 	"            comments[i].style.backgroundColor = '#F5DEB3';"
-	"            selectedPosX+=comments[i].offsetLeft;"
-	"            selectedPosY+=comments[i].offsetTop;"
-	"            window.scrollTo(selectedPosX,selectedPosY);"
+	"            comments[i].style.fontWeight = 'bold';"
+	"            if(found == false)"
+	"            {"
+	"                var selectedPosX=0;"
+	"			     var selectedPosY=0;"
+	"                selectedPosX+=comments[i].offsetLeft;"
+	"                selectedPosY+=comments[i].offsetTop;"
+	"                window.scrollTo(selectedPosX,selectedPosY);"
+	"                found = true;"
+	"            }"
 	"		}"
 	"		else {"
 	"			comments[i].style.backgroundColor = '#FFFFFF';"
+	"           comments[i].style.fontWeight = 'normal';"
 	"		}"
 	"	}"
 	"}"
+	"</script>";
+	
+	NSString *hide_text =
+	@"<script lang=\"text/javascript\">"
+	"function hide_text()"
+	"{   "
+	"   var comments = document.getElementsByTagName('li');"
+	"	for (i = 0; i < comments.length; i++)"
+	"   {"
+	"       comments[i].style.display = 'none';"
+	"   }"
+	"}   "
+	"hide_text();"
+	"    "
 	"</script>";
 	
 	NSString *display_ratings = 
@@ -125,6 +146,24 @@
 	"      comments[i].appendChild(newdiv);" 
 	"	}"
 	"}"
+	"      "
+	"function show_clear_link(int) "
+	"{   "
+	"      var comments = document.getElementsByTagName('li');"
+	"      var current = comments[int]; "
+	"      var newdiv = document.createElement('div');"
+	"      newdiv.innerHTML = '<a href=\"Undo' + int +'\">UNDO</a>';"
+	"      current.appendChild(newdiv);" 
+	"}"
+	"    "
+	"function undo_button_clicked(int)"
+	"{    "
+	"      var comments = document.getElementsByTagName('li');"
+	"      var current = comments[int]; "
+	"      var children = current.childNodes;"
+	"      alert(children.length);  "
+//	"      if ( comments[i].getAttribute('ref') == ref )"
+	"}    "
 	"display_ratings();"
 	"</script>";
 	
@@ -135,11 +174,13 @@
 	doc = [doc stringByAppendingString:js];
 	doc = [doc stringByAppendingString:display_ratings];
 	doc = [doc stringByAppendingString:meta];
+	doc = [doc stringByAppendingString:hide_text];
 	[commentary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the vocabulary.
 	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
 	doc = [doc stringByAppendingString:js];
+	doc = [doc stringByAppendingString:hide_text];
 	[vocabulary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the sidebar.
@@ -220,8 +261,20 @@
 		{
 			NSRange theRange = [StringRequest rangeOfString:@"/" options:NSBackwardsSearch];
 			NSString *path = [StringRequest substringFromIndex:theRange.location];
-			[RatingsArray addObject:path];
-			return FALSE;
+			NSString *ending = [StringRequest substringFromIndex:StringRequest.length - 1];
+			
+			if([path hasPrefix:@"/Undo"])
+			{
+				NSString *js = [NSString stringWithFormat: @"undo_button_clicked('%@');", ending];
+				[commentary stringByEvaluatingJavaScriptFromString:js];
+			}
+			else
+			{
+				NSString *js = [NSString stringWithFormat: @"show_clear_link('%@');", ending];
+				[commentary stringByEvaluatingJavaScriptFromString:js];
+				[RatingsArray addObject:path];
+				return FALSE;
+			}
 		}
 		else
 		{
