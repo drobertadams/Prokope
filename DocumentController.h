@@ -23,6 +23,8 @@
 	NSString *Title;
 	NSString *UserName;
 	UILabel *label2;
+	
+	NSMutableArray *RatingsArray;
 }
 
 

@@ -38,6 +38,10 @@
 
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
+	NSString *meta = @"<meta name='viewport' content='width=device-width; initial-scale=1.0; maximum-scale=4.0; user-scalable=1;' />";
+	
+	// This function highlights the specific <a> tag that the user just clicked. That word will remain highlighted until another
+	// word is clicked. 
 	NSString *script = 
 	@"<script lang=\"text/javascript\">"
 	"function highlightword(ref)"
@@ -47,7 +51,7 @@
 	"   {"
 	"       if ( words[i].getAttribute('href') == ref )"
 	"       {"       
-	"	         words[i].style.backgroundColor = '#F55550';"
+	"	         words[i].style.backgroundColor = '#F5DEB3';"
 	"       }"
 	"       else"
 	"       {"
@@ -56,41 +60,81 @@
 	"    }"
 	"}"
 	"</script>";
+
+	NSString *scale_script = 
+	@"<script lang=\"text/javascript\">"
+	"function scale_images()"
+	"{"
+	"   for(i = 0; i < document.images.length; i++)"
+	"   {"
+	"       document.images[i].style.marginLeft = '5';"
+	"       document.images[i].height = '11';"
+	"   }"
+	"}"
+	"scale_images();"
+	"</script>";
 	
 	doc = [doc stringByAppendingString:script];
+	doc = [doc stringByAppendingString:meta];
 	
 	// Find the content of the document itself.
 	doc = [doc stringByAppendingString:[self getXMLElement:@"<body>" endElement:@"</body>" fromData:data]];
+	doc = [doc stringByAppendingString:scale_script];
 	
 	[document loadHTMLString:doc baseURL:nil];	
 
+	// This javascript function highlights the coresponding li tag(s) that contain a match for a specific id
+	// It then scrolls the window (in this case the UIWebView that holds it) to that li tag.
+	NSString *js = 
+	@"<script lang=\"text/javascript\">"
+	"function show_only(ref)"
+	"{"
+	"	var comments = document.getElementsByTagName('li');"
+	"	for (i = 0; i < comments.length; i++) {"
+	"		if ( comments[i].getAttribute('ref') == ref ) {"
+	"			 comments[i].style.display = 'list-item';"
+	"            var selectedPosX=0;"
+	"			 var selectedPosY=0;"
+	"            comments[i].style.backgroundColor = '#F5DEB3';"
+	"            selectedPosX+=comments[i].offsetLeft;"
+	"            selectedPosY+=comments[i].offsetTop;"
+	"            window.scrollTo(selectedPosX,selectedPosY);"
+	"		}"
+	"		else {"
+	"			comments[i].style.backgroundColor = '#FFFFFF';"
+	"		}"
+	"	}"
+	"}"
+	"</script>";
+	
+	NSString *display_ratings = 
+	@"<script lang=\"text/javascript\">"
+	"function alert_me()"
+	"{   "
+	"    alert('hello me!');     "
+	"}"
+	"    "
+	"function display_ratings()"
+	"{"
+	"	var comments = document.getElementsByTagName('li');"
+	"   var i = 0;"
+	"	for (i = 0; i < comments.length; i++)"
+	"   {"
+	"      var newdiv = document.createElement('div');"
+	"      newdiv.innerHTML = '<a href=\"Like' + i +'\">Like</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + i +'\">Dis-Like</a>';"
+	"      comments[i].appendChild(newdiv);" 
+	"	}"
+	"}"
+	"display_ratings();"
+	"</script>";
+	
+	
 	// Find the content of the commentary.
 	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
-	
-	// Construct a function to hide all comments except the ones associated with the
-	// given id (ref attribute)
-	NSString *js = 
-		@"<script lang=\"text/javascript\">"
-		"function show_only(ref)"
-		"{"
-		"	var comments = document.getElementsByTagName('li');"
-		"	for (i = 0; i < comments.length; i++) {"
-		"		if ( comments[i].getAttribute('ref') == ref ) {"
-		"			 comments[i].style.display = 'list-item';"
-	    "            var selectedPosX=0;"
-	    "			 var selectedPosY=0;"
-	    "            comments[i].style.backgroundColor = '#F55550';"
-	    "            selectedPosX+=comments[i].offsetLeft;"
-	    "            selectedPosY+=comments[i].offsetTop;"
-	    "            window.scrollTo(selectedPosX,selectedPosY);"
-		"		}"
-		"		else {"
-		"			comments[i].style.backgroundColor = '#FFFFFF';"
-		"		}"
-		"	}"
-		"}"
-		"</script>";
+
 	doc = [doc stringByAppendingString:js];
+	doc = [doc stringByAppendingString:display_ratings];
+	doc = [doc stringByAppendingString:meta];
 	[commentary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the vocabulary.
@@ -100,6 +144,7 @@
 
 	// Find the content of the sidebar.
 	doc = [self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data];
+	doc = [doc stringByAppendingString:meta];
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
 	[data release];
@@ -142,6 +187,7 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
+	RatingsArray = [[NSMutableArray alloc] initWithCapacity:100];
 	
 	// Create a delegate for the document viewer.
 	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
@@ -151,49 +197,10 @@
 	vocabulary.delegate = self;
 	sidebar.delegate = self;
 	
-	
-	[self setUpNavBar];
-	
 	// Go fetch and display the document.
 	[self fetchDocumentData];
 }
 
--(void)setUpNavBar
-{
-	
-	UIView *NavBarView = [[UIView alloc] init];
-	NavBarView.frame = CGRectMake(0, 0, 320, 40);
-	
-	UILabel *label;
-	label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 300, 16)];
-	label.tag = 1;
-	label.backgroundColor = [UIColor clearColor];
-	label.font = [UIFont boldSystemFontOfSize:17];
-	label.adjustsFontSizeToFitWidth = NO;
-	label.textAlignment = UITextAlignmentCenter;
-	label.textColor = [UIColor grayColor];
-	label.text = Title;
-	label.highlightedTextColor = [UIColor blackColor];
-	[NavBarView addSubview:label];
-	[label release];
-	
-	
-	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(-350, 10, 350, 16)];
-	label2 = [[UILabel alloc] initWithFrame:CGRectMake(305, 10, 295, 16)];
-	label2.tag = 2;
-	label2.backgroundColor = [UIColor clearColor];
-	label2.font = [UIFont boldSystemFontOfSize:17];
-	label2.adjustsFontSizeToFitWidth = YES;
-	label2.textAlignment = UITextAlignmentRight;
-	label2.textColor = [UIColor blackColor];
-	label2.text = [NSString stringWithFormat:@"Welcome : %@", UserName];
-	label2.highlightedTextColor = [UIColor blackColor];
-//	[NavBarView addSubview:label2];
-	[label2 release];
-	
-	self.navigationItem.titleView = NavBarView;
-	
-}
 
 /* **********************************************************************************************************************
  * Called when any of the webviews (except document) wants to load a URL.
@@ -209,16 +216,28 @@
 		
 		// Get the URL begin requested and feed it to our imageViewController.
 		NSString *StringRequest = [[request URL] absoluteString];
-		
-		// Load the image viewer nib and set the URL.
-		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
-																				 bundle:nil];
-		webViewer.url = StringRequest;
-		
-		// If not using a popover, create a modal view.
-		[self presentModalViewController:webViewer animated:YES];
-		[webViewer release];
-		
+		if ( [StringRequest rangeOfString:@"http"].length == 0 )
+		{
+			NSRange theRange = [StringRequest rangeOfString:@"/" options:NSBackwardsSearch];
+			NSString *path = [StringRequest substringFromIndex:theRange.location];
+			[RatingsArray addObject:path];
+			return FALSE;
+		}
+		else
+		{
+			for (NSString *str in RatingsArray)
+			{
+				NSLog(str);
+			}
+			// Load the image viewer nib and set the URL.
+			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
+																			   bundle:nil];
+			webViewer.url = StringRequest;
+			
+			// If not using a popover, create a modal view.
+			[self presentModalViewController:webViewer animated:YES];
+			[webViewer release];
+		}
 	}
 	
 	// Ignore all other types of user interation.
