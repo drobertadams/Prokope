@@ -302,21 +302,50 @@
 			{
 				NSString *js = [NSString stringWithFormat: @"undo_button_clicked('%@');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:js];
+	//			for (NSString *str in RatingsArray)
+	//			{
+	//				NSLog(str);
+	//			}
 			}
 			else
 			{
 				NSString *js = [NSString stringWithFormat: @"show_clear_link('%@');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:js];
-				[RatingsArray addObject:path];
+				NSString *found = @"false";
+				for (NSString *str in RatingsArray)
+				{
+					NSString *localend = [str substringFromIndex:str.length - 1];
+					if ([localend isEqualToString:ending])
+					{
+						NSLog(str);
+						found = @"true";
+						break;
+					}
+				}
+				
+				if([found isEqualToString:@"false"])
+				{
+					[RatingsArray addObject:path];
+				}
+				else
+				{
+					for (NSString *str in RatingsArray)
+					{
+						NSLog(str);
+					}
+				}
+				
 				return FALSE;
 			}
 		}
+		// Meaning this was an actually http request. Therefore we have our own code that gets called, and we present a WebViewController
+		// and show that with the contents of the request.
 		else
 		{
-			for (NSString *str in RatingsArray)
-			{
-				NSLog(str);
-			}
+		//	for (NSString *str in RatingsArray)
+		//	{
+		//		NSLog(str);
+		//	}
 			// Load the image viewer nib and set the URL.
 			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
 																			   bundle:nil];
