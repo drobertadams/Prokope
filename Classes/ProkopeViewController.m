@@ -571,7 +571,7 @@
 			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
 			alertDialog.tag = 1;
 			 
-			NSString *theUser = @"User Name";
+			NSString *theUser = @"E-mail";
 			NSString *thePass = @"Pass Word";
 			
 			if(!test)
@@ -580,7 +580,7 @@
 			}
 			else
 			{
-				theUser = [test objectForKey:@"UserName"];
+				theUser = [test objectForKey:@"E-mail"];
 				thePass = [test objectForKey:@"Password"];
 			}
 			 

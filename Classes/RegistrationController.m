@@ -63,10 +63,9 @@
 	NSString *ButtonTitle = [resultButton currentTitle];
 	if ([ButtonTitle isEqualToString:@"Register"])
 	{
-	
-		NSString *u_Name = [UserNameText text];
-		NSString *p_Name = [PassWordText text];
+
 		NSString *e_Name = [EmailText text];
+		NSString *p_Name = [PassWordText text];
 		NSString *professor_Name = [ProfessorText text];
 		
 		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -76,7 +75,7 @@
 		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 		
 		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
-			"username/%@/password/%@/professor/%@", u_Name, p_Name, professor_Name]];
+			"username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name]];
 		
 		//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/username/true/password/1234/professor/adams"];
 		NSData *data = [NSData dataWithContentsOfURL: url];
@@ -86,16 +85,16 @@
 		[parser parse];
 		[parser release];
 		
-		NSString *theUser = [test objectForKey:@"UserName"];
+		NSString *theUser = [test objectForKey:@"E-mail"];
 		NSString *thePass = [test objectForKey:@"Password"];
 		
-		if ([u_Name isEqualToString:theUser])
+		if ([e_Name isEqualToString:theUser])
 		{
 			NSLog(@"Match");
 		}
 		else
 		{	
-			NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", u_Name];
+			NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", e_Name];
 			
 			UIAlertView *alertDialog;
 			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
@@ -149,9 +148,8 @@
 	if ([buttonTitle isEqualToString:@"YES"])
 	{
 	
-		NSString *u_Name = [UserNameText text];
-		NSString *p_Name = [PassWordText text];
 		NSString *e_Name = [EmailText text];
+		NSString *p_Name = [PassWordText text];
 		NSString *professor_Name = [ProfessorText text];
 		
 		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -161,9 +159,8 @@
 		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  u_Name, @"UserName", 
-							  p_Name, @"Password",
 							  e_Name, @"E-mail", 
+							  p_Name, @"Password",
 							  professor_Name, @"Professor",
 							  nil];
 		
