@@ -180,6 +180,36 @@
 	"      }"
 	"}"
 	"    "
+	"function toggleLikeDislike(int, text)"
+	"{"
+	"      var comments = document.getElementsByTagName('li');"
+	"      var current = comments[int]; "
+	"      var children = current.childNodes;"
+	"	   for (i = 0; i < children.length; i++)"
+	"      {"
+	"           if(children[i].tagName == 'DIV')   "
+	"           {"
+	"               var anchors = children[i].getElementsByTagName('a');"
+	"               for (j = 0; j < anchors.length; j++)"
+	"               {"
+	"                     var now = anchors[j].getAttribute('href');"
+	"                     var sentText = text + int;"
+	"                     if(now == sentText)"
+	"                     {"
+	"                         anchors[j].style.fontStyle = 'italic';"
+	"                         anchors[j].style.fontWeight = 'bold';"
+	"                     }"
+	"                     else"
+	"                     {"
+	"                          anchors[j].style.fontStyle = 'normal';"
+	"                          anchors[j].style.fontWeight = 'normal';"
+	"                     }"
+	"               }"
+	"               break;"
+	"           }"
+	"	    }"
+	"}"
+	"    "
 	"function undo_button_clicked(int)"
 	"{    "
 	"      var comments = document.getElementsByTagName('li');"
@@ -190,11 +220,20 @@
 	"      {"
 	"           if(children[i].tagName == 'DIV')   "
 	"           {"
+	"               if(count == 1)"
+	"               {"
+	"                   var anchors = children[i].getElementsByTagName('a');"
+	"                   for (j = 0; j < anchors.length; j++)"
+	"                   {"
+	"                        anchors[j].style.fontStyle = 'normal';"
+	"                        anchors[j].style.fontWeight = 'normal';"
+	"                   }"
+	"               }"
 	"               if(count == 2)"
 	"               { "
 	"                   children[i].style.display = 'none';"
     "               } "
-	"               count += 1; "
+	"               count ++; "
 	"           }"
 	"      }"
 //	"      if ( comments[i].getAttribute('ref') == ref )"
@@ -296,31 +335,51 @@
 		{
 			NSRange theRange = [StringRequest rangeOfString:@"/" options:NSBackwardsSearch];
 			NSString *path = [StringRequest substringFromIndex:theRange.location];
-			NSString *ending = [StringRequest substringFromIndex:StringRequest.length - 1];
+//			NSString *ending = [StringRequest substringFromIndex:StringRequest.length - 1];
+			
+			NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+			NSString *ending = [path stringByTrimmingCharactersInSet:nonDigits];
 			
 			if([path hasPrefix:@"/Undo"])
 			{
 				NSString *js = [NSString stringWithFormat: @"undo_button_clicked('%@');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:js];
-	//			for (NSString *str in RatingsArray)
-	//			{
-	//				NSLog(str);
-	//			}
+				for (NSString *str in RatingsArray)
+				{
+					NSString *localend = [str stringByTrimmingCharactersInSet:nonDigits];
+					if ([localend isEqualToString:ending])
+					{
+						[RatingsArray removeObject:str];
+						break;
+					}
+				}
 			}
 			else
 			{
+				if ([path hasPrefix:@"/Like"])
+				{
+					NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Like');", ending];
+					[commentary stringByEvaluatingJavaScriptFromString:jss];
+				}
+				else if([path hasPrefix:@"/Dis-Like"])
+				{
+					NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Dis-Like');", ending];
+					[commentary stringByEvaluatingJavaScriptFromString:jss];
+				}
 				NSString *js = [NSString stringWithFormat: @"show_clear_link('%@');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:js];
 				NSString *found = @"false";
+				int count = 0;
 				for (NSString *str in RatingsArray)
 				{
-					NSString *localend = [str substringFromIndex:str.length - 1];
+					NSString *localend = [str stringByTrimmingCharactersInSet:nonDigits];
 					if ([localend isEqualToString:ending])
 					{
-						NSLog(str);
+						[RatingsArray replaceObjectAtIndex:count withObject:path];
 						found = @"true";
 						break;
 					}
+					count ++;
 				}
 				
 				if([found isEqualToString:@"false"])
@@ -334,7 +393,6 @@
 						NSLog(str);
 					}
 				}
-				
 				return FALSE;
 			}
 		}
@@ -342,10 +400,6 @@
 		// and show that with the contents of the request.
 		else
 		{
-		//	for (NSString *str in RatingsArray)
-		//	{
-		//		NSLog(str);
-		//	}
 			// Load the image viewer nib and set the URL.
 			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
 																			   bundle:nil];
