@@ -236,7 +236,6 @@
 	"               count ++; "
 	"           }"
 	"      }"
-//	"      if ( comments[i].getAttribute('ref') == ref )"
 	"}    "
 	"display_ratings();"
 	"</script>";
