@@ -37,8 +37,8 @@
 //	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
-	//NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-	//NSLog(theString);
+//	NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+//	NSLog(theString);
 	
 	// The current tag keeps track of what the current element is in the parser. 
 	CurrentTag = @"";

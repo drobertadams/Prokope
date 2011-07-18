@@ -11,7 +11,7 @@
 
 @implementation RegistrationController
 
-@synthesize UserNameText, PassWordText, EmailText, ProfessorText;
+@synthesize PassWordText, EmailText, ProfessorText, ProfessorTable;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -28,7 +28,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[UserNameText setText:name];
+//	[UserNameText setText:name];
 	[PassWordText setText:pass];
 	[EmailText setText:mail];
 	[ProfessorText setText:prof];
@@ -41,6 +41,67 @@
 	{
 		//<#statements#>
 	}
+	
+	//ProfessorsArray = [[NSMutableArray alloc] initWithObjects:@"Adams", @"Anderson", @"Smith", nil];
+	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
+	
+	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/professor"]];
+	
+	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/username/true/password/1234/professor/adams"];
+	NSData *data = [NSData dataWithContentsOfURL: url];
+	
+	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
+	[parser setDelegate:self];
+	[parser parse];
+	[parser release];
+	
+	ProfessorTable.delegate = self;
+	ProfessorTable.dataSource = self;
+	
+	
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Return the number of rows in the section.
+    return [ProfessorsArray count];
+}
+
+/*
+ // Implement loadView to create a view hierarchy programmatically, without using a nib.
+ - (void)loadView {
+ }
+ */
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+	
+    NSString *a = [ProfessorsArray objectAtIndex:indexPath.row];
+	
+    cell.textLabel.text = a;
+	
+    return cell;
+}
+
+// This method repsonds to the touch on an item in the table view.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	[ProfessorTable deselectRowAtIndexPath:indexPath animated:YES];
+	
+	NSString *a = [ProfessorsArray objectAtIndex:indexPath.row];
+	[ProfessorText setText:a];
 }
 
 -(void)UserLogedIn:(BOOL)u_logged
@@ -74,16 +135,26 @@
 		// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
 		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 		
-		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
-			"username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name]];
 		
-		//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/username/true/password/1234/professor/adams"];
+		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
+							   "username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name];
+		
+	//	NSString* escapedUrlString = [@"hee there" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%%40"];
+		
+		NSLog(StringUrl);
+		
+		NSURL *url = [NSURL URLWithString:StringUrl];
+		
 		NSData *data = [NSData dataWithContentsOfURL: url];
 		
-		NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
-		[parser setDelegate:self];
-		[parser parse];
-		[parser release];
+		NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+		NSLog(theString);
+		
+		NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
+		[parse setDelegate:self];
+		[parse parse];
+		[parse release];
 		
 		NSString *theUser = [test objectForKey:@"E-mail"];
 		NSString *thePass = [test objectForKey:@"Password"];
@@ -113,12 +184,21 @@
 {
 	if ([CurrentTag isEqualToString:@"result"])
 	{
-		NSLog(string);
+		NSLog(@"Result from rest server is : %@", string);
 		if ([string isEqualToString:@"1"])
 		{
 			NSLog(@"There already is a profile");
 		}
 	}
+	else if([CurrentTag isEqualToString:@"professors"])
+	{
+	    NSLog(@"Starting to parse the professors section");	
+	}
+	else if([CurrentTag isEqualToString:@"professor"])
+	{
+	//	NSLog(string);
+	}
+	NSLog(string);
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
@@ -128,11 +208,59 @@
 	if([elementName isEqualToString:@"result"])
 	{
 		CurrentTag = @"result";
+		NSLog(@"A result is coming");
 	}
-	else
+	else if([elementName isEqualToString:@"professors"])
 	{
-		NSLog(@"Others");
+		CurrentTag = @"professors";
 	}
+	else if([elementName isEqualToString:@"professor"])
+	{
+		CurrentTag = @"professor";
+		NSString *username = [attributeDict objectForKey:@"username"];
+		NSString *fullname = [attributeDict objectForKey:@"fullname"];
+		NSString *id = [attributeDict objectForKey:@"id"];
+		
+		NSLog(username);
+		NSLog(fullname);
+		NSLog(id);
+		
+		[ProfessorsArray addObject:username];
+	}
+}
+
+-(NSString *) urlencode: (NSString *) url
+{
+    NSArray *escapeChars = [NSArray arrayWithObjects:@";" , @"/" , @"?" , @":" ,
+							@"@" , @"&" , @"=" , @"+" ,
+							@"$" , @"," , @"[" , @"]",
+							@"#", @"!", @"'", @"(", 
+							@")", @"*", nil];
+	
+    NSArray *replaceChars = [NSArray arrayWithObjects:@"%3B" , @"%2F" , @"%3F" ,
+							 @"%3A" , @"%40" , @"%26" ,
+							 @"%3D" , @"%2B" , @"%24" ,
+							 @"%2C" , @"%5B" , @"%5D", 
+							 @"%23", @"%21", @"%27",
+							 @"%28", @"%29", @"%2A", nil];
+	
+    int len = [escapeChars count];
+	
+    NSMutableString *temp = [url mutableCopy];
+	
+    int i;
+    for(i = 0; i < len; i++)
+    {
+		
+        [temp replaceOccurrencesOfString: [escapeChars objectAtIndex:i]
+							  withString:[replaceChars objectAtIndex:i]
+								 options:NSLiteralSearch
+								   range:NSMakeRange(0, [temp length])];
+    }
+	
+    NSString *out = [NSString stringWithString: temp];
+	
+    return out;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
