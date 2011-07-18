@@ -11,7 +11,7 @@
 
 @implementation RegistrationController
 
-@synthesize PassWordText, EmailText, ProfessorText, ProfessorTable;
+@synthesize PassWordText, EmailText, ProfessorText, ProfessorTable, StatusLabel;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -139,8 +139,10 @@
 		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
 							   "username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name];
 		
+	//	NSString *StringUrl = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/username/tom/password/1234/professor/adams%40cis.gvsu.edu";
+		
 	//	NSString* escapedUrlString = [@"hee there" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%%40"];
+		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
 		
 		NSLog(StringUrl);
 		
@@ -184,11 +186,27 @@
 {
 	if ([CurrentTag isEqualToString:@"result"])
 	{
+		NSString *StatusString = @"Nothing to report";
+		UIColor *StatusColor = [UIColor whiteColor];
 		NSLog(@"Result from rest server is : %@", string);
-		if ([string isEqualToString:@"1"])
+	
+		if ([string isEqualToString:@"-1"])
 		{
-			NSLog(@"There already is a profile");
+			StatusString = @"This profile is in use";
+			StatusColor = [UIColor redColor];
 		}
+		else if([string isEqualToString:@"1"])
+		{
+			StatusColor = [UIColor greenColor];
+			StatusString = @"Your profile was created";			
+		}
+		else if([string isEqualToString:@"-2"])
+		{
+			StatusString = @"You did not enter in the information correctly";
+			StatusColor = [UIColor redColor];
+		}
+		[StatusLabel setText:StatusString];
+		[StatusLabel setBackgroundColor:StatusColor];
 	}
 	else if([CurrentTag isEqualToString:@"professors"])
 	{

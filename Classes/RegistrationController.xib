@@ -206,6 +206,22 @@
 						<float key="IBUISectionHeaderHeight">22</float>
 						<float key="IBUISectionFooterHeight">22</float>
 					</object>
+					<object class="IBUILabel" id="395734739">
+						<reference key="NSNextResponder" ref="766721923"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{90, 540}, {348, 21}}</string>
+						<reference key="NSSuperview" ref="766721923"/>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<int key="IBUIContentMode">7</int>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<string key="IBUIText">Profile Status :</string>
+						<reference key="IBUITextColor" ref="230060119"/>
+						<reference key="IBUIHighlightedColor" ref="27581163"/>
+						<int key="IBUIBaselineAdjustment">1</int>
+						<float key="IBUIMinimumFontSize">10</float>
+					</object>
 				</object>
 				<string key="NSFrameSize">{1024, 704}</string>
 				<reference key="NSSuperview"/>
@@ -303,6 +319,14 @@
 					</object>
 					<int key="connectionID">28</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">StatusLabel</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="395734739"/>
+					</object>
+					<int key="connectionID">33</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -337,6 +361,7 @@
 							<reference ref="497335932"/>
 							<reference ref="768083991"/>
 							<reference ref="1073391252"/>
+							<reference ref="395734739"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -388,6 +413,11 @@
 						<reference key="object" ref="984612933"/>
 						<reference key="parent" ref="0"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">32</int>
+						<reference key="object" ref="395734739"/>
+						<reference key="parent" ref="766721923"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -412,6 +442,8 @@
 					<string>27.IBViewBoundsToFrameTransform</string>
 					<string>29.IBEditorWindowLastContentRect</string>
 					<string>29.IBPluginDependency</string>
+					<string>32.IBPluginDependency</string>
+					<string>32.IBViewBoundsToFrameTransform</string>
 					<string>4.IBPluginDependency</string>
 					<string>4.IBViewBoundsToFrameTransform</string>
 					<string>9.IBPluginDependency</string>
@@ -441,7 +473,7 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABDPgAAwyUAAA</bytes>
 					</object>
-					<string>{{241, 70}, {1039, 686}}</string>
+					<string>{{241, 73}, {1039, 683}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -449,6 +481,10 @@
 					</object>
 					<string>{{356, -142}, {783, 686}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAABD8oAAxA6AAA</bytes>
+					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABDsIAAxBmAAA</bytes>
@@ -475,7 +511,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">31</int>
+			<int key="maxID">33</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -503,6 +539,7 @@
 							<string>ProfessorTable</string>
 							<string>ProfessorText</string>
 							<string>RegisterButton</string>
+							<string>StatusLabel</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -511,6 +548,7 @@
 							<string>UITableView</string>
 							<string>UITextField</string>
 							<string>UIButton</string>
+							<string>UILabel</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -522,6 +560,7 @@
 							<string>ProfessorTable</string>
 							<string>ProfessorText</string>
 							<string>RegisterButton</string>
+							<string>StatusLabel</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -544,6 +583,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">RegisterButton</string>
 								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">StatusLabel</string>
+								<string key="candidateClassName">UILabel</string>
 							</object>
 						</object>
 					</object>

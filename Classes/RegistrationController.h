@@ -16,6 +16,7 @@
 	IBOutlet UITextField *ProfessorText;
 	IBOutlet UITableView *ProfessorTable;
 	IBOutlet UIButton *RegisterButton;
+	IBOutlet UILabel *StatusLabel;
 	
 	NSString *name;
 	NSString *pass;
@@ -34,6 +35,7 @@
 @property (nonatomic, retain) IBOutlet UITextField *ProfessorText;
 @property (nonatomic, retain) IBOutlet UIButton *RegisterButton;
 @property (nonatomic, retain) IBOutlet UITableView *ProfessorTable;
+@property (nonatomic, retain) IBOutlet UILabel *StatusLabel;
 
 -(IBAction)RegisterButtonClicked:(id)sender;
 
