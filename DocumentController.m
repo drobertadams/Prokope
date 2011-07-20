@@ -95,7 +95,7 @@
 	"		comments[i].style.display = 'list-item';"
 	"		if ( comments[i].getAttribute('ref') == ref) {"
 	"            comments[i].style.backgroundColor = '#F5DEB3';"
-	"            comments[i].style.fontWeight = 'bold';"
+//	"            comments[i].style.fontWeight = 'bold';"
 	"            if(found == false)"
 	"            {"
 	"                var selectedPosX=0;"

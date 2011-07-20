@@ -11,8 +11,8 @@
 
 @interface RegistrationController : UIViewController <UIAlertViewDelegate, NSXMLParserDelegate, UITableViewDelegate, UITableViewDataSource> {
 
-	IBOutlet UITextField *PassWordText;
 	IBOutlet UITextField *EmailText;
+	IBOutlet UITextField *PassWordText;
 	IBOutlet UITextField *ProfessorText;
 	IBOutlet UITableView *ProfessorTable;
 	IBOutlet UIButton *RegisterButton;
@@ -28,6 +28,8 @@
 	NSString *CurrentTag;
 	
 	NSMutableArray *ProfessorsArray;
+	
+	int RegistrationResult;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *PassWordText;
@@ -39,8 +41,7 @@
 
 -(IBAction)RegisterButtonClicked:(id)sender;
 
--(void)DisplayHelperImage:(NSString *)u_name Password:(NSString *)p_word
-		Email:(NSString *)e_mail Professor:(NSString *)professor_word;
+-(void)SetInitialData:(NSString *)e_mail Password:(NSString *)p_word Professor:(NSString *)professor_word;
 
 -(void)UserLogedIn:(BOOL)u_logged;
 -(NSString *) urlencode: (NSString *) url;

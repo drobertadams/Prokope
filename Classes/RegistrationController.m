@@ -11,7 +11,7 @@
 
 @implementation RegistrationController
 
-@synthesize PassWordText, EmailText, ProfessorText, ProfessorTable, StatusLabel;
+@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -28,9 +28,8 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-//	[UserNameText setText:name];
-	[PassWordText setText:pass];
 	[EmailText setText:mail];
+	[PassWordText setText:pass];
 	[ProfessorText setText:prof];
 	
 	if (logedin)
@@ -109,12 +108,10 @@
 	logedin = u_logged;
 }
 
--(void)DisplayHelperImage:(NSString *)u_name Password:(NSString *)p_word
-		Email:(NSString *)e_mail Professor:(NSString *)professor_word
+-(void)SetInitialData:(NSString *)e_mail Password:(NSString *)p_word Professor:(NSString *)professor_word
 {
-	name = u_name;
-	pass = p_word;
 	mail = e_mail;
+	pass = p_word;
 	prof = professor_word;
 }
 
@@ -161,20 +158,24 @@
 		NSString *theUser = [test objectForKey:@"E-mail"];
 		NSString *thePass = [test objectForKey:@"Password"];
 		
-		if ([e_Name isEqualToString:theUser])
+		if (RegistrationResult == 1)
 		{
-			NSLog(@"Match");
+			if ([e_Name isEqualToString:theUser])
+			{
+				NSLog(@"Match");
+			}
+			else
+			{	
+				NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", e_Name];
+				
+				UIAlertView *alertDialog;
+				alertDialog = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+				alertDialog.tag = 1;
+				[alertDialog show];
+				[alertDialog release];
+			}
 		}
-		else
-		{	
-			NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", e_Name];
-			
-			UIAlertView *alertDialog;
-			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
-			alertDialog.tag = 1;
-			[alertDialog show];
-			[alertDialog release];
-		}
+		
     }
 	else if([ButtonTitle isEqualToString:@"Update"])
 	{
@@ -194,23 +195,26 @@
 		{
 			StatusString = @"This profile is in use";
 			StatusColor = [UIColor redColor];
+			RegistrationResult = -1;
 		}
 		else if([string isEqualToString:@"1"])
 		{
 			StatusColor = [UIColor greenColor];
-			StatusString = @"Your profile was created";			
+			StatusString = @"Your profile was created";
+			RegistrationResult = 1;
 		}
 		else if([string isEqualToString:@"-2"])
 		{
 			StatusString = @"You did not enter in the information correctly";
 			StatusColor = [UIColor redColor];
+			RegistrationResult = -2;
 		}
 		[StatusLabel setText:StatusString];
 		[StatusLabel setBackgroundColor:StatusColor];
 	}
 	else if([CurrentTag isEqualToString:@"professors"])
 	{
-	    NSLog(@"Starting to parse the professors section");	
+	 //   NSLog(@"Starting to parse the professors section");	
 	}
 	else if([CurrentTag isEqualToString:@"professor"])
 	{
@@ -226,7 +230,6 @@
 	if([elementName isEqualToString:@"result"])
 	{
 		CurrentTag = @"result";
-		NSLog(@"A result is coming");
 	}
 	else if([elementName isEqualToString:@"professors"])
 	{
@@ -238,10 +241,6 @@
 		NSString *username = [attributeDict objectForKey:@"username"];
 		NSString *fullname = [attributeDict objectForKey:@"fullname"];
 		NSString *id = [attributeDict objectForKey:@"id"];
-		
-		NSLog(username);
-		NSLog(fullname);
-		NSLog(id);
 		
 		[ProfessorsArray addObject:username];
 	}

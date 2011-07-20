@@ -15,7 +15,7 @@ to implement the necessary methods for a table view to respond to actions and lo
 table. 
  */
 @interface ProkopeViewController : UIViewController 
-		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate> {
+		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate, NSXMLParserDelegate> {
 
 	NSMutableArray *AuthorsArray;
 			
@@ -61,6 +61,12 @@ table.
 	UIButton *ThirdRightButton;
 			
 	BOOL logedin;
+			
+	NSString *CurrentTag;
+			
+	int LoginResult;
+			
+	NSString *Professor;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;

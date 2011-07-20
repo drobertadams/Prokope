@@ -607,8 +607,8 @@
 	
 		if(logedin == TRUE)
 		{
-			[reg DisplayHelperImage:[test objectForKey:@"UserName"] Password:[test objectForKey:@"Password"] 
-				Email:[test objectForKey:@"E-mail"] Professor:[test objectForKey:@"Professor"]];
+			[reg SetInitialData:[test objectForKey:@"E-mail"] Password:[test objectForKey:@"Password"] Professor:Professor];
+			
 			[reg UserLogedIn:YES];
 		}
 		[self.navigationController pushViewController:reg animated:YES];
@@ -650,25 +650,49 @@
 			NSString *UserName = [userInput text];
 			NSString *PassWord = [passInput text];
 			
-			NSString *theUser = [test objectForKey:@"UserName"];
+			NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
+				"username/%@/password/%@", UserName, PassWord];
+			
+			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
+			
+			NSURL *url = [NSURL URLWithString:StringUrl];
+			NSData *data = [NSData dataWithContentsOfURL: url];
+			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
+			[parse setDelegate:self];
+			[parse parse];
+			[parse release];
+			
+			NSString *theUser = [test objectForKey:@"E-mail"];
 			NSString *thePass = [test objectForKey:@"Password"];
 			
-			if ([[userInput text] isEqualToString:theUser])
-			{
-				NSLog(@"Match");
+			if(LoginResult != -1)
+			{			
+				if ([[userInput text] isEqualToString:theUser])
+				{
+					NSLog(@"Match");
+				}
+				else
+				{ 
+					UIAlertView *alertDialog;
+					NSString *dialog_message = [NSString stringWithFormat:@"%@ is not the default profile, would you like it to be ?", UserName];
+					alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+					alertDialog.tag = 5;
+					
+					[alertDialog show];
+					[alertDialog release];
+				}
+				logedin = TRUE;
+				[self.navigationItem.rightBarButtonItem setTitle:UserName];
 			}
 			else
 			{
 				UIAlertView *alertDialog;
-				NSString *dialog_message = [NSString stringWithFormat:@"%@ is not the default profile, would you like it to be ?", UserName];
-				alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
-				alertDialog.tag = 5;
+				NSString *dialog_message = @"Your login was unsucessful";
+				alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
 				
 				[alertDialog show];
 				[alertDialog release];
 			}
-			logedin = TRUE;
-			[self.navigationItem.rightBarButtonItem setTitle:UserName];
 		}
 	}
 	else if(alertView.tag == 5)
@@ -680,15 +704,45 @@
 			NSString *PassWord = [passInput text];
 			
 			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-								  UserName,
-								  @"UserName", 
-								  PassWord,
-								  @"Password", 
-								  nil];
+								  UserName, @"E-mail", 
+								  PassWord, @"Password", nil];
 			
 			[self.navigationItem.rightBarButtonItem setTitle:UserName];
 			[dict writeToFile:file atomically: TRUE];
 		}
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if ([CurrentTag isEqualToString:@"result"])
+	{		
+		if ([string isEqualToString:@"-1"])
+		{
+			LoginResult = -1;
+		}
+		else
+		{
+		    LoginResult = 1;
+			
+			// This needs to be converted into a NSData object and then back. 
+			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
+        	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+		}
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
+  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
+	attributes:(NSDictionary *)attributeDict
+{	
+	if([elementName isEqualToString:@"result"])
+	{
+		CurrentTag = @"result";
+	}
+	else
+	{
+		CurrentTag = "Unknown";
 	}
 }
 
