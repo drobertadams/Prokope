@@ -314,6 +314,9 @@
 	
 	// Go fetch and display the document.
 	[self fetchDocumentData];
+	
+	NSXMLDocument xmlDoc;
+	xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:furl
 }
 
 
@@ -436,6 +439,12 @@
 	NSLog(@"Clicked was : %@", id);
 	NSLog(@"On poem %@", URL);
 	NSLog(@"By user : %@", UserName);
+	
+	NSString *xml = 
+	@"<?xml version='1.0' encoding='UTF-8'?>"
+	"<entries>"
+    "<element name='foo' />"
+	"</entires>";
 }
 
 
