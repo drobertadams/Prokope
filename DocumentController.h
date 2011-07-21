@@ -25,6 +25,8 @@
 	UILabel *label2;
 	
 	NSMutableArray *RatingsArray;
+	
+	NSMutableString *XMLString;
 }
 
 

@@ -315,8 +315,11 @@
 	// Go fetch and display the document.
 	[self fetchDocumentData];
 	
-	NSXMLDocument xmlDoc;
-	xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:furl
+	NSString *datestring = [[NSDate date] description];
+
+	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
+	
+	 NSLog(XMLString);
 }
 
 
@@ -436,15 +439,20 @@
 	js = [NSString stringWithFormat:@"highlightword('%@')", id];
 	[document stringByEvaluatingJavaScriptFromString:js];
 	
-	NSLog(@"Clicked was : %@", id);
-	NSLog(@"On poem %@", URL);
-	NSLog(@"By user : %@", UserName);
+	[XMLString appendString:@"<click>"];
+	[XMLString appendString: id];
+	[XMLString appendString:@"</click>"];
+
+	for (NSString *str in RatingsArray)
+	{
+		[XMLString appendString:@"<rate>"];
+		[XMLString appendString: str];
+		[XMLString appendString:@"</rate>"];
+	}
 	
-	NSString *xml = 
-	@"<?xml version='1.0' encoding='UTF-8'?>"
-	"<entries>"
-    "<element name='foo' />"
-	"</entires>";
+	[XMLString appendString:@"</entries>"];
+	
+	NSLog(XMLString);
 }
 
 

@@ -220,7 +220,6 @@
 	{
 	//	NSLog(string);
 	}
-	NSLog(string);
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 

@@ -66,6 +66,8 @@ table.
 			
 	int LoginResult;
 			
+	NSString *TheUserName;
+	NSString *ThePassWord;
 	NSString *Professor;
 }
 

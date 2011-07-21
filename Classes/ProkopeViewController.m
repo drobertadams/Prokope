@@ -389,11 +389,11 @@
 		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
 
-		NSString *str = [label2 text];
+//		NSString *str = [label2 text];
 		
 		// strips away the 'Welcome : ' part of the user login label.
-		NSString *TheName = [str substringFromIndex:10];
-		doc.UserName = TheName;
+//		NSString *TheName = [str substringFromIndex:10];
+//		doc.UserName = TheName;
 		
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];
@@ -456,10 +456,8 @@
 	doc.URL = MyAuth.workURL;
 	doc.Title = MyAuth.name;
 	
-	NSString *str = [label2 text];
 	
-	NSString *TheName = [str substringFromIndex:10];
-	doc.UserName = TheName;
+	doc.UserName = TheUserName;
 	
 	[self.navigationController pushViewController:doc animated:YES];
 	[doc release];
@@ -563,6 +561,8 @@
 		if(logedin == TRUE)
 		{
 			logedin = FALSE;
+			TheUserName = @"";
+			ThePassWord = @"";
 			[self.navigationItem.rightBarButtonItem setTitle:@"Profile"];
 		}
 		else 
@@ -607,7 +607,8 @@
 	
 		if(logedin == TRUE)
 		{
-			[reg SetInitialData:[test objectForKey:@"E-mail"] Password:[test objectForKey:@"Password"] Professor:Professor];
+
+			[reg SetInitialData:TheUserName Password:ThePassWord Professor:Professor];
 			
 			[reg UserLogedIn:YES];
 		}
@@ -650,13 +651,21 @@
 			NSString *UserName = [userInput text];
 			NSString *PassWord = [passInput text];
 			
+			NSData *data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
+			UserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
+			PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			
+			NSLog(UserName);
+			NSLog(PassWord);
+			
 			NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
 				"username/%@/password/%@", UserName, PassWord];
 			
 			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
-			NSData *data = [NSData dataWithContentsOfURL: url];
+			data = [NSData dataWithContentsOfURL: url];
 			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 			[parse setDelegate:self];
 			[parse parse];
@@ -665,7 +674,7 @@
 			NSString *theUser = [test objectForKey:@"E-mail"];
 			NSString *thePass = [test objectForKey:@"Password"];
 			
-			if(LoginResult != -1)
+			if(LoginResult == 1)
 			{			
 				if ([[userInput text] isEqualToString:theUser])
 				{
@@ -682,6 +691,12 @@
 					[alertDialog release];
 				}
 				logedin = TRUE;
+			
+				data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
+				TheUserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+				data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
+				ThePassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+				
 				[self.navigationItem.rightBarButtonItem setTitle:UserName];
 			}
 			else
@@ -729,6 +744,7 @@
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
+		NSLog(string);
 	}
 }
 
