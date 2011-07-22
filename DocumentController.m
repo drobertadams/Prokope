@@ -322,12 +322,12 @@
 
 	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
 	
-	 NSLog(XMLString);
+	NSLog(XMLString);
 	
-//	if(!MyTimer)
-//	{
-//		NSLog("@No Timer");	
-//	}
+	//if(MyTimer)
+	//{
+	//	NSLog("@No Timer");	
+	//}
 	
 	MyTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
 
@@ -474,6 +474,8 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
 	NSLog(@"AAH");	
+	[MyTimer invalidate];
+	MyTimer = nil;
 }
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
