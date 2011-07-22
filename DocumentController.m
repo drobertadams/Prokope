@@ -87,15 +87,17 @@
 	// It then scrolls the window (in this case the UIWebView that holds it) to that li tag.
 	NSString *js = 
 	@"<script lang=\"text/javascript\">"
-	"function show_only(ref)"
+	"function show_only(ref, view)"
 	"{"
 	"	var comments = document.getElementsByTagName('li');"
 	"   var found = false;"
 	"	for (i = 0; i < comments.length; i++) {"
 	"		comments[i].style.display = 'list-item';"
 	"		if ( comments[i].getAttribute('ref') == ref) {"
-	"            comments[i].style.backgroundColor = '#F5DEB3';"
-//	"            comments[i].style.fontWeight = 'bold';"
+	"            if(view == 'commentary')"
+	"            {"
+	"                comments[i].style.backgroundColor = '#F5DEB3';"
+	"            }"
 	"            if(found == false)"
 	"            {"
 	"                var selectedPosX=0;"
@@ -315,13 +317,26 @@
 	// Go fetch and display the document.
 	[self fetchDocumentData];
 	
+	ClicksArray = [[NSMutableArray alloc] initWithCapacity:1000];
 	NSString *datestring = [[NSDate date] description];
 
 	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
 	
 	 NSLog(XMLString);
+	
+//	if(!MyTimer)
+//	{
+//		NSLog("@No Timer");	
+//	}
+	
+	MyTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
+
 }
 
+-(void)targetMethod
+{
+	NSLog(@"timer:");
+}
 
 /* **********************************************************************************************************************
  * Called when any of the webviews (except document) wants to load a URL.
@@ -341,76 +356,32 @@
 		{
 			NSRange theRange = [StringRequest rangeOfString:@"/" options:NSBackwardsSearch];
 			NSString *path = [StringRequest substringFromIndex:theRange.location];
-//			NSString *ending = [StringRequest substringFromIndex:StringRequest.length - 1];
 			
 			NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
 			NSString *ending = [path stringByTrimmingCharactersInSet:nonDigits];
 			
-			if([path hasPrefix:@"/Undo"])
+			if ([path hasPrefix:@"/Like"])
 			{
-				NSString *js = [NSString stringWithFormat: @"undo_button_clicked('%@');", ending];
-				[commentary stringByEvaluatingJavaScriptFromString:js];
-				for (NSString *str in RatingsArray)
-				{
-					NSString *localend = [str stringByTrimmingCharactersInSet:nonDigits];
-					if ([localend isEqualToString:ending])
-					{
-						[RatingsArray removeObject:str];
-						break;
-					}
-				}
+				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Like');", ending];
+				[commentary stringByEvaluatingJavaScriptFromString:jss];
 			}
-			else
+			else if([path hasPrefix:@"/Dis-Like"])
 			{
-				if ([path hasPrefix:@"/Like"])
-				{
-					NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Like');", ending];
-					[commentary stringByEvaluatingJavaScriptFromString:jss];
-				}
-				else if([path hasPrefix:@"/Dis-Like"])
-				{
-					NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Dis-Like');", ending];
-					[commentary stringByEvaluatingJavaScriptFromString:jss];
-				}
-				NSString *js = [NSString stringWithFormat: @"show_clear_link('%@');", ending];
-				[commentary stringByEvaluatingJavaScriptFromString:js];
-				NSString *found = @"false";
-				int count = 0;
-				for (NSString *str in RatingsArray)
-				{
-					NSString *localend = [str stringByTrimmingCharactersInSet:nonDigits];
-					if ([localend isEqualToString:ending])
-					{
-						[RatingsArray replaceObjectAtIndex:count withObject:path];
-						found = @"true";
-						break;
-					}
-					count ++;
-				}
-				
-				if([found isEqualToString:@"false"])
-				{
-					[RatingsArray addObject:path];
-				}
-				else
-				{
-					for (NSString *str in RatingsArray)
-					{
-						NSLog(str);
-					}
-				}
-				return FALSE;
+				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Dis-Like');", ending];
+				[commentary stringByEvaluatingJavaScriptFromString:jss];
 			}
+			[RatingsArray addObject:path];
 		}
 		// Meaning this was an actually http request. Therefore we have our own code that gets called, and we present a WebViewController
 		// and show that with the contents of the request.
 		else
 		{
 			// Load the image viewer nib and set the URL.
-			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
-																			   bundle:nil];
+			[ClicksArray addObject:StringRequest];
+			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
+
 			webViewer.url = StringRequest;
-			
+
 			// If not using a popover, create a modal view.
 			[self presentModalViewController:webViewer animated:YES];
 			[webViewer release];
@@ -431,9 +402,9 @@
 	
 	// Call the javascript show_only() function in the commentary UIWebView to display all comments associated with the
 	// given id and hide all the others.
-	NSString *js = [NSString stringWithFormat: 
-							  @"show_only('%@');", id];
+	NSString *js = [NSString stringWithFormat: @"show_only('%@', 'commentary');", id];
 	[commentary stringByEvaluatingJavaScriptFromString:js];	
+	js = [NSString stringWithFormat: @"show_only('%@', 'vocabulary');", id];
 	[vocabulary stringByEvaluatingJavaScriptFromString:js];
 	
 	js = [NSString stringWithFormat:@"highlightword('%@')", id];
@@ -445,26 +416,32 @@
 
 	for (NSString *str in RatingsArray)
 	{
-		[XMLString appendString:@"<rate>"];
-		[XMLString appendString: str];
-		[XMLString appendString:@"</rate>"];
+	//	[XMLString appendString:@"<rate>"];
+	//	[XMLString appendString: str];
+	//	[XMLString appendString:@"</rate>"];
+		NSLog(@"%@", str);
+	}
+	
+	for (NSString *str in ClicksArray)
+	{
+		NSLog(@"\n");
+		NSLog(@"%@", str);
 	}
 	
 	[XMLString appendString:@"</entries>"];
 	
-	NSLog(XMLString);
-}
-
-
-/******************************************************************************
- * This alert get shown when this view is first launched. There are two UITextFields
- * that are created and then added to the alert. Two buttons are also created in the 
- * initialization code. Furthermore the message is set to "\n\n\n..." to 'stretch' the 
- * alertView's boundries to include the two UITextFields.
- */
--(void)ShowAlert
-{
-	[log ShowAlert];
+//	NSLog(XMLString);
+//	NSString *xmlString = @"<test><message length='5'>Hello</message></test>";
+	
+//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
+//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
+//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
+//	[serviceRequest setHTTPMethod:@"POST"];
+//	[serviceRequest setHTTPBody:[xmlString dataUsingEncoding:NSASCIIStringEncoding]];
+	
+//	NSURLResponse * serviceResponse;
+//	NSError * serviceError;
+//	serviceResponse = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
 }
 
 -(void)SetUpLoginButton
@@ -484,16 +461,20 @@
 
 
 - (void)viewDidUnload {
+	NSLog(@"Going to a different view");
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 
 - (void)dealloc {
+	NSLog(@"Deallocating");
     [super dealloc];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+	NSLog(@"AAH");	
+}
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*

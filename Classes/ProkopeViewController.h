@@ -69,6 +69,9 @@ table.
 	NSString *TheUserName;
 	NSString *ThePassWord;
 	NSString *Professor;
+			
+	UIImage *image_left;
+	UIImage *image_right;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
@@ -82,6 +85,8 @@ table.
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 -(void)showActionSheet;
+
+-(void)InitalizeButton:(UIButton *)Button Tag:(int)tag Shelf:(UIScrollView *)Shelf Side:(NSString *)Side;
 
 -(void)FirstShelfButtonClicked:(id)sender;
 -(void)SecondShelfButtonClicked:(id)sender;

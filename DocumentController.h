@@ -26,12 +26,18 @@
 	
 	NSMutableArray *RatingsArray;
 	
+	NSMutableArray *ClicksArray;
+	
 	NSMutableString *XMLString;
+	
+	NSTimer *MyTimer;
 }
 
 
 // Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
+
+-(void)targetMethod;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 -(void)wordClicked:(NSString *)id;

@@ -32,9 +32,8 @@
 	
 	webView.delegate = self;
 	webView.allowsInlineMediaPlayback = YES;	// display movies "inline" (in the UIWebView)
-	
+
 	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	//NSLog(@"url=%@", url);
 	[webView loadRequest:theRequest]; 		
 }
 

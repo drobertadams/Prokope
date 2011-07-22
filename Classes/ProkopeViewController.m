@@ -53,12 +53,15 @@
  */
 -(void)viewDidLoad
 {
-	
+	[super viewDidLoad];
 	ClickedFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
 	ControlFont = [UIFont systemFontOfSize:25];
 	
 	self.title = @"Prokope - Intermediate Latin Reader";
-	[super viewDidLoad];
+	[CommentaryView setBackgroundColor:[UIColor clearColor]];
+	
+	[self setUpNavBar];
+	[self SetUpLoginButton];
 	
 	FirstShelf.tag = 1;
 	FirstShelf.delegate = self;
@@ -69,15 +72,11 @@
 	ThirdShelf.tag = 3;
 	ThirdShelf.delegate = self;
 	
-	[self setUpNavBar];
-	[self SetUpLoginButton];
-	
+	// these images are constants for this controller. The image_left and image_right UIImages are for the buttons on the shelves
+	// to indicate if there is more content that can be scrolled to. 
 	BookSpine = [UIImage imageNamed:@"BookSpine2.png"];
-	
-	[CommentaryView setBackgroundColor:[UIColor clearColor]];
-	
-	UIImage *image_left = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon-left" ofType:@"png"]];
-	UIImage *image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
+	image_left = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon-left" ofType:@"png"]];
+	image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
 	
 	first_shelf_x_cord = -55;
 	// This loop populates the 'top shelf' of the BookShelfImage.
@@ -105,72 +104,76 @@
 	[FirstShelf setShowsHorizontalScrollIndicator:YES];
 	[FirstShelf setContentSize:CGSizeMake(first_shelf_x_cord, FirstShelf.frame.size.height)];
 	
+	[SecondShelf setScrollEnabled:YES];
+	[SecondShelf setShowsHorizontalScrollIndicator:YES];
+	
+	[ThirdShelf setScrollEnabled:YES];
+	[ThirdShelf setShowsHorizontalScrollIndicator:YES];
+
+	// These series of 6 buttons are the buttons on the book shelves to indicate if there is content that can be scrolled to.
+	// There is a right and left button on each shelf, and each button has been given a tag that the code can later reference.
 	FirstLeftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[FirstLeftButton setBackgroundImage:image_left forState:UIControlStateNormal];
-	[FirstLeftButton setBackgroundImage:image_left forState:UIControlStateHighlighted];
-	[FirstLeftButton setBackgroundImage:image_left forState:UIControlStateSelected];
-	[FirstLeftButton addTarget:self action:@selector(accelorateLeft:) forControlEvents:UIControlEventTouchUpInside];
-	FirstLeftButton.tag=21;	
+	[self InitalizeButton:FirstLeftButton Tag:21 Shelf:FirstShelf Side:@"Left"];
 	
 	FirstRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[FirstRightButton setBackgroundImage:image_right forState:UIControlStateNormal];
-	[FirstRightButton setBackgroundImage:image_right forState:UIControlStateHighlighted];
-	[FirstRightButton setBackgroundImage:image_right forState:UIControlStateSelected];
-	[FirstRightButton addTarget:self action:@selector(accelorateRight:) forControlEvents:UIControlEventTouchUpInside];
-	FirstRightButton.tag=22;	
+	[self InitalizeButton:FirstRightButton Tag:22 Shelf:FirstShelf Side:@"Right"];
 	
 	SecondLeftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[SecondLeftButton setBackgroundImage:image_left forState:UIControlStateNormal];
-	[SecondLeftButton setBackgroundImage:image_left forState:UIControlStateHighlighted];
-	[SecondLeftButton setBackgroundImage:image_left forState:UIControlStateSelected];
-	[SecondLeftButton addTarget:self action:@selector(accelorateLeft:) forControlEvents:UIControlEventTouchUpInside];
-	SecondLeftButton.tag=23;	
+	[self InitalizeButton:SecondLeftButton Tag:23 Shelf:SecondShelf Side:@"Left"];
 	
 	SecondRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[SecondRightButton setBackgroundImage:image_right forState:UIControlStateNormal];
-	[SecondRightButton setBackgroundImage:image_right forState:UIControlStateHighlighted];
-	[SecondRightButton setBackgroundImage:image_right forState:UIControlStateSelected];
-	[SecondRightButton addTarget:self action:@selector(accelorateRight:) forControlEvents:UIControlEventTouchUpInside];
-	SecondRightButton.tag=24;	
+	[self InitalizeButton:SecondRightButton Tag:24 Shelf:SecondShelf Side:@"Right"];
 	
 	ThirdLeftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[ThirdLeftButton setBackgroundImage:image_left forState:UIControlStateNormal];
-	[ThirdLeftButton setBackgroundImage:image_left forState:UIControlStateHighlighted];
-	[ThirdLeftButton setBackgroundImage:image_left forState:UIControlStateSelected];
-	[ThirdLeftButton addTarget:self action:@selector(accelorateLeft:) forControlEvents:UIControlEventTouchUpInside];
-	ThirdLeftButton.tag=25;	
+	[self InitalizeButton:ThirdLeftButton Tag:25 Shelf:ThirdShelf Side:@"Left"];	
 	
 	ThirdRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[ThirdRightButton setBackgroundImage:image_right forState:UIControlStateNormal];
-	[ThirdRightButton setBackgroundImage:image_right forState:UIControlStateHighlighted];
-	[ThirdRightButton setBackgroundImage:image_right forState:UIControlStateSelected];
-	[ThirdRightButton addTarget:self action:@selector(accelorateRight:) forControlEvents:UIControlEventTouchUpInside];
-	ThirdRightButton.tag=26;
-	
-	[FirstShelf addSubview:FirstLeftButton];
-	[FirstShelf addSubview:FirstRightButton];
-	[SecondShelf addSubview:SecondLeftButton];
-	[SecondShelf addSubview:SecondRightButton];
-	[ThirdShelf addSubview:ThirdLeftButton];
-	[ThirdShelf addSubview:ThirdRightButton];
+	[self InitalizeButton:ThirdRightButton Tag:26 Shelf:ThirdShelf Side:@"Right"];
 	
 	[self ForceScroll:FirstShelf];
-	
-	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
 	logedin = FALSE;
 }
 
+/******************************************************************************
+ * This method allows you to inialize a button and assign it to UIScrollView. It saves on repeating the same
+ * code for the 6 different buttons. 
+ */
+-(void)InitalizeButton:(UIButton *)Button Tag:(int)tag Shelf:(UIScrollView *)Shelf Side:(NSString *)Side
+{
+	NSString *myselector;
+	UIImage *myImage;
+	
+	if([Side isEqualToString:@"Right"])
+	{
+		myselector = @"accelorateRight:";
+		myImage = image_right;
+	}
+	else
+	{
+		myselector = @"accelorateLeft:";
+		myImage = image_left;	
+	}
+	
+	[Button setBackgroundImage:myImage forState:UIControlStateNormal];
+	[Button setBackgroundImage:myImage forState:UIControlStateHighlighted];
+	[Button setBackgroundImage:myImage forState:UIControlStateSelected];
+	[Button addTarget:self action:NSSelectorFromString(myselector) forControlEvents:UIControlEventTouchUpInside];
+	Button.tag=tag;
+	[Shelf addSubview:Button];
+}
+
+/******************************************************************************
+ * This method is called when a button on the left side of the scroll view is clicked. 
+ * Meaning the user wants to scroll all the way to the left of the shelf.
+ */
 -(void)accelorateLeft:(id)sender
 {
 	UIScrollView *scroll;
 	int x_cord;
 	
-	int tid = [sender tag]; 
+	int tid = [sender tag];
+	// if the tag is 21 we know it is the left button on the first shelf since we tagged it.
 	if (tid == 21)
 	{
 		scroll = FirstShelf;
@@ -197,12 +200,17 @@
     [scroll setContentOffset:offset animated:YES];	
 }
 
+/******************************************************************************
+ * This method is called when a button on the right side of the scroll view is clicked. 
+ * Meaning the user wants to scroll all the way to the right of the shelf.
+ */
 -(void)accelorateRight:(id)sender
 {	
 	UIScrollView *scroll;
 	int x_cord;
 	
-	int tid = [sender tag]; 
+	int tid = [sender tag];
+	// if the tag is 22 we know it is the right button on the first shelf since we tagged it. 
 	if (tid == 22)
 	{
 		scroll = FirstShelf;
@@ -224,6 +232,7 @@
 	}
 	
 	CGPoint offset = scroll.contentOffset;
+	// This calculation scrolls us to the very right of the scrollview. 
     offset.x = x_cord - scroll.frame.size.width;
     offset.y = 0;
     [scroll setContentOffset:offset animated:YES];
@@ -250,25 +259,8 @@
 	[NavBarView addSubview:label];
 	[label release];
 	
-	
-	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(-350, 10, 350, 16)];
-	//label2 = [[UILabel alloc] initWithFrame:CGRectMake(305, 10, 295, 16)];
-	//label2.tag = 2;
-	//label2.backgroundColor = [UIColor clearColor];
-	//label2.font = [UIFont boldSystemFontOfSize:17];
-	//label2.adjustsFontSizeToFitWidth = YES;
-	//label2.textAlignment = UITextAlignmentRight;
-	//label2.textColor = [UIColor blackColor];
-	//NSString *UserNameLabel = @"";
-	//label2.text = [NSString stringWithFormat:@"Welcome : %@", UserNameLabel];
-	//label2.highlightedTextColor = [UIColor blackColor];
-	//[NavBarView addSubview:label2];
-	//[label2 release];
-	
 	self.navigationItem.titleView = NavBarView;
-	
 }
-
 
 /******************************************************************************
  * This method is called when something in the table was clicked. It creates a SecondNavigation
@@ -318,8 +310,6 @@
 	}
 	second_shelf_x_cord += 80;
 	
-	[SecondShelf setScrollEnabled:YES];
-	[SecondShelf setShowsHorizontalScrollIndicator:YES];
 	[SecondShelf setContentSize:CGSizeMake(second_shelf_x_cord, SecondShelf.frame.size.height)];
 	
 	[self ForceScroll:SecondShelf];
@@ -389,11 +379,7 @@
 		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
 
-//		NSString *str = [label2 text];
-		
-		// strips away the 'Welcome : ' part of the user login label.
-//		NSString *TheName = [str substringFromIndex:10];
-//		doc.UserName = TheName;
+		doc.UserName = TheUserName;
 		
 		[self.navigationController pushViewController:doc animated:YES];
 		[doc release];
@@ -418,7 +404,7 @@
 			third_shelf_x_cord += 45;
 		}
 		third_shelf_x_cord += 75;
-		[ThirdShelf setScrollEnabled:YES];
+	
 		[ThirdShelf setContentSize:CGSizeMake(third_shelf_x_cord, ThirdShelf.frame.size.height)];
 		
 		[self ForceScroll:ThirdShelf];
@@ -455,7 +441,6 @@
 	
 	doc.URL = MyAuth.workURL;
 	doc.Title = MyAuth.name;
-	
 	
 	doc.UserName = TheUserName;
 	
@@ -497,10 +482,11 @@
 		if ([v isKindOfClass: [UIButton class]])
 		{
 		     UIButton *b = (UIButton*)v;
-			 int t = [b tag]; 
+			 int t = [b tag];
+			 // we don't want to get rid of these six buttons because they are the left and right buttons on the shelves.
 			 if (t== 21 || t == 22 || t == 23 || t == 24 || t == 25 || t == 26)
 			 {
-				 NSLog(@"Except %i", t);
+				// NSLog(@"Except %i", t);
 			 }
 			 else
 			 {
@@ -656,9 +642,6 @@
 			data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
 			PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 			
-			NSLog(UserName);
-			NSLog(PassWord);
-			
 			NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
 				"username/%@/password/%@", UserName, PassWord];
 			
@@ -691,14 +674,13 @@
 					[alertDialog release];
 				}
 				logedin = TRUE;
-			
-				data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
-				TheUserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-				data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
-				ThePassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+		
+				TheUserName = UserName;
+				ThePassWord = PassWord;
 				
 				[self.navigationItem.rightBarButtonItem setTitle:UserName];
 			}
+			// If the LoginResult comes back as anything other than -1 we know the login information was not correct. 
 			else
 			{
 				UIAlertView *alertDialog;
@@ -710,6 +692,7 @@
 			}
 		}
 	}
+	// The alertview with a 5 is the one asking if the user wants to save the profile locally.
 	else if(alertView.tag == 5)
 	{
 		if ([buttonTitle isEqualToString:@"YES"])
@@ -744,7 +727,7 @@
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
-		NSLog(string);
+		NSLog(@"%@", string);
 	}
 }
 
@@ -813,6 +796,7 @@
 {
 	int size = 30;
 	int x_left_placement = offset + 10;
+	// the right_placement is calculated by moving 50 pixels to the left of the right edge of the scrollview.
 	int x_right_placement = (scroll.frame.size.width + offset) - 50;
 	int y_placement = (scroll.frame.size.height / 2) - (size / 2);
 	
