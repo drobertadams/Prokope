@@ -329,13 +329,19 @@
 	//	NSLog("@No Timer");	
 	//}
 	
-	MyTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
+	MyTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
 
 }
 
 -(void)targetMethod
 {
 	NSLog(@"timer:");
+	TimerCount ++;
+	if(TimerCount == 10)
+	{
+	    NSLog(@"Count = 10");
+		TimerCount = 0;
+	}
 }
 
 /* **********************************************************************************************************************

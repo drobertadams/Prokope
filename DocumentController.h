@@ -31,6 +31,8 @@
 	NSMutableString *XMLString;
 	
 	NSTimer *MyTimer;
+	
+	int TimerCount;
 }
 
 
