@@ -143,10 +143,11 @@
 	"   var i = 0;"
 	"	for (i = 0; i < comments.length; i++)"
 	"   {"
+	"      var ref = comments[i].getAttribute('ref');"
 	"      var newdiv = document.createElement('div');"
 //	"      newdiv.setAttribute('id', 'rate' + i);"
 //	"      newdiv.innerHTML = '<a href=\"Like' + i +'\"><img src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + i +'\">Dis-Like</a>';"
-	"      newdiv.innerHTML = '<a href=\"Like' + i +'\"><img width=25 height=25 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + i +'\"><img width=25 height=25 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
+	"      newdiv.innerHTML = '<a href=\"Like' + ref +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + ref +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
 	"      comments[i].appendChild(newdiv);" 
 	"	}"
 	"}"
@@ -185,31 +186,32 @@
 	"    "
 	"function toggleLikeDislike(int, text)"
 	"{"
-	"      var comments = document.getElementsByTagName('li');"
-	"      var current = comments[int]; "
-	"      var children = current.childNodes;"
+	"      var str = text + int;  "
+	"      var children = document.getElementsByTagName('li');"
 	"	   for (i = 0; i < children.length; i++)"
 	"      {"
-	"           if(children[i].tagName == 'DIV')   "
+//	"           alert(children[i].getAttribute('ref'));"
+	"           if(children[i].getAttribute('ref') == int)   "
 	"           {"
-	"               var anchors = children[i].getElementsByTagName('img');"
-    "               var like = anchors[0];"
-	"               var dislike = anchors[1];"
+	"                 var anchors = children[i].getElementsByTagName('img');"
+	"                 var count = anchors.length;"
+    "                 var like = anchors[count - 2];"
+	"                 var dislike = anchors[count - 1];"
 	""
-	"               var sentText = text + int;"
-    "               var subSection = sentText.substring(0,4);"
-	"               if(subSection == 'Like')"
-	"               {"
-	"                    like.src = 'http://www.justinantranikian.com/Photos/Like-Clicked.png';"
-	"                    dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Up.png';"
-	"               }"
-	"               else"
-	"               {"
-	"                    like.src = 'http://www.justinantranikian.com/Photos/Like-Up.png';"
-	"                    dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Clicked.png';"
-	"               }"
-	"               break;"
-	"           }"
+	"                 var sentText = text + int;"
+    "                 var subSection = sentText.substring(0,4);"
+	"                 if(subSection == 'Like')"
+	"                 {"
+	"                      like.src = 'http://www.justinantranikian.com/Photos/Like-Clicked.png';"
+	"                      dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Up.png';"
+	"                 }"
+	"                 else"
+	"                 {"
+	"                      like.src = 'http://www.justinantranikian.com/Photos/Like-Up.png';"
+	"                      dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Clicked.png';"
+	"                 }"
+	"                 break;"
+	"            }"
 	"	    }"
 	"}"
 	"    "
@@ -335,13 +337,13 @@
 
 -(void)targetMethod
 {
-	NSLog(@"timer:");
-	TimerCount ++;
-	if(TimerCount == 10)
-	{
-	    NSLog(@"Count = 10");
-		TimerCount = 0;
-	}
+//	NSLog(@"timer:");
+//	TimerCount ++;
+//	if(TimerCount == 10)
+///	{
+//	    NSLog(@"Count = 10");
+//		TimerCount = 0;
+//	}
 }
 
 /* **********************************************************************************************************************
@@ -365,6 +367,8 @@
 			
 			NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
 			NSString *ending = [path stringByTrimmingCharactersInSet:nonDigits];
+			
+			NSLog(@"%@", path);
 			
 			if ([path hasPrefix:@"/Like"])
 			{
@@ -436,7 +440,7 @@
 	
 	[XMLString appendString:@"</entries>"];
 	
-//	NSLog(XMLString);
+	NSLog(XMLString);
 //	NSString *xmlString = @"<test><message length='5'>Hello</message></test>";
 	
 //	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
