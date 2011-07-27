@@ -25,6 +25,8 @@
 	
 	NSString *CurrentTag;
 	
+	NSString *ParentString;
+	
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

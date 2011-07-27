@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ProkopeViewController.h"
 
 @interface RegistrationController : UIViewController <UIAlertViewDelegate, NSXMLParserDelegate, UITableViewDelegate, UITableViewDataSource> {
 
@@ -30,6 +30,8 @@
 	NSMutableArray *ProfessorsArray;
 	
 	int RegistrationResult;
+	
+	ProkopeViewController *controller;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *PassWordText;
@@ -38,12 +40,11 @@
 @property (nonatomic, retain) IBOutlet UIButton *RegisterButton;
 @property (nonatomic, retain) IBOutlet UITableView *ProfessorTable;
 @property (nonatomic, retain) IBOutlet UILabel *StatusLabel;
+@property (nonatomic, retain) ProkopeViewController *controller;
 
 -(IBAction)RegisterButtonClicked:(id)sender;
+-(void)SaveContentsToFile;
 
--(void)SetInitialData:(NSString *)e_mail Password:(NSString *)p_word Professor:(NSString *)professor_word;
-
--(void)UserLogedIn:(BOOL)u_logged;
 -(NSString *) urlencode: (NSString *) url;
 
 @end

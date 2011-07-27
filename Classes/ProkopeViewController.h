@@ -81,7 +81,10 @@ table.
 @property (nonatomic, retain) IBOutlet UIScrollView *ThirdShelf;
 
 @property (nonatomic, retain) IBOutlet UIWebView *CommentaryView;
-@property (nonatomic, retain) UILabel *label2;
+@property (nonatomic, retain) NSString *TheUserName;
+@property (nonatomic, retain) NSString *ThePassWord;
+@property (nonatomic, retain) NSString *Professor;
+@property (nonatomic, getter=isWorking setter=isWorking) BOOL logedin;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 -(void)showActionSheet;

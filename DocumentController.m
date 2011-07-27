@@ -324,20 +324,66 @@
 
 	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
 	
-	NSLog(XMLString);
 	
-	//if(MyTimer)
-	//{
-	//	NSLog("@No Timer");	
-	//}
+//	if(MyTimer)
+//	{
+//		NSLog("@No Timer needed");	
+//	}
 	
-	MyTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
+//	MyTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
 
 }
 
 -(void)targetMethod
 {
-//	NSLog(@"timer:");
+	NSDate *currentDateTime = [NSDate date];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
+	[dateFormatter release];
+	NSLog(dateInString);
+	
+	NSLog(@"timer:");
+	
+	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, dateInString];
+	
+	for (NSString *str in RatingsArray)
+	{
+		NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+		NSString *ending = [str stringByTrimmingCharactersInSet:nonDigits];
+		
+		NSLog(@"%@", ending);
+		
+		if ([str hasPrefix:@"/Like"])
+		{
+		    [XMLString1 appendString:[NSString stringWithFormat:@"<like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
+		}
+		else if([str hasPrefix:@"/Dis-Like"])
+		{
+			[XMLString1 appendString:[NSString stringWithFormat:@"<dis-like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
+		}
+	}
+	
+	for (NSString *str in ClicksArray)
+	{
+		[XMLString1 appendString:[NSString stringWithFormat:@"<click user='%@' date='%@' id='%@' /> \n", UserName, dateInString, str]];
+	}
+	
+	[XMLString1 appendString:@"</entries>"];
+	
+	NSLog(@"%@", XMLString1);
+	
+	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
+	//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
+	//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
+	//	[serviceRequest setHTTPMethod:@"POST"];
+	//	[serviceRequest setHTTPBody:[xmlString dataUsingEncoding:NSASCIIStringEncoding]];
+	
+	//	NSURLResponse * serviceResponse;
+	//	NSError * serviceError;
+	//	serviceResponse = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
+	
+	
 //	TimerCount ++;
 //	if(TimerCount == 10)
 ///	{
@@ -387,7 +433,8 @@
 		else
 		{
 			// Load the image viewer nib and set the URL.
-			[ClicksArray addObject:StringRequest];
+	//		[ClicksArray addObject:[NSString stringWithFormat:@"%@", StringRequest]];
+			NSLog(@"%@",StringRequest);
 			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
 
 			webViewer.url = StringRequest;
@@ -419,48 +466,46 @@
 	
 	js = [NSString stringWithFormat:@"highlightword('%@')", id];
 	[document stringByEvaluatingJavaScriptFromString:js];
+		
+	[ClicksArray addObject:id];
 	
-	[XMLString appendString:@"<click>"];
-	[XMLString appendString: id];
-	[XMLString appendString:@"</click>"];
-
+	NSDate *currentDateTime = [NSDate date];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
+	[dateFormatter release];
+	
+	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, dateInString]; 
+	
 	for (NSString *str in RatingsArray)
 	{
-	//	[XMLString appendString:@"<rate>"];
-	//	[XMLString appendString: str];
-	//	[XMLString appendString:@"</rate>"];
-		NSLog(@"%@", str);
+		NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+		NSString *ending = [str stringByTrimmingCharactersInSet:nonDigits];
+		
+		NSLog(@"%@", ending);
+		
+		if ([str hasPrefix:@"/Like"])
+		{
+		    [XMLString1 appendString:[NSString stringWithFormat:@"<like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
+		}
+		else if([str hasPrefix:@"/Dis-Like"])
+		{
+			[XMLString1 appendString:[NSString stringWithFormat:@"<dis-like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
+		}
 	}
 	
 	for (NSString *str in ClicksArray)
 	{
-		NSLog(@"\n");
-		NSLog(@"%@", str);
+		[XMLString1 appendString:[NSString stringWithFormat:@"<click user='%@' date='%@' id='%@' /> \n", UserName, dateInString, str]];
 	}
 	
-	[XMLString appendString:@"</entries>"];
+	[XMLString1 appendString:@"</entries>"];
 	
-	NSLog(XMLString);
-//	NSString *xmlString = @"<test><message length='5'>Hello</message></test>";
-	
-//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
-//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
-//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
-//	[serviceRequest setHTTPMethod:@"POST"];
-//	[serviceRequest setHTTPBody:[xmlString dataUsingEncoding:NSASCIIStringEncoding]];
-	
-//	NSURLResponse * serviceResponse;
-//	NSError * serviceError;
-//	serviceResponse = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
+	NSLog(XMLString1);
 }
 
--(void)SetUpLoginButton
-{
-	self.navigationItem.rightBarButtonItem = nil;
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
-	self.navigationItem.rightBarButtonItem = anotherButton;
-	[anotherButton release];	
-}
+// prokope/rest/update/oldusername/value/newusername/value/oldpassword/value/newpassword/value/professor/value.
+
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

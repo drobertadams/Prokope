@@ -11,7 +11,7 @@
 
 @implementation RegistrationController
 
-@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel;
+@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel, controller;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -28,25 +28,17 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[EmailText setText:mail];
-	[PassWordText setText:pass];
-	[ProfessorText setText:prof];
 	
-	if (logedin)
+	if (self.controller.logedin)
 	{
+		[EmailText setText:self.controller.TheUserName];
+		[PassWordText setText:self.controller.ThePassWord];
+		[ProfessorText setText:self.controller.Professor];
 		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
-	}
-	else
-	{
-		//<#statements#>
-	}
-	
-	//ProfessorsArray = [[NSMutableArray alloc] initWithObjects:@"Adams", @"Anderson", @"Smith", nil];
+	}	
 	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
 	
 	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/professor"]];
-	
-	//NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/username/true/password/1234/professor/adams"];
 	NSData *data = [NSData dataWithContentsOfURL: url];
 	
 	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
@@ -56,8 +48,6 @@
 	
 	ProfessorTable.delegate = self;
 	ProfessorTable.dataSource = self;
-	
-	
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -103,35 +93,24 @@
 	[ProfessorText setText:a];
 }
 
--(void)UserLogedIn:(BOOL)u_logged
-{
-	logedin = u_logged;
-}
-
--(void)SetInitialData:(NSString *)e_mail Password:(NSString *)p_word Professor:(NSString *)professor_word
-{
-	mail = e_mail;
-	pass = p_word;
-	prof = professor_word;
-}
 
 -(IBAction)RegisterButtonClicked:(id)sender
 {	
 	UIButton *resultButton = (UIButton *)sender;
 	NSString *ButtonTitle = [resultButton currentTitle];
+	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
 	if ([ButtonTitle isEqualToString:@"Register"])
 	{
 
 		NSString *e_Name = [EmailText text];
 		NSString *p_Name = [PassWordText text];
 		NSString *professor_Name = [ProfessorText text];
-		
-		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-		NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-		
-		// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-		
 		
 		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
 							   "username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name];
@@ -141,14 +120,14 @@
 	//	NSString* escapedUrlString = [@"hee there" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
 		
-		NSLog(StringUrl);
+	//	NSLog(StringUrl);
 		
 		NSURL *url = [NSURL URLWithString:StringUrl];
 		
 		NSData *data = [NSData dataWithContentsOfURL: url];
 		
 		NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-		NSLog(theString);
+	//	NSLog(theString);
 		
 		NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 		[parse setDelegate:self];
@@ -162,7 +141,7 @@
 		{
 			if ([e_Name isEqualToString:theUser])
 			{
-				NSLog(@"Match");
+			//	NSLog(@"Match");
 			}
 			else
 			{	
@@ -175,11 +154,57 @@
 				[alertDialog release];
 			}
 		}
-		
+		self.controller.TheUserName = [EmailText text];
+		self.controller.ThePassWord = [PassWordText text];
+		self.controller.Professor = [ProfessorText text];
+		self.controller.logedin = TRUE;
     }
 	else if([ButtonTitle isEqualToString:@"Update"])
 	{
-	    NSLog(@"Update");	
+	    NSLog(@"Update");
+		
+		NSString *e_Name = [EmailText text];
+		NSString *p_Name = [PassWordText text];
+		NSString *professor_Name = [ProfessorText text];
+		
+		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/update/"
+							   "oldusername/%@/newusername/%@/oldpassword/%@/newpassword/%@/professor/%@", self.controller.TheUserName, e_Name, self.controller.ThePassWord, p_Name, professor_Name];
+		
+		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];		
+		
+		NSURL *url = [NSURL URLWithString:StringUrl];
+		NSData *data = [NSData dataWithContentsOfURL: url];
+		
+		NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
+		[parse setDelegate:self];
+		[parse parse];
+		[parse release];
+		
+		NSString *theUser = [test objectForKey:@"E-mail"];
+		NSString *thePass = [test objectForKey:@"Password"];
+		NSString *theProf = [test objectForKey:@"Professor"];
+		
+		if (RegistrationResult == 1)
+		{
+			if ([theUser isEqualToString:e_Name] && [thePass isEqualToString:p_Name] &&
+				    [theProf isEqualToString:professor_Name])
+			{
+				NSLog(@"Match");
+			}
+			else
+			{	
+				[self SaveContentsToFile];
+				
+				UIAlertView *alertDialog;
+				alertDialog = [[UIAlertView alloc]initWithTitle:@"Profile Updated" message:@"Your profile has been updated." delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+				[alertDialog show];
+				[alertDialog release];
+			}
+			self.controller.TheUserName = [EmailText text];
+			self.controller.ThePassWord = [PassWordText text];
+			self.controller.Professor = [ProfessorText text];
+			self.controller.logedin = TRUE;
+		}
 	}
 }
 
@@ -187,40 +212,57 @@
 {
 	if ([CurrentTag isEqualToString:@"result"])
 	{
-		NSString *StatusString = @"Nothing to report";
-		UIColor *StatusColor = [UIColor whiteColor];
-		NSLog(@"Result from rest server is : %@", string);
-	
-		if ([string isEqualToString:@"-1"])
+		// they are logged in so it is an update. 
+		if (self.controller.logedin)
 		{
-			StatusString = @"This profile is in use";
-			StatusColor = [UIColor redColor];
-			RegistrationResult = -1;
+			NSString *StatusString = @"Nothing to report";
+			UIColor *StatusColor = [UIColor whiteColor];
+			if ([string isEqualToString:@"-1"])
+			{
+				RegistrationResult = -1;
+				StatusString = @"This profile is in use";
+				StatusColor = [UIColor redColor];	
+			}
+			if ([string isEqualToString:@"1"])
+			{
+				RegistrationResult = 1;
+				StatusColor = [UIColor greenColor];
+				StatusString = @"Your profile was updated";
+			}
+			[StatusLabel setText:string];
+			[StatusLabel setBackgroundColor:StatusColor];
 		}
-		else if([string isEqualToString:@"1"])
+		// They are not logged in, so it is a registration.
+		else
 		{
-			StatusColor = [UIColor greenColor];
-			StatusString = @"Your profile was created";
-			RegistrationResult = 1;
+			NSString *StatusString = @"Nothing to report";
+			UIColor *StatusColor = [UIColor whiteColor];
+			NSLog(@"Result from rest server is : %@", string);
+		
+			if ([string isEqualToString:@"-1"])
+			{
+				StatusString = @"This profile is in use";
+				StatusColor = [UIColor redColor];
+				RegistrationResult = -1;
+			}
+			else if([string isEqualToString:@"1"])
+			{
+				StatusColor = [UIColor greenColor];
+				StatusString = @"Your profile was created";
+				RegistrationResult = 1;
+			}
+			else if([string isEqualToString:@"-2"])
+			{
+				StatusString = @"You did not enter in the information correctly";
+				StatusColor = [UIColor redColor];
+				RegistrationResult = -2;
+			}
+			[StatusLabel setText:StatusString];
+			[StatusLabel setBackgroundColor:StatusColor];
 		}
-		else if([string isEqualToString:@"-2"])
-		{
-			StatusString = @"You did not enter in the information correctly";
-			StatusColor = [UIColor redColor];
-			RegistrationResult = -2;
-		}
-		[StatusLabel setText:StatusString];
-		[StatusLabel setBackgroundColor:StatusColor];
-	}
-	else if([CurrentTag isEqualToString:@"professors"])
-	{
-	 //   NSLog(@"Starting to parse the professors section");	
-	}
-	else if([CurrentTag isEqualToString:@"professor"])
-	{
-	//	NSLog(string);
 	}
 }
+
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
@@ -238,12 +280,72 @@
 	{
 		CurrentTag = @"professor";
 		NSString *username = [attributeDict objectForKey:@"username"];
-		NSString *fullname = [attributeDict objectForKey:@"fullname"];
-		NSString *id = [attributeDict objectForKey:@"id"];
+	//	NSString *fullname = [attributeDict objectForKey:@"fullname"];
+	//	NSString *id = [attributeDict objectForKey:@"id"];
 		
 		[ProfessorsArray addObject:username];
 	}
 }
+
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Overriden to allow any orientation.
+    return YES;
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+
+	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
+	
+	if ([buttonTitle isEqualToString:@"YES"])
+	{
+		[self SaveContentsToFile];
+	}
+	else if ([buttonTitle isEqualToString:@"NO"])
+	{
+	  // for now we simply dismiss this, but we might want to add something later. 
+	  //  NSLog(@"Dismiss");	
+	}
+}
+
+-(void)SaveContentsToFile
+{
+	NSString *e_Name = [EmailText text];
+	NSString *p_Name = [PassWordText text];
+	NSString *professor_Name = [ProfessorText text];
+	
+	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
+	
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
+	
+	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+						  e_Name, @"E-mail", 
+						  p_Name, @"Password",
+						  professor_Name, @"Professor",
+						  nil];
+	
+	[dict writeToFile:file atomically: TRUE];	
+	
+}
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc. that aren't in use.
+}
+
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+
 
 -(NSString *) urlencode: (NSString *) url
 {
@@ -279,63 +381,9 @@
     return out;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Overriden to allow any orientation.
-    return YES;
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-
-	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
-	
-	if ([buttonTitle isEqualToString:@"YES"])
-	{
-	
-		NSString *e_Name = [EmailText text];
-		NSString *p_Name = [PassWordText text];
-		NSString *professor_Name = [ProfessorText text];
-		
-		NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-		NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
-		
-		// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-		NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  e_Name, @"E-mail", 
-							  p_Name, @"Password",
-							  professor_Name, @"Professor",
-							  nil];
-		
-		[dict writeToFile:file atomically: TRUE];
-	}
-	else if ([buttonTitle isEqualToString:@"NO"])
-	{
-	  // for now we simply dismiss this, but we might want to add something later. 
-	  //  NSLog(@"Dismiss");	
-	}
-}
-
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
 
 - (void)dealloc {
     [super dealloc];
 }
-
 
 @end

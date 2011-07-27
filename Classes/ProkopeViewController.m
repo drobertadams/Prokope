@@ -15,7 +15,7 @@
 
 @implementation ProkopeViewController
 
-@synthesize BookShelfImage, SecondShelf, ThirdShelf, CommentaryView, FirstShelf, label2;
+@synthesize BookShelfImage, SecondShelf, ThirdShelf, CommentaryView, FirstShelf, TheUserName, ThePassWord, Professor, logedin;
 
 
 /******************************************************************************
@@ -60,8 +60,9 @@
 	self.title = @"Prokope - Intermediate Latin Reader";
 	[CommentaryView setBackgroundColor:[UIColor clearColor]];
 	
+	logedin = FALSE;
+	
 	[self setUpNavBar];
-	[self SetUpLoginButton];
 	
 	FirstShelf.tag = 1;
 	FirstShelf.delegate = self;
@@ -131,13 +132,11 @@
 	[self InitalizeButton:ThirdRightButton Tag:26 Shelf:ThirdShelf Side:@"Right"];
 	
 	[self ForceScroll:FirstShelf];
-	
-	logedin = FALSE;
 }
 
 /******************************************************************************
  * This method allows you to inialize a button and assign it to UIScrollView. It saves on repeating the same
- * code for the 6 different buttons. 
+ * code for the 6 different buttons. See the initialization code in the view did load method. 
  */
 -(void)InitalizeButton:(UIButton *)Button Tag:(int)tag Shelf:(UIScrollView *)Shelf Side:(NSString *)Side
 {
@@ -499,16 +498,9 @@
 }
 
 /******************************************************************************
- * This alert get shown when this view is first launched. There are two UITextFields
- * that are created and then added to the alert. Two buttons are also created in the 
- * initialization code. Furthermore the message is set to "\n\n\n..." to 'stretch' the 
- * alertView's boundries to include the two UITextFields.
+ * This method gets called when a user clicks on the top right button on the naviagtion bar.
+ * This populates the data for the actionsheet based on what the status of the user is.
  */
--(void)ShowAlert
-{
-	[self showActionSheet];
-}
-
 -(void)showActionSheet
 {
 	NSString *login_string;
@@ -534,7 +526,11 @@
 	}
 }
 
-
+/******************************************************************************
+ * This method gets called when a button on the actionsheet gets clicked. It gives
+ * you the index of the button click, which then you can know what the user wanted 
+ * to click on.
+ */
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
@@ -542,6 +538,7 @@
 	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
+	// buttonIndex 0 is the login/logout button.
 	if (buttonIndex == 0)
 	{
 		if(logedin == TRUE)
@@ -586,33 +583,26 @@
 			[alertDialog release];
 		}
 	}
+	// button index 1 is the register/update profile button.
 	else if (buttonIndex == 1)
 	{
 		
 		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
-	
-		if(logedin == TRUE)
-		{
 
-			[reg SetInitialData:TheUserName Password:ThePassWord Professor:Professor];
-			
-			[reg UserLogedIn:YES];
-		}
+		reg.controller = self;
 		[self.navigationController pushViewController:reg animated:YES];
 		[reg release];
 	}
+	// button index 2 is the forget me button. 
 	else if (buttonIndex == 2)
 	{
-	    if(test)
-		{
-			NSFileManager *fileManager = [NSFileManager defaultManager];
-			[fileManager removeItemAtPath:file error:NULL];
-		}
-		else 
-		{
-			NSLog(@"File was never created");
-		} 
+		UIAlertView *alertDialog;
+		alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear Profile" message:@"Are you sure you want to clear the profile for this device ?" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+		alertDialog.tag = 6;
+		[alertDialog show];
+		[alertDialog release];
     }
+	// setting the popupQuery to nil makes it so that only one dialog can be open at one time.
 	popupQuery = nil;
 }
 
@@ -678,14 +668,14 @@
 				TheUserName = UserName;
 				ThePassWord = PassWord;
 				
-				[self.navigationItem.rightBarButtonItem setTitle:UserName];
+				[self SetUpLoginButton];
 			}
 			// If the LoginResult comes back as anything other than -1 we know the login information was not correct. 
 			else
 			{
 				UIAlertView *alertDialog;
 				NSString *dialog_message = @"Your login was unsucessful";
-				alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+				alertDialog = [[UIAlertView alloc]initWithTitle:@"Login attempt" message:dialog_message delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
 				
 				[alertDialog show];
 				[alertDialog release];
@@ -709,8 +699,29 @@
 			[dict writeToFile:file atomically: TRUE];
 		}
 	}
+	// The alertview with a 6 is the one asking to clear the p-list file or not. 
+	else if(alertView.tag == 6)
+	{
+		if ([buttonTitle isEqualToString:@"ok"])
+		{
+			if(test)
+			{
+				NSFileManager *fileManager = [NSFileManager defaultManager];
+				[fileManager removeItemAtPath:file error:NULL];
+			}
+			else 
+			{
+				NSLog(@"File was never created");
+			}
+			logedin = FALSE;
+			[self SetUpLoginButton];
+		}
+	}
 }
 
+/******************************************************************************
+ * This method gets called when the parser found characters in an XML document. 
+ */
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
 	if ([CurrentTag isEqualToString:@"result"])
@@ -731,18 +742,17 @@
 	}
 }
 
+/******************************************************************************
+ * This method gets called when the parser starts parsing an XML element.  
+ */
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
 	attributes:(NSDictionary *)attributeDict
 {	
 	if([elementName isEqualToString:@"result"])
-	{
 		CurrentTag = @"result";
-	}
 	else
-	{
 		CurrentTag = "Unknown";
-	}
 }
 
 /******************************************************************************
@@ -750,12 +760,28 @@
  */
 -(void)SetUpLoginButton
 {
+	NSLog(@"Setting up Login");
 	self.navigationItem.rightBarButtonItem = nil;
-	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Profile" style:UIBarButtonItemStylePlain target:self action:@selector(ShowAlert)];          
+	NSString *buttonTitle;
+	if (logedin == TRUE)
+	    buttonTitle = TheUserName;
+	else
+		buttonTitle = @"Profile";
+		
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:buttonTitle style:UIBarButtonItemStylePlain target:self action:@selector(showActionSheet)];          
 	self.navigationItem.rightBarButtonItem = anotherButton;
 	[anotherButton release];	
 }
 
+/******************************************************************************
+ * This method gets called when a view is appearing. It gets called after the view did load
+ * is finished. And it gets called when this controller recieves focus again from the navigation
+ * controller. 
+ */
+-(void)viewDidAppear:(BOOL)animated
+{
+	[self SetUpLoginButton];
+}
 
 /******************************************************************************
  * This method is one of the central methods for the UIScrollView delegate protocol.
@@ -840,8 +866,11 @@
 	}	
 }
 
-
-- (void)dealloc {
+/******************************************************************************
+ * This deallocates the memory. 
+ */
+- (void)dealloc
+{
     [super dealloc];
 }
 
