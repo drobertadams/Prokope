@@ -26,23 +26,22 @@
 	AuthorsArray = dataArray;
 }
 
-// Look into why scrolls doesn't work for i-pad.
-// salting on the i-pad.
-
-
 // Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 	
 	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
@@ -262,6 +261,26 @@
 }
 
 /******************************************************************************
+ * The idea behind the force scroll method is twofold :
+ * 1) It will automatically set the contentOffset to 0, which will set it to the scroll to the original position.
+ * 2) by changing the scollview's position programmatically it will kickoff the viewdidscoll method for that 
+ * scrollview. That method will kickoff the method to display the images if there is scrollable content. These images
+ * are loaded before the user has even touched the scroll bar.
+ */
+-(void)ForceScroll:(UIScrollView *)scroll
+{
+	CGPoint offset = scroll.contentOffset;
+    offset.x = -10;
+    offset.y = 0;
+    [scroll setContentOffset:offset animated:NO];
+	
+	offset = scroll.contentOffset;
+    offset.x = 0;
+    offset.y = 0;
+    [scroll setContentOffset:offset animated:NO];
+}
+
+/******************************************************************************
  * This method is called when something in the table was clicked. It creates a SecondNavigation
  * object and sets its array to the WorksArray of the corresponding cell that was clicked.
  */
@@ -318,26 +337,6 @@
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
 	
 	[CommentaryView loadHTMLString:HTML baseURL:nil];
-}
-
-/******************************************************************************
- * The idea behind the force scroll method is twofold :
- * 1) It will automatically set the contentOffset to 0, which will set it to the scroll to the original position.
- * 2) by changing the scollview's position programmatically it will kickoff the viewdidscoll method for that 
- * scrollview. That method will kickoff the method to display the images if there is scrollable content. These images
- * are loaded before the user has even touched the scroll bar.
- */
--(void)ForceScroll:(UIScrollView *)scroll
-{
-	CGPoint offset = scroll.contentOffset;
-    offset.x = -10;
-    offset.y = 0;
-    [scroll setContentOffset:offset animated:NO];
-	
-	offset = scroll.contentOffset;
-    offset.x = 0;
-    offset.y = 0;
-    [scroll setContentOffset:offset animated:NO];
 }
 
 /******************************************************************************
@@ -457,13 +456,11 @@
 	NSArray *viewsToChange = [BookShelfScrollView subviews];
 	for (UIView *v in viewsToChange)
 	{
+		// we only want to change the Buttons since those are the shelves. The UIImageViews need to stay where they are.
 		if ([v isKindOfClass: [UIButton class]])
 		{
 			UIButton *button = (UIButton *)v;
 			button.titleLabel.font = ControlFont;
-		}
-		else if ([v isKindOfClass: [UIImageView class]]){
-		//	NSLog(@"OTHER");
 		}
 	}	
 }
@@ -516,7 +513,7 @@
 		login_string = @"Login";
 		register_string = @"Register Profile";
 	}
-	
+	// If popupQuery is nil then we create a new one. otherwise we don't. 
 	if(!popupQuery)
 	{
 		popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, @"forget me", nil];
@@ -548,6 +545,7 @@
 			ThePassWord = @"";
 			[self.navigationItem.rightBarButtonItem setTitle:@"Profile"];
 		}
+		// we know they are logged out, so they need the login dialog box to be displayed.
 		else 
 		{
 			UIAlertView *alertDialog;
@@ -557,11 +555,7 @@
 			NSString *theUser = @"E-mail";
 			NSString *thePass = @"Pass Word";
 			
-			if(!test)
-			{
-			//	NSLog(@"File has not been created");
-			}
-			else
+			if(test)
 			{
 				theUser = [test objectForKey:@"E-mail"];
 				thePass = [test objectForKey:@"Password"];
@@ -649,12 +643,8 @@
 			
 			if(LoginResult == 1)
 			{			
-				if ([[userInput text] isEqualToString:theUser])
+				if (![[userInput text] isEqualToString:theUser])
 				{
-					NSLog(@"Match");
-				}
-				else
-				{ 
 					UIAlertView *alertDialog;
 					NSString *dialog_message = [NSString stringWithFormat:@"%@ is not the default profile, would you like it to be ?", UserName];
 					alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
@@ -695,7 +685,6 @@
 								  UserName, @"E-mail", 
 								  PassWord, @"Password", nil];
 			
-			[self.navigationItem.rightBarButtonItem setTitle:UserName];
 			[dict writeToFile:file atomically: TRUE];
 		}
 	}
@@ -708,10 +697,6 @@
 			{
 				NSFileManager *fileManager = [NSFileManager defaultManager];
 				[fileManager removeItemAtPath:file error:NULL];
-			}
-			else 
-			{
-				NSLog(@"File was never created");
 			}
 			logedin = FALSE;
 			[self SetUpLoginButton];
@@ -738,7 +723,6 @@
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
-		NSLog(@"%@", string);
 	}
 }
 
@@ -760,7 +744,6 @@
  */
 -(void)SetUpLoginButton
 {
-	NSLog(@"Setting up Login");
 	self.navigationItem.rightBarButtonItem = nil;
 	NSString *buttonTitle;
 	if (logedin == TRUE)

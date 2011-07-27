@@ -23,8 +23,6 @@
 	NSString *mail;
 	NSString *prof;
 	
-	BOOL logedin;
-	
 	NSString *CurrentTag;
 	
 	NSMutableArray *ProfessorsArray;

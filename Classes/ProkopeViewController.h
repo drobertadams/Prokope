@@ -87,32 +87,27 @@ table.
 @property (nonatomic, getter=isWorking setter=isWorking) BOOL logedin;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
--(void)showActionSheet;
-
 -(void)InitalizeButton:(UIButton *)Button Tag:(int)tag Shelf:(UIScrollView *)Shelf Side:(NSString *)Side;
+
+-(void)accelorateRight:(id)sender;
+-(void)accelorateLeft:(id)sender;
+
+-(void)setUpNavBar;
+-(void)ForceScroll:(UIScrollView *)scroll;
 
 -(void)FirstShelfButtonClicked:(id)sender;
 -(void)SecondShelfButtonClicked:(id)sender;
 -(void)ThirdShelfButtonClicked:(id)sender;
 
--(void)ForceScroll:(UIScrollView *)scroll;
--(void)setUpNavBar;
-
--(void)accelorateRight:(id)sender;
--(void)accelorateLeft:(id)sender;
-
 -(void)ClearShelfFonts:(UIScrollView *)BookShelfScrollView;
 -(void)ClearShelf:(UIScrollView *)BookShelfScrollView;
 
--(void)ShowAlert;
+-(void)showActionSheet;
+
 -(void)SetUpLoginButton;
--(void)LogoutButtonClicked;
--(void)ClearUserSettings;
 
 -(void)DisplayHelperImage:(int)offset scrollView:(UIScrollView *)scroll 
 	LeftImage:(UIButton *)LeftImage RightImage:(UIButton *)RightImage ShelfCord:(int)ShelfCord;
-
--(void)updateRightNavigationBar;
 
 @end
 
