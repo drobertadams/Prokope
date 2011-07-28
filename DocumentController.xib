@@ -45,7 +45,7 @@
 					<object class="IBUIWebView" id="947363872">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, 9}, {481, 529}}</string>
+						<string key="NSFrame">{{9, 9}, {472, 529}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="280161330">
 							<int key="NSColorSpace">1</int>
@@ -70,7 +70,7 @@
 					<object class="IBUIWebView" id="895383566">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{866, 9}, {158, 739}}</string>
+						<string key="NSFrame">{{866, 9}, {150, 687}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -80,7 +80,7 @@
 					<object class="IBUIWebView" id="10031264">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, 546}, {858, 202}}</string>
+						<string key="NSFrame">{{9, 546}, {849, 150}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="IBUIBackgroundColor" ref="280161330"/>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -177,9 +177,9 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="947363872"/>
+							<reference ref="1015389768"/>
 							<reference ref="10031264"/>
 							<reference ref="895383566"/>
-							<reference ref="1015389768"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -226,7 +226,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>DocumentController</string>
 					<string>UIResponder</string>
-					<string>{{0, 73}, {1039, 683}}</string>
+					<string>{{-171, 69}, {1039, 686}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -238,11 +238,11 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABEVIAAw5eAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABEWIAAxCqAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDeAAAxDWAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAxCbAAA</bytes>
 					</object>
 				</object>
 			</object>
