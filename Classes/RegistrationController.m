@@ -44,6 +44,14 @@
 }
 
 /******************************************************************************
+ * Override to allow orientations other than the default portrait orientation..
+ */
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
+/******************************************************************************
  * We return one for this because there is one entry per row in the table.
  */
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -336,15 +344,6 @@
 		NSString *username = [attributeDict objectForKey:@"username"];
 		[ProfessorsArray addObject:username];
 	}
-}
-
-/******************************************************************************
- * This method rotates the i-pad. 
- */
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Overriden to allow any orientation.
-    return YES;
 }
 
 /******************************************************************************

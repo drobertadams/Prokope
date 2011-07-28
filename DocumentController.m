@@ -42,11 +42,11 @@
 }
 
 /******************************************************************************
- * Force the application to remain in landscape mode.
+ * Override to allow orientations other than the default portrait orientation..
  */
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	return(interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 /******************************************************************************
@@ -202,18 +202,6 @@
 	NSString *display_ratings = 
 	@"<script lang=\"text/javascript\">"
 	"    "
-	"function preloadImages()"
-	"{   "
-	"   var preloadArray = new Array();"
-	"   preloadArray[0] = 'http://www.justinantranikian.com/Photos/Like-Up.png';"
-	"   preloadArray[1] = 'http://www.justinantranikian.com/Photos/Dislike-Up.png';"
-	"   for(i = 0; i < preloadArray.length; i++)"
-	"   {"
-	"        var img = new Image();"  
-	"        img.src = preloadArray[i];"
-	"   }"
-    "}"
-	"    "
 	"function display_ratings()"
 	"{"
 	"	var comments = document.getElementsByTagName('li');"
@@ -222,6 +210,11 @@
 	"   {"
 	"      var newid = comments[i].getAttribute('id');"
 	"      var newdiv = document.createElement('div');"
+	"      if(i == 0)"
+	"      {"
+	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Clicked.png\" />';"
+	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Clicked.png\" />';"
+	"      }"
 	"      newdiv.innerHTML = '<a href=\"Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
 	"      comments[i].appendChild(newdiv);" 
 	"	}"
@@ -257,7 +250,6 @@
 	"	    }"
 	"}"
 	"    "
-	"preloadImages();"
 	"display_ratings();"
 	"</script>";
 	

@@ -64,13 +64,12 @@
 	return YES;
 }
 
-/***********************************************************************************************************************
- * rotates the i-pad. 
+/******************************************************************************
+ * Override to allow orientations other than the default portrait orientation..
  */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Overriden to allow any orientation.
-    return YES;
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 /***********************************************************************************************************************

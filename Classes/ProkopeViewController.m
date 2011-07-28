@@ -26,12 +26,17 @@
 	AuthorsArray = dataArray;
 }
 
-// Override to allow orientations other than the default portrait orientation.
+/******************************************************************************
+ * Override to allow orientations other than the default portrait orientation..
+ */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
+/******************************************************************************
+ * auto created method.
+ */
 - (void)didReceiveMemoryWarning
 {
 	// Releases the view if it doesn't have a superview.
@@ -40,6 +45,9 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
+/******************************************************************************
+ * auto created method.
+ */
 - (void)viewDidUnload
 {
 	// Release any retained subviews of the main view.
