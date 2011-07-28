@@ -16,18 +16,37 @@
 
 @synthesize webView, url;
 
-/* **********************************************************************************************************************
+/***********************************************************************************************************************
+ * A default method.
+ */
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc. that aren't in use.
+}
+
+/***********************************************************************************************************************
+ * A default method.
+ */
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+}
+
+/***********************************************************************************************************************
  * Closes this view.
  */
-- (IBAction) Close {
+-(IBAction)Close 
+{
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-
-/* **********************************************************************************************************************
+/***********************************************************************************************************************
  * Called after the view is loaded. Fetch the image URL and display it.
  */
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 	
 	webView.delegate = self;
@@ -37,39 +56,28 @@
 	[webView loadRequest:theRequest]; 		
 }
 
-
+/***********************************************************************************************************************
+ * Allows an outgoing request to go off to the web.
+ */
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
 	return YES;
 }
 
-
-
-
-
-
-
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+/***********************************************************************************************************************
+ * rotates the i-pad. 
+ */
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     // Overriden to allow any orientation.
     return YES;
 }
 
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-}
-
-
-- (void)dealloc {
+/***********************************************************************************************************************
+ * Clears up the memory.
+ */
+- (void)dealloc
+{
 	[webView release];
     [super dealloc];
 	

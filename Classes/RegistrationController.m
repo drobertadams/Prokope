@@ -8,10 +8,9 @@
 
 #import "RegistrationController.h"
 
-
 @implementation RegistrationController
 
-@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel, controller;
+@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel, RegisterButton, controller;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -42,33 +41,6 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-}
-
-/******************************************************************************
- * auto created method. Called when the view is loaded. A constructor basically.
- */
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	
-	if (self.controller.logedin)
-	{
-		[EmailText setText:self.controller.TheUserName];
-		[PassWordText setText:self.controller.ThePassWord];
-		[ProfessorText setText:self.controller.Professor];
-		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
-	}	
-	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
-	
-	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/professor"]];
-	NSData *data = [NSData dataWithContentsOfURL: url];
-	
-	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
-	[parser setDelegate:self];
-	[parser parse];
-	[parser release];
-	
-	ProfessorTable.delegate = self;
-	ProfessorTable.dataSource = self;
 }
 
 /******************************************************************************
@@ -118,6 +90,34 @@
 }
 
 /******************************************************************************
+ * auto created method. Called when the view is loaded. A constructor basically.
+ */
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	
+	if (self.controller.logedin)
+	{
+		[EmailText setText:self.controller.TheUserName];
+		[PassWordText setText:self.controller.ThePassWord];
+		[ProfessorText setText:self.controller.Professor];
+		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
+		[TitleLabel setText:[NSString stringWithFormat:@"Update Profile : %@", self.controller.TheUserName]];
+	}	
+	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
+	
+	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/professor"]];
+	NSData *data = [NSData dataWithContentsOfURL: url];
+	
+	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
+	[parser setDelegate:self];
+	[parser parse];
+	[parser release];
+	
+	ProfessorTable.delegate = self;
+	ProfessorTable.dataSource = self;
+}
+
+/******************************************************************************
  * This method responds to clicks for the register/update button.
  */
 -(IBAction)RegisterButtonClicked:(id)sender
@@ -140,15 +140,11 @@
 		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
 							   "username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name];
 		
-	//	NSString* escapedUrlString = [@"hee there" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+	    StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
-	//	NSLog(StringUrl);
 		
 		NSURL *url = [NSURL URLWithString:StringUrl];
 		NSData *data = [NSData dataWithContentsOfURL: url];
-		
-		NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-		NSLog(@"%@", theString);
 		
 		NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 		[parse setDelegate:self];
@@ -157,6 +153,7 @@
 		
 		NSString *theUser = [test objectForKey:@"E-mail"];
 		
+		// we know the registration was sucessful because of the response from the server. 
 		if (RegistrationResult == 1)
 		{
 			if (![e_Name isEqualToString:theUser])
@@ -185,7 +182,9 @@
 		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/update/"
 							   "oldusername/%@/newusername/%@/oldpassword/%@/newpassword/%@/professor/%@", self.controller.TheUserName, e_Name, self.controller.ThePassWord, p_Name, professor_Name];
 		
+		StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];		
+		NSLog(@"%@", StringUrl);
 		
 		NSURL *url = [NSURL URLWithString:StringUrl];
 		NSData *data = [NSData dataWithContentsOfURL: url];
@@ -342,7 +341,8 @@
 /******************************************************************************
  * This method rotates the i-pad. 
  */
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     // Overriden to allow any orientation.
     return YES;
 }
@@ -377,42 +377,6 @@
 						  nil];
 	
 	[dict writeToFile:file atomically: TRUE];	
-}
-
-/******************************************************************************
- * Not sure about this guy. 
- */
--(NSString *) urlencode: (NSString *) url
-{
-    NSArray *escapeChars = [NSArray arrayWithObjects:@";" , @"/" , @"?" , @":" ,
-							@"@" , @"&" , @"=" , @"+" ,
-							@"$" , @"," , @"[" , @"]",
-							@"#", @"!", @"'", @"(", 
-							@")", @"*", nil];
-	
-    NSArray *replaceChars = [NSArray arrayWithObjects:@"%3B" , @"%2F" , @"%3F" ,
-							 @"%3A" , @"%40" , @"%26" ,
-							 @"%3D" , @"%2B" , @"%24" ,
-							 @"%2C" , @"%5B" , @"%5D", 
-							 @"%23", @"%21", @"%27",
-							 @"%28", @"%29", @"%2A", nil];
-	
-    int len = [escapeChars count];
-	
-    NSMutableString *temp = [url mutableCopy];
-	
-    int i;
-    for(i = 0; i < len; i++)
-    {
-		
-        [temp replaceOccurrencesOfString: [escapeChars objectAtIndex:i]
-							  withString:[replaceChars objectAtIndex:i]
-								 options:NSLiteralSearch
-								   range:NSMakeRange(0, [temp length])];
-    }
-	
-    NSString *out = [NSString stringWithString: temp];
-    return out;
 }
 
 /******************************************************************************

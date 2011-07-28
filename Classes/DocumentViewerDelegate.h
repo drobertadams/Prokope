@@ -17,7 +17,7 @@
 }
 
 // Initalizes this class with a pointer to the parent controller.
--(DocumentViewerDelegate*) initWithController: (DocumentController *) c;
+-(DocumentViewerDelegate*)initWithController:(DocumentController *)c;
 
 @property (nonatomic, retain) DocumentController *controller;
 

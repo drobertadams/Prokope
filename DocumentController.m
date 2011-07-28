@@ -12,26 +12,96 @@
 
 @implementation DocumentController
 
-@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName;
+@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName, ClicksArray;
 
 /******************************************************************************
- * Closes this view.
+ * This is a standard method.
  */
-- (IBAction) close 
+- (void)didReceiveMemoryWarning
 {
-	[self dismissModalViewControllerAnimated:YES];
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc. that aren't in use.
 }
 
+/******************************************************************************
+ * This is called when a new view is being presented.
+ */
+-(void)viewWillDisappear:(BOOL)animated
+{	
+	[MyTimer invalidate];
+	MyTimer = nil;
+}
+
+/******************************************************************************
+ * This is called when a this view goes away.
+ */
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+}
+
+/******************************************************************************
+ * Force the application to remain in landscape mode.
+ */
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
+	return(interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
+/******************************************************************************
+ * Called after this view is loaded -- basically a constructor.
+ */
+- (void)viewDidLoad 
+{
+    [super viewDidLoad];
+	RatingsArray = [[NSMutableArray alloc] initWithCapacity:100];
+	
+	// Create a delegate for the document viewer.
+	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
+	
+	// Make ourselves the delegate for the other web views.
+	commentary.delegate = self;
+	vocabulary.delegate = self;
+	sidebar.delegate = self;
+	
+	// Go fetch and display the document.
+	[self fetchDocumentData];
+	
+	ClicksArray = [[NSMutableArray alloc] initWithCapacity:1000];
+	NSString *datestring = [[NSDate date] description];
+	
+	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
+	
+	//	if(MyTimer)
+	//	{
+	//		NSLog("@No Timer needed");	
+	//	}
+	
+	//	MyTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
+}
+
+/******************************************************************************
+ * This method is called by the timer after a certain interval.
+ */
+-(void)targetMethod
+{	
+	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
+	//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
+	//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
+	//	[serviceRequest setHTTPMethod:@"POST"];
+	//	[serviceRequest setHTTPBody:[xmlString dataUsingEncoding:NSASCIIStringEncoding]];
+	
+	//	NSURLResponse * serviceResponse;
+	//	NSError * serviceError;
+	//	serviceResponse = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
+}
 
 /******************************************************************************
  * Fetches and displays all the data related to a document.
  */
 - (void)fetchDocumentData
 {
-	// Fetch the document from the server.
-	//NSString *url = @"http://www.cis.gvsu.edu/~prokope/index.php/rest/document/1";
-	//	NSString *url = @"http://localhost/~adams/Private/Prokope/index.php/rest/document/4";
-	
 	// Convert the NSMutable data into a normal string.
 	NSError *error;
 	NSString *data = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:URL] encoding:NSUTF8StringEncoding error:&error];
@@ -127,15 +197,22 @@
 	"   }"
 	"}   "
 	"hide_text();"
-	"    "
 	"</script>";
 	
 	NSString *display_ratings = 
 	@"<script lang=\"text/javascript\">"
-	"function alert_me()"
+	"    "
+	"function preloadImages()"
 	"{   "
-	"    alert('hello me!');     "
-	"}"
+	"   var preloadArray = new Array();"
+	"   preloadArray[0] = 'http://www.justinantranikian.com/Photos/Like-Up.png';"
+	"   preloadArray[1] = 'http://www.justinantranikian.com/Photos/Dislike-Up.png';"
+	"   for(i = 0; i < preloadArray.length; i++)"
+	"   {"
+	"        var img = new Image();"  
+	"        img.src = preloadArray[i];"
+	"   }"
+    "}"
 	"    "
 	"function display_ratings()"
 	"{"
@@ -143,55 +220,20 @@
 	"   var i = 0;"
 	"	for (i = 0; i < comments.length; i++)"
 	"   {"
-	"      var ref = comments[i].getAttribute('ref');"
+	"      var newid = comments[i].getAttribute('id');"
 	"      var newdiv = document.createElement('div');"
-//	"      newdiv.setAttribute('id', 'rate' + i);"
-//	"      newdiv.innerHTML = '<a href=\"Like' + i +'\"><img src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + i +'\">Dis-Like</a>';"
-	"      newdiv.innerHTML = '<a href=\"Like' + ref +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + ref +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
+	"      newdiv.innerHTML = '<a href=\"Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
 	"      comments[i].appendChild(newdiv);" 
 	"	}"
 	"}"
 	"      "
-	"function show_clear_link(int) "
-	"{   "
-	"      var test = document.getElementById('undo' + int);"
-	"      if(!test)"
-	"      {"
-	"          var comments = document.getElementsByTagName('li');"
-	"          var current = comments[int]; "
-	"          current.setAttribute('id', 'undo' + int);"
-	"          var newdiv = document.createElement('div');"
-	"          newdiv.innerHTML = '<a href=\"Undo' + int +'\">UNDO</a>';"
-	"          current.appendChild(newdiv);" 
-	"      }"
-	"      else"
-	"      { "
-	"          var comments = document.getElementsByTagName('li');"
-	"          var current = comments[int]; "
-    "          var children = current.childNodes;"
-	"          var count = 1;  "
-	"	       for (i = 0; i < children.length; i++)"
-	"          {"
-	"             if(children[i].tagName == 'DIV')   "
-	"             {"
-	"                 if(count == 2)"
-	"                 { "
-	"                     children[i].style.display = 'block'; "
-	"                 }"
-	"                 count += 1; "
-	"             }"
-	"          }"
-	"      }"
-	"}"
-	"    "
 	"function toggleLikeDislike(int, text)"
 	"{"
 	"      var str = text + int;  "
 	"      var children = document.getElementsByTagName('li');"
 	"	   for (i = 0; i < children.length; i++)"
 	"      {"
-//	"           alert(children[i].getAttribute('ref'));"
-	"           if(children[i].getAttribute('ref') == int)   "
+	"           if(children[i].getAttribute('id') == int)   "
 	"           {"
 	"                 var anchors = children[i].getElementsByTagName('img');"
 	"                 var count = anchors.length;"
@@ -215,36 +257,9 @@
 	"	    }"
 	"}"
 	"    "
-	"function undo_button_clicked(int)"
-	"{    "
-	"      var comments = document.getElementsByTagName('li');"
-	"      var current = comments[int]; "
-	"      var children = current.childNodes;"
-	"      var count = 1;  "
-	"	   for (i = 0; i < children.length; i++)"
-	"      {"
-	"           if(children[i].tagName == 'DIV')   "
-	"           {"
-	"               if(count == 1)"
-	"               {"
-	"                   var anchors = children[i].getElementsByTagName('img');"
-    "                   var like = anchors[0];"
-	"                   var dislike = anchors[1];"
-	"                                                          "
-	"                   like.src = 'http://www.justinantranikian.com/Photos/Like-Up.png';"
-	"                   dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Up.png';"
-	"               }"
-	"               if(count == 2)"
-	"               { "
-	"                   children[i].style.display = 'none';"
-    "               } "
-	"               count ++; "
-	"           }"
-	"      }"
-	"}    "
+	"preloadImages();"
 	"display_ratings();"
 	"</script>";
-	
 	
 	// Find the content of the commentary.
 	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
@@ -258,12 +273,13 @@
 	// Find the content of the vocabulary.
 	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
 	doc = [doc stringByAppendingString:js];
+	doc = [doc stringByAppendingString:meta];
 	doc = [doc stringByAppendingString:hide_text];
 	[vocabulary loadHTMLString:doc baseURL:nil];
 
 	// Find the content of the sidebar.
-	doc = [self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data];
-	doc = [doc stringByAppendingString:meta];
+	doc = meta;
+	doc = [doc stringByAppendingString:[self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data]];
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
 	[data release];
@@ -292,108 +308,9 @@
 	return [data substringWithRange:dataRange];
 }
 
-/******************************************************************************
- * Force the application to remain in landscape mode.
- */
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
-{
-	return(interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-}
-
-/******************************************************************************
- * Called after this view is loaded -- basically a constructor.
- */
-- (void)viewDidLoad 
-{
-    [super viewDidLoad];
-	RatingsArray = [[NSMutableArray alloc] initWithCapacity:100];
-	
-	// Create a delegate for the document viewer.
-	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
-
-	// Make ourselves the delegate for the other web views.
-	commentary.delegate = self;
-	vocabulary.delegate = self;
-	sidebar.delegate = self;
-	
-	// Go fetch and display the document.
-	[self fetchDocumentData];
-	
-	ClicksArray = [[NSMutableArray alloc] initWithCapacity:1000];
-	NSString *datestring = [[NSDate date] description];
-
-	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
-	
-	
-//	if(MyTimer)
-//	{
-//		NSLog("@No Timer needed");	
-//	}
-	
-//	MyTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
-
-}
-
--(void)targetMethod
-{
-	NSDate *currentDateTime = [NSDate date];
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
-	[dateFormatter release];
-	NSLog(dateInString);
-	
-	NSLog(@"timer:");
-	
-	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, dateInString];
-	
-	for (NSString *str in RatingsArray)
-	{
-		NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-		NSString *ending = [str stringByTrimmingCharactersInSet:nonDigits];
-		
-		NSLog(@"%@", ending);
-		
-		if ([str hasPrefix:@"/Like"])
-		{
-		    [XMLString1 appendString:[NSString stringWithFormat:@"<like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
-		}
-		else if([str hasPrefix:@"/Dis-Like"])
-		{
-			[XMLString1 appendString:[NSString stringWithFormat:@"<dis-like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
-		}
-	}
-	
-	for (NSString *str in ClicksArray)
-	{
-		[XMLString1 appendString:[NSString stringWithFormat:@"<click user='%@' date='%@' id='%@' /> \n", UserName, dateInString, str]];
-	}
-	
-	[XMLString1 appendString:@"</entries>"];
-	
-	NSLog(@"%@", XMLString1);
-	
-	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
-	//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
-	//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
-	//	[serviceRequest setHTTPMethod:@"POST"];
-	//	[serviceRequest setHTTPBody:[xmlString dataUsingEncoding:NSASCIIStringEncoding]];
-	
-	//	NSURLResponse * serviceResponse;
-	//	NSError * serviceError;
-	//	serviceResponse = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
-	
-	
-//	TimerCount ++;
-//	if(TimerCount == 10)
-///	{
-//	    NSLog(@"Count = 10");
-//		TimerCount = 0;
-//	}
-}
-
 /* **********************************************************************************************************************
- * Called when any of the webviews (except document) wants to load a URL.
+ * Called when any of the webviews (except document) wants to load a URL. The method screens requests made from
+ * different webviews and directs the request to the appropriate place. 
  */
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -414,8 +331,6 @@
 			NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
 			NSString *ending = [path stringByTrimmingCharactersInSet:nonDigits];
 			
-			NSLog(@"%@", path);
-			
 			if ([path hasPrefix:@"/Like"])
 			{
 				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Like');", ending];
@@ -433,8 +348,7 @@
 		else
 		{
 			// Load the image viewer nib and set the URL.
-	//		[ClicksArray addObject:[NSString stringWithFormat:@"%@", StringRequest]];
-			NSLog(@"%@",StringRequest);
+			[ClicksArray addObject:[NSString stringWithFormat:@"%@", StringRequest]];
 			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
 
 			webViewer.url = StringRequest;
@@ -443,19 +357,21 @@
 			[self presentModalViewController:webViewer animated:YES];
 			[webViewer release];
 		}
-	}
-	
+	}	
 	// Ignore all other types of user interation.
 	return FALSE;
 }
-
 
 /* **********************************************************************************************************************
  * Called by DocumentViewerDelegate when the user clicks on a word.
  */
 - (void) wordClicked:(NSString *)id
 {
-	//[commentary loadHTMLString:id baseURL:nil];
+	NSDate *currentDateTime = [NSDate date];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
+	[dateFormatter release];
 	
 	// Call the javascript show_only() function in the commentary UIWebView to display all comments associated with the
 	// given id and hide all the others.
@@ -469,13 +385,8 @@
 		
 	[ClicksArray addObject:id];
 	
-	NSDate *currentDateTime = [NSDate date];
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
-	[dateFormatter release];
-	
 	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, dateInString]; 
+	[XMLString1 appendString:@"\n\n"];
 	
 	for (NSString *str in RatingsArray)
 	{
@@ -498,50 +409,19 @@
 	{
 		[XMLString1 appendString:[NSString stringWithFormat:@"<click user='%@' date='%@' id='%@' /> \n", UserName, dateInString, str]];
 	}
-	
+	[XMLString1 appendString:@"\n"];
 	[XMLString1 appendString:@"</entries>"];
 	
-	NSLog(XMLString1);
+	NSLog(@"%@", XMLString1);
 }
 
-// prokope/rest/update/oldusername/value/newusername/value/oldpassword/value/newpassword/value/professor/value.
-
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
-
-- (void)viewDidUnload {
-	NSLog(@"Going to a different view");
-    [super viewDidUnload];
-}
-
-
-- (void)dealloc {
-	NSLog(@"Deallocating");
+/* ***********************************************************************************************
+ * Clearing our memory.
+ */
+- (void)dealloc
+{
     [super dealloc];
 }
 
--(void)viewWillDisappear:(BOOL)animated
-{
-	NSLog(@"AAH");	
-	[MyTimer invalidate];
-	MyTimer = nil;
-}
-
-// The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-/*
- - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
- self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
- if (self) {
- // Custom initialization.
- }
- return self;
- }
- */
 
 @end

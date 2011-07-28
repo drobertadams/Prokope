@@ -639,7 +639,6 @@
 			[parse release];
 			
 			NSString *theUser = [test objectForKey:@"E-mail"];
-			NSString *thePass = [test objectForKey:@"Password"];
 			
 			if(LoginResult == 1)
 			{			
@@ -736,7 +735,7 @@
 	if([elementName isEqualToString:@"result"])
 		CurrentTag = @"result";
 	else
-		CurrentTag = "Unknown";
+		CurrentTag = @"Unknown";
 }
 
 /******************************************************************************

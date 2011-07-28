@@ -17,6 +17,7 @@
 	IBOutlet UITableView *ProfessorTable;
 	IBOutlet UIButton *RegisterButton;
 	IBOutlet UILabel *StatusLabel;
+	IBOutlet UILabel *TitleLabel;
 	
 	NSString *name;
 	NSString *pass;
@@ -42,7 +43,5 @@
 
 -(IBAction)RegisterButtonClicked:(id)sender;
 -(void)SaveContentsToFile;
-
--(NSString *) urlencode: (NSString *) url;
 
 @end

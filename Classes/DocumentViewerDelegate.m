@@ -17,15 +17,15 @@
 @synthesize controller;
 
 /* **********************************************************************************************************************
- * Constructor.
+ * Constructor. Sets the controller to the parent's controller so we can get a reference to its data and methods.
  */
--(DocumentViewerDelegate*) initWithController: (DocumentController *) c {
-    self = [super init];
-	
-    if ( self ) {
+-(DocumentViewerDelegate*)initWithController:(DocumentController *)c
+{
+    self = [super init];	
+    if (self)
+	{
         self.controller = c;
     }
-	
     return self;
 }
 
@@ -61,16 +61,16 @@
 		
 		// Otherwise, the user clicked on something other than a word. Load the URL
 		// in the WebViewController.		
-		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController"
-																		   bundle:nil];
+		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
+		
+		[controller.ClicksArray addObject:url];
 		webViewer.url = url;
 		
 		// Create a modal view.
 		[controller presentModalViewController:webViewer animated:YES];
 		[webViewer release];
 		
-	}
-	
+	}	
 	// Ignore all other types of user interation.
 	return FALSE;
 }

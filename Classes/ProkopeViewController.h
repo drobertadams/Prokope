@@ -84,7 +84,7 @@ table.
 @property (nonatomic, retain) NSString *TheUserName;
 @property (nonatomic, retain) NSString *ThePassWord;
 @property (nonatomic, retain) NSString *Professor;
-@property (nonatomic, getter=isWorking setter=isWorking) BOOL logedin;
+@property (nonatomic, getter=isWorking, setter=isWorking) BOOL logedin;
 
 -(void)SetDataArray:(NSMutableArray *)dataArray;
 -(void)InitalizeButton:(UIButton *)Button Tag:(int)tag Shelf:(UIScrollView *)Shelf Side:(NSString *)Side;

@@ -17,7 +17,7 @@
 	
 }
 
-- (IBAction) Close; // close this view
+-(IBAction)Close; // close this view
 
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) NSString *url;	// URL view

@@ -24,25 +24,13 @@
 	NSString *UserName;
 	UILabel *label2;
 	
-	NSMutableArray *RatingsArray;
-	
+	NSMutableArray *RatingsArray;	
 	NSMutableArray *ClicksArray;
-	
 	NSMutableString *XMLString;
 	
 	NSTimer *MyTimer;
-	
 	int TimerCount;
 }
-
-
-// Utility method to extract an XML element from a string.
-- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
-
--(void)targetMethod;
-
-// Called by DocumentVieweerDelegate when the user clicks on a word in the document.
--(void)wordClicked:(NSString *)id;
 
 @property (nonatomic, retain) IBOutlet UIWebView *document;
 @property (nonatomic, retain) IBOutlet UIWebView *commentary;
@@ -51,5 +39,15 @@
 @property (nonatomic, retain) NSString *URL;
 @property (nonatomic, retain) NSString *Title;
 @property (nonatomic, retain) NSString *UserName;
+@property (nonatomic, retain) NSMutableArray *ClicksArray;
+
+- (void)fetchDocumentData;
+
+// Utility method to extract an XML element from a string.
+- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
+-(void)targetMethod;
+
+// Called by DocumentVieweerDelegate when the user clicks on a word in the document.
+-(void)wordClicked:(NSString *)id;
 
 @end
