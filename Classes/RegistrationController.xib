@@ -52,7 +52,7 @@
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">RegistrationBackground1.png</string>
+							<string key="NSResourceName">RegistrationBackground-2.png</string>
 						</object>
 					</object>
 					<object class="IBUIButton" id="451224323">
@@ -647,7 +647,7 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABDjQAAw7sAAA</bytes>
 					</object>
-					<string>{{42, 70}, {1039, 686}}</string>
+					<string>{{42, 73}, {1039, 683}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -1046,7 +1046,7 @@
 		<string key="IBDocument.LastKnownRelativeProjectPath">../Prokope.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">RegistrationBackground1.png</string>
+			<string key="NS.key.0">RegistrationBackground-2.png</string>
 			<string key="NS.object.0">{750, 500}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">141</string>

@@ -25,7 +25,6 @@
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
 		947B13C413AEBAA1009F0858 /* more-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B13C313AEBAA1009F0858 /* more-icon.png */; };
 		947FCCA213E100EF00927806 /* Registration_BackGround.png in Resources */ = {isa = PBXBuildFile; fileRef = 947FCCA113E100EF00927806 /* Registration_BackGround.png */; };
-		947FCCC113E10B3800927806 /* RegistrationBackground1.png in Resources */ = {isa = PBXBuildFile; fileRef = 947FCCC013E10B3800927806 /* RegistrationBackground1.png */; };
 		948D01A713B2A46F007BFFAD /* more-icon-left.png in Resources */ = {isa = PBXBuildFile; fileRef = 948D01A613B2A46F007BFFAD /* more-icon-left.png */; };
 		948D021713B2AC4E007BFFAD /* StoneBook3.png in Resources */ = {isa = PBXBuildFile; fileRef = 948D021613B2AC4E007BFFAD /* StoneBook3.png */; };
 		948D03C713B2DD96007BFFAD /* Authors.xml in Resources */ = {isa = PBXBuildFile; fileRef = 948D03C613B2DD96007BFFAD /* Authors.xml */; };
@@ -35,6 +34,7 @@
 		94AE4B9A1399BAD000827A1E /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4B991399BAD000827A1E /* Author.m */; };
 		94AE4D061399DAB100827A1E /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4D051399DAB100827A1E /* Work.m */; };
 		94B372F5139D4EB60039CC52 /* BookSpine2.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B372F3139D4EB60039CC52 /* BookSpine2.png */; };
+		94E9666413E5BCA600228C99 /* RegistrationBackground-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E9666313E5BCA600228C99 /* RegistrationBackground-2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,7 +64,6 @@
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
 		947B13C313AEBAA1009F0858 /* more-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more-icon.png"; sourceTree = "<group>"; };
 		947FCCA113E100EF00927806 /* Registration_BackGround.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Registration_BackGround.png; sourceTree = "<group>"; };
-		947FCCC013E10B3800927806 /* RegistrationBackground1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RegistrationBackground1.png; sourceTree = "<group>"; };
 		948D01A613B2A46F007BFFAD /* more-icon-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more-icon-left.png"; sourceTree = "<group>"; };
 		948D021613B2AC4E007BFFAD /* StoneBook3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoneBook3.png; sourceTree = "<group>"; };
 		948D03C613B2DD96007BFFAD /* Authors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Authors.xml; sourceTree = "<group>"; };
@@ -77,6 +76,7 @@
 		94AE4D041399DAB100827A1E /* Work.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Work.h; sourceTree = "<group>"; };
 		94AE4D051399DAB100827A1E /* Work.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Work.m; sourceTree = "<group>"; };
 		94B372F3139D4EB60039CC52 /* BookSpine2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BookSpine2.png; sourceTree = "<group>"; };
+		94E9666313E5BCA600228C99 /* RegistrationBackground-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RegistrationBackground-2.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,7 +172,7 @@
 		948D01C013B2A62E007BFFAD /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				947FCCC013E10B3800927806 /* RegistrationBackground1.png */,
+				94E9666313E5BCA600228C99 /* RegistrationBackground-2.png */,
 				947FCCA113E100EF00927806 /* Registration_BackGround.png */,
 				948D06A113B3EF2D007BFFAD /* logo.png */,
 				948D021613B2AC4E007BFFAD /* StoneBook3.png */,
@@ -262,7 +262,7 @@
 				948D06A213B3EF2D007BFFAD /* logo.png in Resources */,
 				948D06D613B3F7D7007BFFAD /* RegistrationController.xib in Resources */,
 				947FCCA213E100EF00927806 /* Registration_BackGround.png in Resources */,
-				947FCCC113E10B3800927806 /* RegistrationBackground1.png in Resources */,
+				94E9666413E5BCA600228C99 /* RegistrationBackground-2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
