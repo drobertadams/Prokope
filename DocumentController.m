@@ -24,6 +24,23 @@
     // Release any cached data, images, etc. that aren't in use.
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+	NSLog(@"NO INTERNET PEOPLE");
+    NSString *titleString = @"Error Loading Page";
+    NSString *messageString = [error localizedDescription];
+    NSString *moreString = [error localizedFailureReason] ?
+	[error localizedFailureReason] :
+	NSLocalizedString(@"Try typing the URL again.", nil);
+    messageString = [NSString stringWithFormat:@"%@. %@", messageString, moreString];
+	
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:titleString
+														message:messageString delegate:self
+											  cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alertView show];
+    [alertView release];
+}
+
 /******************************************************************************
  * This is called when a new view is being presented.
  */
@@ -212,8 +229,8 @@
 	"      var newdiv = document.createElement('div');"
 	"      if(i == 0)"
 	"      {"
-	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Clicked.png\" />';"
-	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Clicked.png\" />';"
+	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.cis.gvsu.edu/~prokope/images/Like-Clicked.png\" />';"
+	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.cis.gvsu.edu/~prokope/images/Dislike-Clicked.png\" />';"
 	"      }"
 	"      newdiv.innerHTML = '<a href=\"Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
 	"      comments[i].appendChild(newdiv);" 
@@ -237,13 +254,13 @@
     "                 var subSection = sentText.substring(0,4);"
 	"                 if(subSection == 'Like')"
 	"                 {"
-	"                      like.src = 'http://www.justinantranikian.com/Photos/Like-Clicked.png';"
-	"                      dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Up.png';"
+	"                      like.src = 'http://www.cis.gvsu.edu/~prokope/images/Like-Clicked.png';"
+	"                      dislike.src = 'http://www.cis.gvsu.edu/~prokope/images/Dislike-Up.png';"
 	"                 }"
 	"                 else"
 	"                 {"
-	"                      like.src = 'http://www.justinantranikian.com/Photos/Like-Up.png';"
-	"                      dislike.src = 'http://www.justinantranikian.com/Photos/Dislike-Clicked.png';"
+	"                      like.src = 'http://www.cis.gvsu.edu/~prokope/images/Like-Up.png';"
+	"                      dislike.src = 'http://www.cis.gvsu.edu/~prokope/images/Dislike-Clicked.png';"
 	"                 }"
 	"                 break;"
 	"            }"

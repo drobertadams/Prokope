@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ProkopeViewController.h"
+#import "Reachability.h"
 
 @interface RegistrationController : UIViewController <UIAlertViewDelegate, NSXMLParserDelegate, UITableViewDelegate, UITableViewDataSource> {
 
@@ -31,6 +32,8 @@
 	int RegistrationResult;
 	
 	ProkopeViewController *controller;
+	
+	Reachability *internetReach;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *PassWordText;
@@ -43,5 +46,6 @@
 
 -(IBAction)RegisterButtonClicked:(id)sender;
 -(void)SaveContentsToFile;
+
 
 @end

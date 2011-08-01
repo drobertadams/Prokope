@@ -7,6 +7,7 @@
 //
 
 #import "RegistrationController.h"
+#import "Reachability.h" 
 
 @implementation RegistrationController
 
@@ -40,8 +41,16 @@
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    // e.g. self.myOutlet = nil;	
 }
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[internetReach release];
+}
+
+
 
 /******************************************************************************
  * Override to allow orientations other than the default portrait orientation..
@@ -123,6 +132,52 @@
 	
 	ProfessorTable.delegate = self;
 	ProfessorTable.dataSource = self;
+	
+	internetReach = [[Reachability reachabilityForInternetConnection] retain];
+	[internetReach startNotifier];
+		
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+	}
+}
+
+//Called by Reachability whenever status changes.
+- (void) reachabilityChanged: (NSNotification* )note
+{
+	// A way to reference your application delegate.
+	//TabnavAppDelegate *delegate = (TabnavAppDelegate *)[[UIApplication sharedApplication]
+	//delegate];
+	
+	Reachability* curReach = [note object];
+	NetworkStatus internetStatus = [curReach currentReachabilityStatus];
+	
+	switch (internetStatus)
+	{
+		case NotReachable:
+		{
+			NSLog(@"The internet is down.");
+			UIAlertView *connectionAlert = [[UIAlertView alloc] init]; 
+			[connectionAlert setTitle:@"Error"];
+			[connectionAlert setMessage:@"myApp was not able to reach the host. Please check your network conenction."];    
+			[connectionAlert setDelegate:self];
+			[connectionAlert addButtonWithTitle:@"Back"];
+			[connectionAlert show];
+			[connectionAlert release];
+			break;
+			
+		}
+		case ReachableViaWiFi:
+		{
+			NSLog(@"The internet is working via WIFI.");
+			break;
+			
+		}
+		case ReachableViaWWAN:
+		{
+			NSLog(@"The internet is working via WWAN.");
+			break;
+			
+		}
+	}
 }
 
 /******************************************************************************

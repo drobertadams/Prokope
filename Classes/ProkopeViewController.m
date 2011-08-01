@@ -26,6 +26,23 @@
 	AuthorsArray = dataArray;
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+	NSLog(@"NO INTERNET PEOPLE");
+    NSString *titleString = @"Error Loading Page";
+    NSString *messageString = [error localizedDescription];
+    NSString *moreString = [error localizedFailureReason] ?
+	[error localizedFailureReason] :
+	NSLocalizedString(@"Try typing the URL again.", nil);
+    messageString = [NSString stringWithFormat:@"%@. %@", messageString, moreString];
+	
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:titleString
+														message:messageString delegate:self
+											  cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alertView show];
+    [alertView release];
+}
+
 /******************************************************************************
  * Override to allow orientations other than the default portrait orientation..
  */
@@ -65,6 +82,7 @@
 	ControlFont = [UIFont systemFontOfSize:25];
 	
 	self.title = @"Prokope - Intermediate Latin Reader";
+	CommentaryView.delegate = self;
 	[CommentaryView setBackgroundColor:[UIColor clearColor]];
 	
 	logedin = FALSE;
@@ -345,6 +363,7 @@
 	NSString *HTML = [ShelfImage stringByAppendingString:MyAuth.bio];	
 	
 	[CommentaryView loadHTMLString:HTML baseURL:nil];
+//	[CommentaryView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com"]]];
 }
 
 /******************************************************************************
@@ -445,13 +464,24 @@
 	}
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
 	
-	doc.URL = MyAuth.workURL;
-	doc.Title = MyAuth.name;
-	
-	doc.UserName = TheUserName;
-	
-	[self.navigationController pushViewController:doc animated:YES];
-	[doc release];
+	NSString *testconnect = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
+	if([testconnect length] == 0)
+	{
+		UIAlertView *alertDialog;
+		alertDialog = [[UIAlertView alloc]initWithTitle:@"No Internet" message:@"You are not connected to the internet" delegate:self cancelButtonTitle:@"dismiss" otherButtonTitles: nil];
+		[alertDialog show];
+		[alertDialog release];
+	}
+	else 
+	{
+		doc.URL = MyAuth.workURL;
+		doc.Title = MyAuth.name;
+		
+		doc.UserName = TheUserName;
+		
+		[self.navigationController pushViewController:doc animated:YES];
+		[doc release];		
+	}
 }
 
 

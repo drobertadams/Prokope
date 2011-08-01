@@ -35,6 +35,8 @@
 		94AE4D061399DAB100827A1E /* Work.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE4D051399DAB100827A1E /* Work.m */; };
 		94B372F5139D4EB60039CC52 /* BookSpine2.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B372F3139D4EB60039CC52 /* BookSpine2.png */; };
 		94E9666413E5BCA600228C99 /* RegistrationBackground-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E9666313E5BCA600228C99 /* RegistrationBackground-2.png */; };
+		94E9667913E5E60300228C99 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E9667813E5E60300228C99 /* SystemConfiguration.framework */; };
+		94E9667F13E5E6C800228C99 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E9667E13E5E6C800228C99 /* Reachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +79,9 @@
 		94AE4D051399DAB100827A1E /* Work.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Work.m; sourceTree = "<group>"; };
 		94B372F3139D4EB60039CC52 /* BookSpine2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BookSpine2.png; sourceTree = "<group>"; };
 		94E9666313E5BCA600228C99 /* RegistrationBackground-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RegistrationBackground-2.png"; sourceTree = "<group>"; };
+		94E9667813E5E60300228C99 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		94E9667D13E5E6C800228C99 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		94E9667E13E5E6C800228C99 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +92,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
+				94E9667913E5E60300228C99 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +102,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				94E9667C13E5E62400228C99 /* Utility Classes */,
 				94AE4B801399B8B500827A1E /* Data Classes */,
 				1D3623240D0F684500981E51 /* ProkopeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ProkopeAppDelegate.m */,
@@ -165,6 +172,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+				94E9667813E5E60300228C99 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,6 +201,15 @@
 				94AE4D051399DAB100827A1E /* Work.m */,
 			);
 			name = "Data Classes";
+			sourceTree = "<group>";
+		};
+		94E9667C13E5E62400228C99 /* Utility Classes */ = {
+			isa = PBXGroup;
+			children = (
+				94E9667D13E5E6C800228C99 /* Reachability.h */,
+				94E9667E13E5E6C800228C99 /* Reachability.m */,
+			);
+			name = "Utility Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,6 +299,7 @@
 				94AE4B9A1399BAD000827A1E /* Author.m in Sources */,
 				94AE4D061399DAB100827A1E /* Work.m in Sources */,
 				948D06D513B3F7D7007BFFAD /* RegistrationController.m in Sources */,
+				94E9667F13E5E6C800228C99 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

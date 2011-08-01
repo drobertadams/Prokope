@@ -15,7 +15,7 @@ to implement the necessary methods for a table view to respond to actions and lo
 table. 
  */
 @interface ProkopeViewController : UIViewController 
-		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate, NSXMLParserDelegate> {
+		<UITextFieldDelegate, UIAlertViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate, NSXMLParserDelegate, UIWebViewDelegate> {
 
 	NSMutableArray *AuthorsArray;
 			
