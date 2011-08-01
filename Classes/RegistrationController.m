@@ -137,7 +137,7 @@
 	[internetReach startNotifier];
 		
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-	}
+
 }
 
 //Called by Reachability whenever status changes.

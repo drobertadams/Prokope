@@ -72,6 +72,8 @@ table.
 			
 	UIImage *image_left;
 	UIImage *image_right;
+			
+	UIDevice *myDevice;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *BookShelfImage;
