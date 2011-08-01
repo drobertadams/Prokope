@@ -433,16 +433,18 @@
 	if(MyAuth.workURL != nil)
 	{
 		[self ForceScroll:ThirdShelf];
-		
-		DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
-		
-		doc.URL = MyAuth.workURL;
-		doc.Title = MyAuth.name;
+		if ([self ShowNoInternetConnectionAlertView])
+		{
+			DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
+			
+			doc.URL = MyAuth.workURL;
+			doc.Title = MyAuth.name;
 
-		doc.UserName = TheUserName;
-		
-		[self.navigationController pushViewController:doc animated:YES];
-		[doc release];
+			doc.UserName = TheUserName;
+			
+			[self.navigationController pushViewController:doc animated:YES];
+			[doc release];
+		}
 	}
 	else 
 	{
@@ -499,15 +501,7 @@
 	}
 	DocumentController *doc = [[DocumentController alloc] initWithNibName:@"DocumentController" bundle:nil];
 	
-	NSString *testconnect = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
-	if([testconnect length] == 0)
-	{
-		UIAlertView *alertDialog;
-		alertDialog = [[UIAlertView alloc]initWithTitle:@"No Internet" message:@"You are not connected to the internet" delegate:self cancelButtonTitle:@"dismiss" otherButtonTitles: nil];
-		[alertDialog show];
-		[alertDialog release];
-	}
-	else 
+	if([self ShowNoInternetConnectionAlertView])
 	{
 		doc.URL = MyAuth.workURL;
 		doc.Title = MyAuth.name;
@@ -589,7 +583,7 @@
 	// If popupQuery is nil then we create a new one. otherwise we don't. 
 	if(!popupQuery)
 	{
-		popupQuery = [[UIActionSheet alloc] initWithTitle:@"Options" delegate:self cancelButtonTitle:@"no" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, @"forget me", nil];
+		popupQuery = [[UIActionSheet alloc] initWithTitle:@"Profile Options" delegate:self cancelButtonTitle:@"NO" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, @"Forget Me", nil];
 		popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
 		[popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
 		[popupQuery release];
@@ -622,6 +616,7 @@
 		else 
 		{
 			UIAlertView *alertDialog;
+			// the message needs the \n to make room for the two UITextFeilds to be placed in the alertview.
 			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
 			alertDialog.tag = 1;
 			 
@@ -673,6 +668,19 @@
 	popupQuery = nil;
 }
 
+-(BOOL)ShowNoInternetConnectionAlertView
+{
+	NSString *testconnect = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
+	if([testconnect length] == 0)
+	{
+		UIAlertView *alertDialog;
+		alertDialog = [[UIAlertView alloc]initWithTitle:@"No Internet" message:@"You are not connected to the internet" delegate:self cancelButtonTitle:@"dismiss" otherButtonTitles: nil];
+		[alertDialog show];
+		[alertDialog release];
+		return FALSE;
+	}
+	return TRUE;
+}
 
 /******************************************************************************
  * This method gets called when an alertview's button gets clicked. 
@@ -783,17 +791,16 @@
 {
 	if ([CurrentTag isEqualToString:@"result"])
 	{		
-		if ([string isEqualToString:@"-1"])
+		if ([string isEqualToString:@"1"])
 		{
-			LoginResult = -1;
-		}
-		else
-		{
-		    LoginResult = 1;
-			
+			LoginResult = 1;
 			// This needs to be converted into a NSData object and then back. 
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+		}
+		else
+		{
+		    LoginResult = -1;
 		}
 	}
 }

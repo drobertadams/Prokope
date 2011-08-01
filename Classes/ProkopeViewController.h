@@ -104,6 +104,7 @@ table.
 -(void)ClearShelfFonts:(UIScrollView *)BookShelfScrollView;
 -(void)ClearShelf:(UIScrollView *)BookShelfScrollView;
 
+-(BOOL)ShowNoInternetConnectionAlertView;
 -(void)showActionSheet;
 
 -(void)SetUpLoginButton;

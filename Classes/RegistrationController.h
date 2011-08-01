@@ -34,6 +34,10 @@
 	ProkopeViewController *controller;
 	
 	Reachability *internetReach;
+  
+    BOOL ProfessorsDataPopulated;
+	
+	BOOL InternetConnection;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *PassWordText;
@@ -44,8 +48,9 @@
 @property (nonatomic, retain) IBOutlet UILabel *StatusLabel;
 @property (nonatomic, retain) ProkopeViewController *controller;
 
+-(void)PopulateProfessorsTable;
 -(IBAction)RegisterButtonClicked:(id)sender;
 -(void)SaveContentsToFile;
-
+-(void)UpdateInternetConnectionStatus;
 
 @end

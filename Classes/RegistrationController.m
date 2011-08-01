@@ -112,6 +112,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	ProfessorsDataPopulated = FALSE;
+	
+	internetReach = [[Reachability reachabilityForInternetConnection] retain];
+	[internetReach startNotifier];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+	[self UpdateInternetConnectionStatus];
+	
 	if (self.controller.logedin)
 	{
 		[EmailText setText:self.controller.TheUserName];
@@ -122,6 +130,77 @@
 	}	
 	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
 	
+	if(InternetConnection == TRUE)
+	{
+		[self PopulateProfessorsTable];
+	}
+	ProfessorTable.delegate = self;
+	ProfessorTable.dataSource = self;	
+}
+
+/******************************************************************************
+ * This method is part of the reachability api. This gets called whenever there is
+ * a change in the status of the internet connection.
+ */
+-(void)reachabilityChanged:(NSNotification *)note
+{
+	[self UpdateInternetConnectionStatus];
+}
+
+/******************************************************************************
+ * This method is called when the internet connection status is changed. When the
+ * reachabilityChanged method is triggered by the NotificationCenter, it calls this 
+ * method. We can also call this method when we first load the view.
+ */
+-(void)UpdateInternetConnectionStatus
+{
+	// A way to reference your application delegate.
+	//TabnavAppDelegate *delegate = (TabnavAppDelegate *)[[UIApplication sharedApplication]
+	//delegate];
+	
+	//	Reachability* curReach = [note object];
+	//	NetworkStatus internetStatus = [curReach currentReachabilityStatus];
+	NetworkStatus internetStatus = [internetReach currentReachabilityStatus];
+	
+	switch (internetStatus)
+	{
+		case NotReachable:
+		{
+			UIAlertView *connectionAlert = [[UIAlertView alloc] initWithTitle:@"No internet connection" message:@"Please check your network conenction" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil]; 
+			[connectionAlert show];
+			[connectionAlert release];
+			RegisterButton.enabled = FALSE;
+			RegisterButton.alpha = 0.5f;
+			InternetConnection = FALSE;
+			break;
+		}
+		case ReachableViaWiFi:
+		{
+			RegisterButton.enabled = TRUE;
+			RegisterButton.alpha = 1.0f;
+			InternetConnection = TRUE;
+			if (ProfessorsDataPopulated == FALSE)
+			{
+				[self PopulateProfessorsTable];
+			}
+			break;
+		}
+		case ReachableViaWWAN:
+		{
+			RegisterButton.enabled = TRUE;
+			RegisterButton.alpha = 1.0f;
+			InternetConnection = TRUE;
+			if (ProfessorsDataPopulated == FALSE)
+			{
+				[self PopulateProfessorsTable];
+			}
+			break;
+		}
+	}
+}
+
+-(void)PopulateProfessorsTable
+{
 	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/professor"]];
 	NSData *data = [NSData dataWithContentsOfURL: url];
 	
@@ -129,55 +208,8 @@
 	[parser setDelegate:self];
 	[parser parse];
 	[parser release];
-	
-	ProfessorTable.delegate = self;
-	ProfessorTable.dataSource = self;
-	
-	internetReach = [[Reachability reachabilityForInternetConnection] retain];
-	[internetReach startNotifier];
-		
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-
-}
-
-//Called by Reachability whenever status changes.
-- (void) reachabilityChanged: (NSNotification* )note
-{
-	// A way to reference your application delegate.
-	//TabnavAppDelegate *delegate = (TabnavAppDelegate *)[[UIApplication sharedApplication]
-	//delegate];
-	
-	Reachability* curReach = [note object];
-	NetworkStatus internetStatus = [curReach currentReachabilityStatus];
-	
-	switch (internetStatus)
-	{
-		case NotReachable:
-		{
-			NSLog(@"The internet is down.");
-			UIAlertView *connectionAlert = [[UIAlertView alloc] init]; 
-			[connectionAlert setTitle:@"Error"];
-			[connectionAlert setMessage:@"myApp was not able to reach the host. Please check your network conenction."];    
-			[connectionAlert setDelegate:self];
-			[connectionAlert addButtonWithTitle:@"Back"];
-			[connectionAlert show];
-			[connectionAlert release];
-			break;
-			
-		}
-		case ReachableViaWiFi:
-		{
-			NSLog(@"The internet is working via WIFI.");
-			break;
-			
-		}
-		case ReachableViaWWAN:
-		{
-			NSLog(@"The internet is working via WWAN.");
-			break;
-			
-		}
-	}
+	[ProfessorTable reloadData];
+	ProfessorsDataPopulated = TRUE;
 }
 
 /******************************************************************************
@@ -264,6 +296,7 @@
 		NSString *thePass = [test objectForKey:@"Password"];
 		NSString *theProf = [test objectForKey:@"Professor"];
 		
+		// we know there was a sucessful update if the RegistrationResult variable is equal to 1.
 		if (RegistrationResult == 1)
 		{
 			// if the p-list file is the same as the the textviews then we do not need to update the p-list.
@@ -312,7 +345,7 @@
 				StatusString = @"Error in the URL string.";
 				StatusColor = [UIColor redColor];				
 			}
-			// a -3 means permission is denied. The new user name already exists, and their authentication failed.
+			// a -3 means permission is denied. The new user name already exists, and their authentication failed (wrong password).
 			else if([string isEqualToString:@"-3"])
 			{
 				RegistrationResult = -3;
@@ -398,6 +431,7 @@
 		CurrentTag = @"professor";
 		NSString *username = [attributeDict objectForKey:@"username"];
 		[ProfessorsArray addObject:username];
+		NSLog(username);
 	}
 }
 
