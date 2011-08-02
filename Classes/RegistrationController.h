@@ -17,8 +17,11 @@
 	IBOutlet UITextField *ProfessorText;
 	IBOutlet UITableView *ProfessorTable;
 	IBOutlet UIButton *RegisterButton;
-	IBOutlet UILabel *StatusLabel;
+	
 	IBOutlet UILabel *TitleLabel;
+	IBOutlet UILabel *EmailLabel;
+	IBOutlet UILabel *PassWordLabel;
+	IBOutlet UILabel *StatusLabel;
 	
 	NSString *name;
 	NSString *pass;
@@ -46,6 +49,9 @@
 @property (nonatomic, retain) IBOutlet UIButton *RegisterButton;
 @property (nonatomic, retain) IBOutlet UITableView *ProfessorTable;
 @property (nonatomic, retain) IBOutlet UILabel *StatusLabel;
+@property (nonatomic, retain) IBOutlet UILabel *PassWordLabel;
+@property (nonatomic, retain) IBOutlet UILabel *EmailLabel;
+
 @property (nonatomic, retain) ProkopeViewController *controller;
 
 -(void)PopulateProfessorsTable;

@@ -11,7 +11,7 @@
 
 @implementation RegistrationController
 
-@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel, RegisterButton, controller;
+@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel, RegisterButton, controller, PassWordLabel, EmailLabel;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -44,12 +44,14 @@
     // e.g. self.myOutlet = nil;	
 }
 
+/******************************************************************************
+ * auto created method. Have to remove the observer and release internetReach.
+ */
 - (void) viewWillDisappear:(BOOL)animated
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[internetReach release];
 }
-
 
 
 /******************************************************************************
@@ -199,6 +201,12 @@
 	}
 }
 
+/******************************************************************************
+ * A convience method to keep from repeating the same code. There are multiple ways
+ * the ProfessorsTable can be populated. Since it uses REST it requires an internet
+ * connection. Therefore if there is no connection when the view is loaded, we will 
+ * have to wait until the connection becomes available to get the data. 
+ */
 -(void)PopulateProfessorsTable
 {
 	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/professor"]];
@@ -230,90 +238,138 @@
 	NSString *p_Name = [PassWordText text];
 	NSString *professor_Name = [ProfessorText text];
 	
-	if ([ButtonTitle isEqualToString:@"Register"])
-	{		
-		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
-							   "username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name];
-		
-	    StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
-		
-		NSURL *url = [NSURL URLWithString:StringUrl];
-		NSData *data = [NSData dataWithContentsOfURL: url];
-		
-		NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
-		[parse setDelegate:self];
-		[parse parse];
-		[parse release];
-		
-		NSString *theUser = [test objectForKey:@"E-mail"];
-		
-		// we know the registration was sucessful because of the response from the server. 
-		if (RegistrationResult == 1)
+	NSLog(@"%@ name", professor_Name);
+	NSLog(@"CLICKED");
+	
+	if ([e_Name isEqualToString:@""] || [p_Name isEqualToString:@""] || [professor_Name isEqualToString:@""])
+	{
+		UIColor *StatusColor = [UIColor lightGrayColor];
+		UIColor *Clear = [UIColor clearColor];
+		if ([e_Name isEqualToString:@""])
 		{
-			if (![e_Name isEqualToString:theUser])
-			{	
-				NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", e_Name];
-				
-				UIAlertView *alertDialog;
-				alertDialog = [[UIAlertView alloc]initWithTitle:@"Remember Me" message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
-				alertDialog.tag = 1;
-				[alertDialog show];
-				[alertDialog release];
-			}
-			self.controller.TheUserName = [EmailText text];
-			self.controller.ThePassWord = [PassWordText text];
-			self.controller.Professor = [ProfessorText text];
-			self.controller.logedin = TRUE;
+			[EmailLabel setBackgroundColor:StatusColor];
 		}
 		else
 		{
-			self.controller.logedin = FALSE;
+			[EmailLabel setText:@""];
+			[EmailLabel setBackgroundColor:Clear];
 		}
-    }
-	// We know we are doing an update call here.
-	else if([ButtonTitle isEqualToString:@"Update"])
-	{		
-		NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/update/"
-							   "oldusername/%@/newusername/%@/oldpassword/%@/newpassword/%@/professor/%@", self.controller.TheUserName, e_Name, self.controller.ThePassWord, p_Name, professor_Name];
-		
-		StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-		StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];		
-		NSLog(@"%@", StringUrl);
-		
-		NSURL *url = [NSURL URLWithString:StringUrl];
-		NSData *data = [NSData dataWithContentsOfURL: url];
-		
-		NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-		NSLog(@"%@", theString);
-		
-		NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
-		[parse setDelegate:self];
-		[parse parse];
-		[parse release];
-		
-		NSString *theUser = [test objectForKey:@"E-mail"];
-		NSString *thePass = [test objectForKey:@"Password"];
-		NSString *theProf = [test objectForKey:@"Professor"];
-		
-		// we know there was a sucessful update if the RegistrationResult variable is equal to 1.
-		if (RegistrationResult == 1)
+
+		if ([p_Name isEqualToString:@""])
 		{
-			// if the p-list file is the same as the the textviews then we do not need to update the p-list.
-			if (!([theUser isEqualToString:e_Name] && [thePass isEqualToString:p_Name] &&
-				    [theProf isEqualToString:professor_Name]))
+			[PassWordLabel setText:@"Your password is nil"];
+			[PassWordLabel setBackgroundColor:StatusColor];
+		}
+		else
+		{
+			[PassWordLabel setText:@""];
+			[PassWordLabel setBackgroundColor:Clear];
+		}
+		NSError *anError = NULL;
+		NSString *text = e_Name;
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" options:0 error:&anError];
+		
+		NSUInteger counter = [regex numberOfMatchesInString:text options:0 range:NSMakeRange(0, [text length])];
+		
+		NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:e_Name options:0 range:NSMakeRange(0, [e_Name length])];
+		
+		if (NSEqualRanges(rangeOfFirstMatch, NSMakeRange(NSNotFound, 0)))
+		{
+			[EmailLabel setText:[NSString stringWithFormat:@"No Match"]];
+		}
+		else
+		{
+			[EmailLabel setText:[NSString stringWithFormat:@"counter = %u", counter]];
+		}
+	//	[EmailLabel setText:[NSString stringWithFormat:@"counter = %u", counter]];
+	}
+	else
+	{
+		if ([ButtonTitle isEqualToString:@"Register"])
+		{		
+			NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/register/"
+								   "username/%@/password/%@/professor/%@", e_Name, p_Name, professor_Name];
+			
+			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
+			
+			NSURL *url = [NSURL URLWithString:StringUrl];
+			NSData *data = [NSData dataWithContentsOfURL: url];
+			
+			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
+			[parse setDelegate:self];
+			[parse parse];
+			[parse release];
+			
+			NSString *theUser = [test objectForKey:@"E-mail"];
+			
+			// we know the registration was sucessful because of the response from the server. 
+			if (RegistrationResult == 1)
 			{
-				[self SaveContentsToFile];
-				
-				UIAlertView *alertDialog;
-				alertDialog = [[UIAlertView alloc]initWithTitle:@"Profile Updated" message:@"Your update has been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-				[alertDialog show];
-				[alertDialog release];
+				if (![e_Name isEqualToString:theUser])
+				{	
+					NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", e_Name];
+					
+					UIAlertView *alertDialog;
+					alertDialog = [[UIAlertView alloc]initWithTitle:@"Remember Me" message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+					alertDialog.tag = 1;
+					[alertDialog show];
+					[alertDialog release];
+				}
+				self.controller.TheUserName = [EmailText text];
+				self.controller.ThePassWord = [PassWordText text];
+				self.controller.Professor = [ProfessorText text];
+				self.controller.logedin = TRUE;
 			}
-			self.controller.TheUserName = [EmailText text];
-			self.controller.ThePassWord = [PassWordText text];
-			self.controller.Professor = [ProfessorText text];
-			self.controller.logedin = TRUE;
+			else
+			{
+				self.controller.logedin = FALSE;
+			}
+		}
+		// We know we are doing an update call here.
+		else if([ButtonTitle isEqualToString:@"Update"])
+		{		
+			NSString *StringUrl = [NSString stringWithFormat:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/update/"
+								   "oldusername/%@/newusername/%@/oldpassword/%@/newpassword/%@/professor/%@", self.controller.TheUserName, e_Name, self.controller.ThePassWord, p_Name, professor_Name];
+			
+			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];		
+			NSLog(@"%@", StringUrl);
+			
+			NSURL *url = [NSURL URLWithString:StringUrl];
+			NSData *data = [NSData dataWithContentsOfURL: url];
+			
+			NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			NSLog(@"%@", theString);
+			
+			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
+			[parse setDelegate:self];
+			[parse parse];
+			[parse release];
+			
+			NSString *theUser = [test objectForKey:@"E-mail"];
+			NSString *thePass = [test objectForKey:@"Password"];
+			NSString *theProf = [test objectForKey:@"Professor"];
+			
+			// we know there was a sucessful update if the RegistrationResult variable is equal to 1.
+			if (RegistrationResult == 1)
+			{
+				// if the p-list file is the same as the the textviews then we do not need to update the p-list.
+				if (!([theUser isEqualToString:e_Name] && [thePass isEqualToString:p_Name] &&
+						[theProf isEqualToString:professor_Name]))
+				{
+					[self SaveContentsToFile];
+					
+					UIAlertView *alertDialog;
+					alertDialog = [[UIAlertView alloc]initWithTitle:@"Profile Updated" message:@"Your update has been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+					[alertDialog show];
+					[alertDialog release];
+				}
+				self.controller.TheUserName = [EmailText text];
+				self.controller.ThePassWord = [PassWordText text];
+				self.controller.Professor = [ProfessorText text];
+				self.controller.logedin = TRUE;
+			}
 		}
 	}
 }
@@ -431,7 +487,6 @@
 		CurrentTag = @"professor";
 		NSString *username = [attributeDict objectForKey:@"username"];
 		[ProfessorsArray addObject:username];
-		NSLog(username);
 	}
 }
 
