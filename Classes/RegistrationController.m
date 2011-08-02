@@ -11,7 +11,8 @@
 
 @implementation RegistrationController
 
-@synthesize EmailText, PassWordText, ProfessorText, ProfessorTable, StatusLabel, RegisterButton, controller, PassWordLabel, EmailLabel;
+@synthesize EmailText, PassWordText, PassWordConfirmText, ProfessorText, 
+    ProfessorTable, StatusLabel, RegisterButton, controller, PassWordStatus, PassWordLabel, EmailLabel, ProfessorLabel;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -126,7 +127,13 @@
 	{
 		[EmailText setText:self.controller.TheUserName];
 		[PassWordText setText:self.controller.ThePassWord];
+		[PassWordConfirmText setText:self.controller.ThePassWord];
 		[ProfessorText setText:self.controller.Professor];
+		if (![[ProfessorText text] isEqualToString:@""])
+		{
+			[ProfessorLabel setText:@""];
+		}
+		[PassWordLabel setText:@"New Password"];
 		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
 		[TitleLabel setText:[NSString stringWithFormat:@"Update Profile : %@", self.controller.TheUserName]];
 	}	
@@ -231,59 +238,14 @@
 	NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *file = [docDir stringByAppendingPathComponent:@"AppUserData.plist"];
 	
-	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
-	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
-	
 	NSString *e_Name = [EmailText text];
 	NSString *p_Name = [PassWordText text];
 	NSString *professor_Name = [ProfessorText text];
 	
-	NSLog(@"%@ name", professor_Name);
-	NSLog(@"CLICKED");
+	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
+	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
-	if ([e_Name isEqualToString:@""] || [p_Name isEqualToString:@""] || [professor_Name isEqualToString:@""])
-	{
-		UIColor *StatusColor = [UIColor lightGrayColor];
-		UIColor *Clear = [UIColor clearColor];
-		if ([e_Name isEqualToString:@""])
-		{
-			[EmailLabel setBackgroundColor:StatusColor];
-		}
-		else
-		{
-			[EmailLabel setText:@""];
-			[EmailLabel setBackgroundColor:Clear];
-		}
-
-		if ([p_Name isEqualToString:@""])
-		{
-			[PassWordLabel setText:@"Your password is nil"];
-			[PassWordLabel setBackgroundColor:StatusColor];
-		}
-		else
-		{
-			[PassWordLabel setText:@""];
-			[PassWordLabel setBackgroundColor:Clear];
-		}
-		NSError *anError = NULL;
-		NSString *text = e_Name;
-		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" options:0 error:&anError];
-		
-		NSUInteger counter = [regex numberOfMatchesInString:text options:0 range:NSMakeRange(0, [text length])];
-		
-		NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:e_Name options:0 range:NSMakeRange(0, [e_Name length])];
-		
-		if (NSEqualRanges(rangeOfFirstMatch, NSMakeRange(NSNotFound, 0)))
-		{
-			[EmailLabel setText:[NSString stringWithFormat:@"No Match"]];
-		}
-		else
-		{
-			[EmailLabel setText:[NSString stringWithFormat:@"counter = %u", counter]];
-		}
-	//	[EmailLabel setText:[NSString stringWithFormat:@"counter = %u", counter]];
-	}
-	else
+	if ([self FieldsFilledOutCorrectly])
 	{
 		if ([ButtonTitle isEqualToString:@"Register"])
 		{		
@@ -372,6 +334,58 @@
 			}
 		}
 	}
+}
+
+-(BOOL)FieldsFilledOutCorrectly
+{
+	BOOL correct = TRUE;
+	
+	NSString *e_Name = [EmailText text];
+	NSString *p_Name = [PassWordText text];
+	NSString *confirm = [PassWordConfirmText text];
+	NSString *professor_Name = [ProfessorText text];
+	
+	NSError *anError = NULL;
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" options:0 error:&anError];
+	
+	NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:e_Name options:0 range:NSMakeRange(0, [e_Name length])];
+	
+	if (NSEqualRanges(rangeOfFirstMatch, NSMakeRange(NSNotFound, 0)))
+	{
+		[EmailLabel setText:[NSString stringWithFormat:@"Please Provide a valid email."]];
+		correct = FALSE;
+	}
+	else
+	{
+		[EmailLabel setText:@""];
+	}
+	
+	if ([p_Name isEqualToString:@""])
+	{
+		[PassWordStatus setText:@"You have not entered a password."];
+		correct = FALSE;
+	}
+	else if(![p_Name isEqualToString:confirm])
+	{
+		[PassWordStatus setText:@"Your passwords are not the same"];
+		correct = FALSE;
+	}
+	else
+	{
+		[PassWordStatus setText:@""];
+	}
+
+	if ([professor_Name isEqualToString:@""])
+	{
+		[ProfessorLabel setText:@"Please Select a professor"];
+		correct = FALSE;
+	}
+	else
+	{
+		[ProfessorLabel setText:@""];
+	}
+
+	return correct;
 }
 
 /******************************************************************************
