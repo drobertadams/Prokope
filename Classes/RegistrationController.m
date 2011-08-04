@@ -245,6 +245,7 @@
 	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
+	// If the BOOL from the call to FieldsFilledOutCorrectly returns true, then we send the form off to be processed. 
 	if ([self FieldsFilledOutCorrectly])
 	{
 		if ([ButtonTitle isEqualToString:@"Register"])
@@ -254,10 +255,11 @@
 			
 			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
+			NSLog(@"%@", StringUrl);
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
 			NSData *data = [NSData dataWithContentsOfURL: url];
-			
+
 			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 			[parse setDelegate:self];
 			[parse parse];
@@ -279,6 +281,7 @@
 					[alertDialog release];
 				}
 				self.controller.TheUserName = [EmailText text];
+				NSLog(@"%@", [EmailText text]);
 				self.controller.ThePassWord = [PassWordText text];
 				self.controller.Professor = [ProfessorText text];
 				self.controller.logedin = TRUE;
@@ -328,6 +331,7 @@
 					[alertDialog release];
 				}
 				self.controller.TheUserName = [EmailText text];
+				NSLog(@"%@", [EmailText text]);
 				self.controller.ThePassWord = [PassWordText text];
 				self.controller.Professor = [ProfessorText text];
 				self.controller.logedin = TRUE;
@@ -353,6 +357,7 @@
 	if (NSEqualRanges(rangeOfFirstMatch, NSMakeRange(NSNotFound, 0)))
 	{
 		[EmailLabel setText:[NSString stringWithFormat:@"Please Provide a valid email."]];
+		EmailLabel.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
 	else
@@ -363,11 +368,13 @@
 	if ([p_Name isEqualToString:@""])
 	{
 		[PassWordStatus setText:@"You have not entered a password."];
+		PassWordStatus.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
 	else if(![p_Name isEqualToString:confirm])
 	{
 		[PassWordStatus setText:@"Your passwords are not the same"];
+		PassWordStatus.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
 	else
@@ -378,11 +385,13 @@
 	if ([professor_Name isEqualToString:@""])
 	{
 		[ProfessorLabel setText:@"Please Select a professor"];
+		ProfessorLabel.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
 	else
 	{
-		[ProfessorLabel setText:@""];
+		[ProfessorLabel setText:@"Select a professor from the list"];
+		ProfessorLabel.textColor = [UIColor blackColor];
 	}
 
 	return correct;

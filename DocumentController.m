@@ -103,6 +103,26 @@
  */
 -(void)targetMethod
 {	
+	// URL to do the post is :  www.cis.gvsu.edu/~prokope/index.php/rest/log
+	
+	/**
+	 * Logs user activity to the DB.
+	 * Assumes data comes in via POST with the format:
+	 * <entries user="USERNAME">
+	 *    <like date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
+	 *    <dislike date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
+	 *    <click date="2011-07-25 19:42:54" doc="DOCUMENTID" word="WORDID" />
+	 * </entries>
+	 * Where:
+	 *		USERNAME is the email address of the user
+	 *		DOCUMENTID is the (int) unique document id
+	 *		COMMENTID is the (int) unique comment id
+	 * 		WORDID is the id of the word within the document (usually of the form "10.2.1.14")
+	 * Returns "<result>1</result>" on success, 
+	 * 		<result>-1</result> on user not found,
+	 * 		<result>-2</result> on a runtime exception (probably malformed XML).
+	 */
+	
 	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
 	//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
 	//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];

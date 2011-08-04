@@ -633,7 +633,7 @@
 			[userInput setBackgroundColor:[UIColor whiteColor]];
 			[userInput setText:theUser];
 			[userInput setClearsOnBeginEditing:YES];
-			 
+			
 			passInput = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 60.0, 260.0, 25.0)];
 			[passInput setBackgroundColor:[UIColor whiteColor]];
 			[passInput setText:thePass];
@@ -702,15 +702,19 @@
 			NSString *UserName = [userInput text];
 			NSString *PassWord = [passInput text];
 			
-			NSData *data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
+			NSLog(@"%@", UserName);
+			
+		/*	NSData *data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
 			UserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 			data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
-			PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];  */
 			
 			NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
 				"username/%@/password/%@", UserName, PassWord];
 			
+			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
+			NSLog(@"%@", StringUrl);
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
 			data = [NSData dataWithContentsOfURL: url];
