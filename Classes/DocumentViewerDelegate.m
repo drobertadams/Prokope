@@ -63,9 +63,18 @@
 		// in the WebViewController.		
 		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
 		
+		NSString *extension = [url pathExtension];
 		
-		[controller.ClicksArray addObject:url];
-		[controller captureURL:webView RequestMade:url];
+		if ([extension isEqualToString:@"jpg"] || [extension isEqualToString:@"png"])
+		{
+			[controller captureURL:webView RequestMade:url];
+		}
+		else
+		{
+			NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [controller getDate], controller.URL, url];
+			[controller.FollowArray addObject:new];
+		}
+												   
 		webViewer.url = url;
 		
 		// Create a modal view.

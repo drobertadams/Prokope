@@ -26,6 +26,9 @@
 	
 	NSMutableArray *RatingsArray;	
 	NSMutableArray *ClicksArray;
+	NSMutableArray *MediaArray;
+	NSMutableArray *FollowArray;
+	
 	NSMutableString *XMLString;
 	
 	NSTimer *MyTimer;
@@ -39,13 +42,14 @@
 @property (nonatomic, retain) NSString *URL;
 @property (nonatomic, retain) NSString *Title;
 @property (nonatomic, retain) NSString *UserName;
-@property (nonatomic, retain) NSMutableArray *ClicksArray;
+@property (nonatomic, retain) NSMutableArray *FollowArray;
 
 - (void)fetchDocumentData;
 
 // Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
 -(void)targetMethod;
+-(NSString *)getDate;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 -(void)wordClicked:(NSString *)id;

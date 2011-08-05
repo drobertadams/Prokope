@@ -14,7 +14,7 @@
 
 @implementation DocumentController
 
-@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName, ClicksArray;
+@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName, FollowArray;
 
 /******************************************************************************
  * This is a standard method.
@@ -74,7 +74,10 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	RatingsArray = [[NSMutableArray alloc] initWithCapacity:100];
+	RatingsArray = [[NSMutableArray alloc] initWithCapacity:1000];
+	ClicksArray = [[NSMutableArray alloc] initWithCapacity:1000];
+	MediaArray = [[NSMutableArray alloc] initWithCapacity:1000];
+	FollowArray = [[NSMutableArray alloc] initWithCapacity:1000];
 	
 	// Create a delegate for the document viewer.
 	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
@@ -87,7 +90,6 @@
 	// Go fetch and display the document.
 	[self fetchDocumentData];
 	
-	ClicksArray = [[NSMutableArray alloc] initWithCapacity:1000];
 	NSString *datestring = [[NSDate date] description];
 	
 	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
@@ -114,27 +116,19 @@
 	 *    <like date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
 	 *    <dislike date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
 	 *    <click date="2011-07-25 19:42:54" doc="DOCUMENTID" word="WORDID" />
+	 *     <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
+	 *     <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
 	 * </entries>
+	 
 	 * Where:
 	 *		USERNAME is the email address of the user
 	 *		DOCUMENTID is the (int) unique document id
 	 *		COMMENTID is the (int) unique comment id
 	 * 		WORDID is the id of the word within the document (usually of the form "10.2.1.14")
+	 
 	 * Returns "<result>1</result>" on success, 
 	 * 		<result>-1</result> on user not found,
 	 * 		<result>-2</result> on a runtime exception (probably malformed XML).
-	
-	<a id="281" href="someImageURL">
-	 <img src="someImageURL"/>
-	 </a>
-	 
-	 When the user clicks on the image, you use the "id" attribute to generate the following log entry:
-	 
-	 <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
-	 
-	 For embedded URLs (like the ones that link to outside pages), you can generate an entry that looks like:
-	 
-	 <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
 	 */
 	
 	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
@@ -182,6 +176,7 @@
 	"}"
 	"</script>";
 
+	// This javascript scales the images down to a smaller size.
 	NSString *scale_script = 
 	@"<script lang=\"text/javascript\">"
 	"function scale_images()"
@@ -195,6 +190,7 @@
 	"scale_images();"
 	"</script>";
 	
+	// This javascript takes in a url and gives a corresponding id. 
 	NSString *URL_Getter = 
 	@"<script lang=\"text/javascript\">"
 	"    "
@@ -213,17 +209,6 @@
 	"}"
 	"   "
 	"</script>";
-	
-	
-	doc = [doc stringByAppendingString:script];
-	doc = [doc stringByAppendingString:meta];
-	doc = [doc stringByAppendingString:URL_Getter];
-	
-	// Find the content of the document itself.
-	doc = [doc stringByAppendingString:[self getXMLElement:@"<body>" endElement:@"</body>" fromData:data]];
-	doc = [doc stringByAppendingString:scale_script];
-	
-	[document loadHTMLString:doc baseURL:nil];	
 
 	// This javascript function highlights the coresponding li tag(s) that contain a match for a specific id
 	// It then scrolls the window (in this case the UIWebView that holds it) to that li tag.
@@ -258,6 +243,8 @@
 	"}"
 	"</script>";
 	
+	// This javascript function hides all the text. It is hidden when the poem is first loaded. The 
+	// rest of the content is shown when a user clicks on a word. 
 	NSString *hide_text =
 	@"<script lang=\"text/javascript\">"
 	"function hide_text()"
@@ -271,6 +258,7 @@
 	"hide_text();"
 	"</script>";
 	
+	// This javascript function display the ratings for the comments, and switches the images when a like/dislike button is clicked.
 	NSString *display_ratings = 
 	@"<script lang=\"text/javascript\">"
 	"    "
@@ -325,6 +313,16 @@
 	"display_ratings();"
 	"</script>";
 	
+	doc = [doc stringByAppendingString:script];
+	doc = [doc stringByAppendingString:meta];
+	doc = [doc stringByAppendingString:URL_Getter];
+	
+	// Find the content of the document itself.
+	doc = [doc stringByAppendingString:[self getXMLElement:@"<body>" endElement:@"</body>" fromData:data]];
+	doc = [doc stringByAppendingString:scale_script];
+	
+	[document loadHTMLString:doc baseURL:nil];
+	
 	// Find the content of the commentary.
 	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
 
@@ -345,8 +343,8 @@
 
 	// Find the content of the sidebar.
 	doc = meta;
-	doc = [doc stringByAppendingString:[self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data]];
 	doc = [doc stringByAppendingString:URL_Getter];
+	doc = [doc stringByAppendingString:[self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data]];
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
 	[data release];
@@ -402,60 +400,48 @@
 			{
 				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Like');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:jss];
+				NSString *new = [NSString stringWithFormat:@"<like date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, ending];
+				[RatingsArray addObject:new];
 			}
 			else if([path hasPrefix:@"/Dis-Like"])
 			{
 				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Dis-Like');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:jss];
+				NSString *new = [NSString stringWithFormat:@"<dislike date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, ending];
+				[RatingsArray addObject:new];
 			}
-			[RatingsArray addObject:path];
 		}
 		// Meaning this was an actually http request. Therefore we have our own code that gets called, and we present a WebViewController
 		// and show that with the contents of the request.
 		else
 		{
 			// Load the image viewer nib and set the URL.
-			[ClicksArray addObject:[NSString stringWithFormat:@"%@", StringRequest]];
-		
-			NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
-				[NSString stringWithFormat:@"GetIdFromHref('%@')", StringRequest]];
-		
-			NSLog(@"%@", returnval);
+			NSString *extension = [StringRequest pathExtension];
 			
-			//	NSString *jss = [NSString stringWithFormat: @"GetIdFromURL('%@');", StringRequest];
-		//	[document stringByEvaluatingJavaScriptFromString:jss];
-			
-		//	NSString *jss = [NSString stringWithFormat: @"GetIdFromURL('%@');", StringRequest];
-		//	[vocabulary stringByEvaluatingJavaScriptFromString:jss];
-			
-		//	jss = [NSString stringWithFormat: @"GetIdFromURL('%@');", StringRequest];
-		//	[sidebar stringByEvaluatingJavaScriptFromString:jss];
+			if ([extension isEqualToString:@"jpg"] || [extension isEqualToString:@"png"])
+			{
+				[self captureURL:webView RequestMade:StringRequest];
+			}
+			else
+			{
+				NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, StringRequest];
+				[FollowArray addObject:new];
+			}
 
-		//	WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
+			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
 
-		//	webViewer.url = StringRequest;
+			webViewer.url = StringRequest;
 
 			// If not using a popover, create a modal view.
-		//	[self presentModalViewController:webViewer animated:YES];
-		//	[webViewer release];
+			[self presentModalViewController:webViewer animated:YES];
+			[webViewer release];
 		}
 	}	
 	// Ignore all other types of user interation.
 	return FALSE;
 }
 
--(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request
-{
-	NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
-		[NSString stringWithFormat:@"GetIdFromHref('%@')", request]];
-	
-	NSLog(@"%@", returnval);
-}
-
-/* **********************************************************************************************************************
- * Called by DocumentViewerDelegate when the user clicks on a word.
- */
-- (void) wordClicked:(NSString *)id
+-(NSString *)getDate
 {
 	NSDate *currentDateTime = [NSDate date];
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -463,8 +449,24 @@
 	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
 	[dateFormatter release];
 	
-	// Call the javascript show_only() function in the commentary UIWebView to display all comments associated with the
-	// given id and hide all the others.
+	return dateInString;
+}
+
+-(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request
+{
+	NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
+		[NSString stringWithFormat:@"GetIdFromHref('%@')", request]];
+	
+	NSString *new = [NSString stringWithFormat:@"<media date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, returnval];
+	[MediaArray addObject:new];
+}
+
+/* **********************************************************************************************************************
+ * Called by DocumentViewerDelegate when the user clicks on a word.
+ */
+- (void) wordClicked:(NSString *)id
+{
+	
 	NSString *js = [NSString stringWithFormat: @"show_only('%@', 'commentary');", id];
 	[commentary stringByEvaluatingJavaScriptFromString:js];	
 	js = [NSString stringWithFormat: @"show_only('%@', 'vocabulary');", id];
@@ -473,35 +475,35 @@
 	js = [NSString stringWithFormat:@"highlightword('%@')", id];
 	[document stringByEvaluatingJavaScriptFromString:js];
 		
-	[ClicksArray addObject:id];
+	NSString *new = [NSString stringWithFormat:@"<click date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, id];
+	[ClicksArray addObject:new];
 	
-	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, dateInString]; 
+	[self pumpXMLtoOutput];
+}
+
+-(void)pumpXMLtoOutput
+{
+	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@'>", UserName]; 
 	[XMLString1 appendString:@"\n\n"];
 	
 	for (NSString *str in RatingsArray)
 	{
-		NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-		NSString *ending = [str stringByTrimmingCharactersInSet:nonDigits];
-		
-		NSLog(@"%@", ending);
-		
-		if ([str hasPrefix:@"/Like"])
-		{
-		    [XMLString1 appendString:[NSString stringWithFormat:@"<like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
-		}
-		else if([str hasPrefix:@"/Dis-Like"])
-		{
-			[XMLString1 appendString:[NSString stringWithFormat:@"<dis-like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
-		}
+		[XMLString1 appendString:str];
 	}
 	
-//	for (<#initial#>; <#condition#>; <#increment#>) {
-//		<#statements#>
-//	}
+	for (NSString *str in MediaArray)
+	{		
+		[XMLString1 appendString:str];
+	}
+	
+	for (NSString *str in FollowArray)
+	{		
+		[XMLString1 appendString:str];
+	}
 	
 	for (NSString *str in ClicksArray)
 	{
-		[XMLString1 appendString:[NSString stringWithFormat:@"<click user='%@' date='%@' id='%@' /> \n", UserName, dateInString, str]];
+		[XMLString1 appendString:str];
 	}
 	[XMLString1 appendString:@"\n"];
 	[XMLString1 appendString:@"</entries>"];
