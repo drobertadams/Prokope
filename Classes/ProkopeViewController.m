@@ -704,10 +704,12 @@
 			
 			NSLog(@"%@", UserName);
 			
-		/*	NSData *data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
-			UserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-			data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
-			PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];  */
+			NSData *data; 
+	//		NSData *data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
+	//		UserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+	//		data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
+	//		PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]; 
+	//		NSLog(@"%@", UserName);
 			
 			NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
 				"username/%@/password/%@", UserName, PassWord];
@@ -718,6 +720,10 @@
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
 			data = [NSData dataWithContentsOfURL: url];
+			
+			NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			NSLog(@"%@", theString);
+			
 			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 			[parse setDelegate:self];
 			[parse parse];
@@ -795,17 +801,24 @@
 {
 	if ([CurrentTag isEqualToString:@"result"])
 	{		
-		if ([string isEqualToString:@"1"])
+		if ([string isEqualToString:@"-1"])
 		{
-			LoginResult = 1;
+			LoginResult = -1;
 			// This needs to be converted into a NSData object and then back. 
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
+		else if ([string isEqualToString:@"-2"])
+		{
+		    LoginResult = -2;
+		}
 		else
 		{
-		    LoginResult = -1;
+			LoginResult = 1;
+			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
+        	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
+
 	}
 }
 

@@ -63,7 +63,9 @@
 		// in the WebViewController.		
 		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
 		
+		
 		[controller.ClicksArray addObject:url];
+		[controller captureURL:webView RequestMade:url];
 		webViewer.url = url;
 		
 		// Create a modal view.

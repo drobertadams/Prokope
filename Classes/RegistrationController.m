@@ -259,6 +259,9 @@
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
 			NSData *data = [NSData dataWithContentsOfURL: url];
+			
+			NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			NSLog(@"%@", theString);
 
 			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 			[parse setDelegate:self];

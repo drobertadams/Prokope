@@ -49,5 +49,6 @@
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 -(void)wordClicked:(NSString *)id;
+-(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request;
 
 @end

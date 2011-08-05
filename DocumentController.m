@@ -5,6 +5,8 @@
 //  Created by D. Robert Adams on 5/10/11.
 //  Copyright 2011 Grand Valley State University. All rights reserved.
 //
+// Need to knows : 1) don't create an div tags in the commentary section. 
+//
 
 #import "DocumentController.h"
 #import "DocumentViewerDelegate.h"
@@ -121,6 +123,18 @@
 	 * Returns "<result>1</result>" on success, 
 	 * 		<result>-1</result> on user not found,
 	 * 		<result>-2</result> on a runtime exception (probably malformed XML).
+	
+	<a id="281" href="someImageURL">
+	 <img src="someImageURL"/>
+	 </a>
+	 
+	 When the user clicks on the image, you use the "id" attribute to generate the following log entry:
+	 
+	 <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
+	 
+	 For embedded URLs (like the ones that link to outside pages), you can generate an entry that looks like:
+	 
+	 <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
 	 */
 	
 	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
@@ -181,8 +195,29 @@
 	"scale_images();"
 	"</script>";
 	
+	NSString *URL_Getter = 
+	@"<script lang=\"text/javascript\">"
+	"    "
+	"function GetIdFromHref(url)"
+	"{"
+	"   var elems = document.body.getElementsByTagName('a');"
+	"    var anchors = document.body.getElementsByTagName('a');"
+	"	 for (i = 0; i < anchors.length; i++)"
+	"    {"
+	"        if(anchors[i].getAttribute('href', 0) == url)"
+	"        {"
+	"            var id = anchors[i].getAttribute('id', 0);"
+	"            return id;"
+	"        }"
+	"    }"
+	"}"
+	"   "
+	"</script>";
+	
+	
 	doc = [doc stringByAppendingString:script];
 	doc = [doc stringByAppendingString:meta];
+	doc = [doc stringByAppendingString:URL_Getter];
 	
 	// Find the content of the document itself.
 	doc = [doc stringByAppendingString:[self getXMLElement:@"<body>" endElement:@"</body>" fromData:data]];
@@ -295,6 +330,7 @@
 
 	doc = [doc stringByAppendingString:js];
 	doc = [doc stringByAppendingString:display_ratings];
+	doc = [doc stringByAppendingString:URL_Getter];
 	doc = [doc stringByAppendingString:meta];
 	doc = [doc stringByAppendingString:hide_text];
 	[commentary loadHTMLString:doc baseURL:nil];
@@ -302,6 +338,7 @@
 	// Find the content of the vocabulary.
 	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
 	doc = [doc stringByAppendingString:js];
+	doc = [doc stringByAppendingString:URL_Getter];
 	doc = [doc stringByAppendingString:meta];
 	doc = [doc stringByAppendingString:hide_text];
 	[vocabulary loadHTMLString:doc baseURL:nil];
@@ -309,6 +346,7 @@
 	// Find the content of the sidebar.
 	doc = meta;
 	doc = [doc stringByAppendingString:[self getXMLElement:@"<sidebar>" endElement:@"</sidebar>" fromData:data]];
+	doc = [doc stringByAppendingString:URL_Getter];
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
 	[data release];
@@ -378,17 +416,40 @@
 		{
 			// Load the image viewer nib and set the URL.
 			[ClicksArray addObject:[NSString stringWithFormat:@"%@", StringRequest]];
-			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
+		
+			NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
+				[NSString stringWithFormat:@"GetIdFromHref('%@')", StringRequest]];
+		
+			NSLog(@"%@", returnval);
+			
+			//	NSString *jss = [NSString stringWithFormat: @"GetIdFromURL('%@');", StringRequest];
+		//	[document stringByEvaluatingJavaScriptFromString:jss];
+			
+		//	NSString *jss = [NSString stringWithFormat: @"GetIdFromURL('%@');", StringRequest];
+		//	[vocabulary stringByEvaluatingJavaScriptFromString:jss];
+			
+		//	jss = [NSString stringWithFormat: @"GetIdFromURL('%@');", StringRequest];
+		//	[sidebar stringByEvaluatingJavaScriptFromString:jss];
 
-			webViewer.url = StringRequest;
+		//	WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
+
+		//	webViewer.url = StringRequest;
 
 			// If not using a popover, create a modal view.
-			[self presentModalViewController:webViewer animated:YES];
-			[webViewer release];
+		//	[self presentModalViewController:webViewer animated:YES];
+		//	[webViewer release];
 		}
 	}	
 	// Ignore all other types of user interation.
 	return FALSE;
+}
+
+-(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request
+{
+	NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
+		[NSString stringWithFormat:@"GetIdFromHref('%@')", request]];
+	
+	NSLog(@"%@", returnval);
 }
 
 /* **********************************************************************************************************************
@@ -433,6 +494,10 @@
 			[XMLString1 appendString:[NSString stringWithFormat:@"<dis-like user='%@' date='%@' id='%@' /> \n", UserName, dateInString, ending]];
 		}
 	}
+	
+//	for (<#initial#>; <#condition#>; <#increment#>) {
+//		<#statements#>
+//	}
 	
 	for (NSString *str in ClicksArray)
 	{
