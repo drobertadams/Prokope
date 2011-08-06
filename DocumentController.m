@@ -90,16 +90,24 @@
 	// Go fetch and display the document.
 	[self fetchDocumentData];
 	
+//	 http://www.cis.gvsu.edu/~prokope/index.php/rest/events
+	
+//	NSRange theRange = [URL rangeOfString:@"/" options:NSBackwardsSearch];
+//	NSString *path = [URL substringFromIndex:theRange.location];
+//	NSLog(@"%@", path);
+
+	URL = @"3";
+	
 	NSString *datestring = [[NSDate date] description];
 	
 	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
 	
-	//	if(MyTimer)
-	//	{
-	//		NSLog("@No Timer needed");	
-	//	}
+	if(MyTimer)
+	{
+		NSLog("@No Timer needed");	
+	}
 	
-	//	MyTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
+	MyTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
 }
 
 /******************************************************************************
@@ -108,6 +116,7 @@
 -(void)targetMethod
 {	
 	// URL to do the post is :  www.cis.gvsu.edu/~prokope/index.php/rest/log
+	NSLog(@"Making a Post");
 	
 	/**
 	 * Logs user activity to the DB.
@@ -131,15 +140,85 @@
 	 * 		<result>-2</result> on a runtime exception (probably malformed XML).
 	 */
 	
-	//	NSURL * serviceUrl = [NSURL URLWithString:@"http://my.company.com/myservice"];
-	//	NSMutableURLRequest * serviceRequest = [NSMutableURLRequest requestWithURL:serviceUrl];
-	//	[serviceRequest setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
-	//	[serviceRequest setHTTPMethod:@"POST"];
-	//	[serviceRequest setHTTPBody:[xmlString dataUsingEncoding:NSASCIIStringEncoding]];
 	
-	//	NSURLResponse * serviceResponse;
-	//	NSError * serviceError;
-	//	serviceResponse = [NSURLConnection sendSynchronousRequest:serviceRequest returningResponse:&serviceResponse error:&serviceError];
+	NSURL *nsurl = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/log"];  
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:nsurl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:3600.0];   
+	
+	[request setURL:nsurl];
+	[request setHTTPMethod:@"POST"];  
+	[request setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
+	
+	NSMutableString *xmlRequestString = [self getXMLData];
+	NSData *body = [xmlRequestString dataUsingEncoding:NSASCIIStringEncoding];	
+	
+	[request setHTTPBody:body];  
+	
+	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	
+	if (connection)
+	{
+		NSLog(@"Connection created");
+		// Create the NSMutableData to hold the received data.
+		// receivedData is an instance variable declared elsewhere.
+		recievedData = [[NSMutableData data] retain];
+	} else 
+	{
+		NSLog(@"Connection failed");
+		// Inform the user that the connection failed.
+	}
+	
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+//	NSLog(@"Recieved Response");
+    // This method is called when the server has determined that it
+    // has enough information to create the NSURLResponse.
+	
+    // It can be called multiple times, for example in the case of a
+    // redirect, so each time we reset the data.
+	
+    // receivedData is an instance variable declared elsewhere.
+ //   [receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+	NSLog(@"Recieved Data");
+    // Append the new data to receivedData.
+    // receivedData is an instance variable declared elsewhere.
+    [recievedData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection
+  didFailWithError:(NSError *)error
+{
+	NSLog(@"Recieved an error");
+    // release the connection, and the data object
+    [connection release];
+    // receivedData is declared as a method instance elsewhere
+  //  [receivedData release];
+	
+    // inform the user
+    NSLog(@"Connection failed! Error - %@ %@",
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+	NSLog(@"Connection finished");
+    // do something with the data
+    // receivedData is declared as a method instance elsewhere
+ //   NSLog(@"Succeeded! Received %d bytes of data",[receivedData length]);
+	
+    // release the connection, and the data object
+    [connection release];
+ 
+	NSString *theString = [[NSString alloc] initWithData:recievedData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", theString);
+
+	[recievedData release];
 }
 
 /******************************************************************************
@@ -509,6 +588,36 @@
 	[XMLString1 appendString:@"</entries>"];
 	
 	NSLog(@"%@", XMLString1);
+}
+
+-(NSMutableString *)getXMLData
+{
+	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@'>", UserName]; 
+	[XMLString1 appendString:@"\n\n"];
+	
+	for (NSString *str in RatingsArray)
+	{
+		[XMLString1 appendString:str];
+	}
+	
+	for (NSString *str in MediaArray)
+	{		
+		[XMLString1 appendString:str];
+	}
+	
+	for (NSString *str in FollowArray)
+	{		
+		[XMLString1 appendString:str];
+	}
+	
+	for (NSString *str in ClicksArray)
+	{
+		[XMLString1 appendString:str];
+	}
+	[XMLString1 appendString:@"\n"];
+	[XMLString1 appendString:@"</entries>"];
+	
+	return XMLString1;	
 }
 
 /* ***********************************************************************************************

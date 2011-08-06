@@ -33,6 +33,8 @@
 	
 	NSTimer *MyTimer;
 	int TimerCount;
+	
+	NSMutableData *recievedData;
 }
 
 @property (nonatomic, retain) IBOutlet UIWebView *document;
@@ -50,6 +52,7 @@
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
 -(void)targetMethod;
 -(NSString *)getDate;
+-(NSMutableString *)getXMLData;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 -(void)wordClicked:(NSString *)id;
