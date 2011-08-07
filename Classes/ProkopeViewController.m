@@ -509,7 +509,7 @@
 		doc.UserName = TheUserName;
 		
 		[self.navigationController pushViewController:doc animated:YES];
-		[doc release];		
+		[doc release];
 	}
 }
 

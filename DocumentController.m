@@ -14,7 +14,7 @@
 
 @implementation DocumentController
 
-@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName, FollowArray;
+@synthesize document, commentary, vocabulary, sidebar, URL, Title, UserName, EventsArray;
 
 /******************************************************************************
  * This is a standard method.
@@ -26,38 +26,37 @@
     // Release any cached data, images, etc. that aren't in use.
 }
 
+/******************************************************************************
+ * When a webview is not able to load, this method will get called as part of the
+ * UIWebViewDelegate protocol.
+ */
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-	NSLog(@"NO INTERNET PEOPLE");
-    NSString *titleString = @"Error Loading Page";
+    NSString *titleString = @"There was a failure in the internet connection";
     NSString *messageString = [error localizedDescription];
     NSString *moreString = [error localizedFailureReason] ?
-	[error localizedFailureReason] :
-	NSLocalizedString(@"Try typing the URL again.", nil);
+	[error localizedFailureReason] : NSLocalizedString(@"Please try again", nil);
     messageString = [NSString stringWithFormat:@"%@. %@", messageString, moreString];
 	
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:titleString
-														message:messageString delegate:self
-											  cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:titleString message:messageString delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [alertView show];
     [alertView release];
 }
 
 /******************************************************************************
- * This is called when a new view is being presented.
+ * We know that another view controller now has focus in our application. If we check 
+ * that the parent view controller is nil, we know that the view has been popped. 
+ * Therefore we are going back to the home page. 
  */
--(void)viewWillDisappear:(BOOL)animated
-{	
-	[MyTimer invalidate];
-	MyTimer = nil;
-}
-
-/******************************************************************************
- * This is called when a this view goes away.
- */
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
+-(void)viewDidDisappear:(BOOL)animated
+{ 
+	if (self.parentViewController == nil)
+	{
+		[MyTimer invalidate];
+		MyTimer = nil;
+			
+		[self MakeRestCall];
+	} 
 }
 
 /******************************************************************************
@@ -69,159 +68,6 @@
 }
 
 /******************************************************************************
- * Called after this view is loaded -- basically a constructor.
- */
-- (void)viewDidLoad 
-{
-    [super viewDidLoad];
-	RatingsArray = [[NSMutableArray alloc] initWithCapacity:1000];
-	ClicksArray = [[NSMutableArray alloc] initWithCapacity:1000];
-	MediaArray = [[NSMutableArray alloc] initWithCapacity:1000];
-	FollowArray = [[NSMutableArray alloc] initWithCapacity:1000];
-	
-	// Create a delegate for the document viewer.
-	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
-	
-	// Make ourselves the delegate for the other web views.
-	commentary.delegate = self;
-	vocabulary.delegate = self;
-	sidebar.delegate = self;
-	
-	// Go fetch and display the document.
-	[self fetchDocumentData];
-	
-//	 http://www.cis.gvsu.edu/~prokope/index.php/rest/events
-	
-//	NSRange theRange = [URL rangeOfString:@"/" options:NSBackwardsSearch];
-//	NSString *path = [URL substringFromIndex:theRange.location];
-//	NSLog(@"%@", path);
-
-	URL = @"3";
-	
-	NSString *datestring = [[NSDate date] description];
-	
-	XMLString = [[NSMutableString alloc] initWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, datestring];
-	
-	if(MyTimer)
-	{
-		NSLog("@No Timer needed");	
-	}
-	
-	MyTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(targetMethod) userInfo:nil repeats:YES];
-}
-
-/******************************************************************************
- * This method is called by the timer after a certain interval.
- */
--(void)targetMethod
-{	
-	// URL to do the post is :  www.cis.gvsu.edu/~prokope/index.php/rest/log
-	NSLog(@"Making a Post");
-	
-	/**
-	 * Logs user activity to the DB.
-	 * Assumes data comes in via POST with the format:
-	 * <entries user="USERNAME">
-	 *    <like date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
-	 *    <dislike date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
-	 *    <click date="2011-07-25 19:42:54" doc="DOCUMENTID" word="WORDID" />
-	 *     <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
-	 *     <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
-	 * </entries>
-	 
-	 * Where:
-	 *		USERNAME is the email address of the user
-	 *		DOCUMENTID is the (int) unique document id
-	 *		COMMENTID is the (int) unique comment id
-	 * 		WORDID is the id of the word within the document (usually of the form "10.2.1.14")
-	 
-	 * Returns "<result>1</result>" on success, 
-	 * 		<result>-1</result> on user not found,
-	 * 		<result>-2</result> on a runtime exception (probably malformed XML).
-	 */
-	
-	
-	NSURL *nsurl = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/log"];  
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:nsurl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:3600.0];   
-	
-	[request setURL:nsurl];
-	[request setHTTPMethod:@"POST"];  
-	[request setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
-	
-	NSMutableString *xmlRequestString = [self getXMLData];
-	NSData *body = [xmlRequestString dataUsingEncoding:NSASCIIStringEncoding];	
-	
-	[request setHTTPBody:body];  
-	
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	
-	if (connection)
-	{
-		NSLog(@"Connection created");
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		recievedData = [[NSMutableData data] retain];
-	} else 
-	{
-		NSLog(@"Connection failed");
-		// Inform the user that the connection failed.
-	}
-	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-//	NSLog(@"Recieved Response");
-    // This method is called when the server has determined that it
-    // has enough information to create the NSURLResponse.
-	
-    // It can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-	
-    // receivedData is an instance variable declared elsewhere.
- //   [receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-	NSLog(@"Recieved Data");
-    // Append the new data to receivedData.
-    // receivedData is an instance variable declared elsewhere.
-    [recievedData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
-{
-	NSLog(@"Recieved an error");
-    // release the connection, and the data object
-    [connection release];
-    // receivedData is declared as a method instance elsewhere
-  //  [receivedData release];
-	
-    // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	NSLog(@"Connection finished");
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
- //   NSLog(@"Succeeded! Received %d bytes of data",[receivedData length]);
-	
-    // release the connection, and the data object
-    [connection release];
- 
-	NSString *theString = [[NSString alloc] initWithData:recievedData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", theString);
-
-	[recievedData release];
-}
-
-/******************************************************************************
  * Fetches and displays all the data related to a document.
  */
 - (void)fetchDocumentData
@@ -229,7 +75,7 @@
 	// Convert the NSMutable data into a normal string.
 	NSError *error;
 	NSString *data = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:URL] encoding:NSUTF8StringEncoding error:&error];
-
+	
 	// Make sure that links look like normal text.
 	NSString *doc = @"<style type=\"text/css\">a { color: black; text-decoration: none; </style>";
 	NSString *meta = @"<meta name='viewport' content='width=device-width; initial-scale=1.0; maximum-scale=4.0; user-scalable=1;' />";
@@ -254,7 +100,7 @@
 	"    }"
 	"}"
 	"</script>";
-
+	
 	// This javascript scales the images down to a smaller size.
 	NSString *scale_script = 
 	@"<script lang=\"text/javascript\">"
@@ -288,7 +134,7 @@
 	"}"
 	"   "
 	"</script>";
-
+	
 	// This javascript function highlights the coresponding li tag(s) that contain a match for a specific id
 	// It then scrolls the window (in this case the UIWebView that holds it) to that li tag.
 	NSString *js = 
@@ -404,14 +250,14 @@
 	
 	// Find the content of the commentary.
 	doc = [self getXMLElement:@"<commentary>" endElement:@"</commentary>" fromData:data];
-
+	
 	doc = [doc stringByAppendingString:js];
 	doc = [doc stringByAppendingString:display_ratings];
 	doc = [doc stringByAppendingString:URL_Getter];
 	doc = [doc stringByAppendingString:meta];
 	doc = [doc stringByAppendingString:hide_text];
 	[commentary loadHTMLString:doc baseURL:nil];
-
+	
 	// Find the content of the vocabulary.
 	doc = [self getXMLElement:@"<vocabulary>" endElement:@"</vocabulary>" fromData:data];
 	doc = [doc stringByAppendingString:js];
@@ -419,7 +265,7 @@
 	doc = [doc stringByAppendingString:meta];
 	doc = [doc stringByAppendingString:hide_text];
 	[vocabulary loadHTMLString:doc baseURL:nil];
-
+	
 	// Find the content of the sidebar.
 	doc = meta;
 	doc = [doc stringByAppendingString:URL_Getter];
@@ -427,6 +273,200 @@
 	[sidebar loadHTMLString:doc baseURL:nil];
 	
 	[data release];
+}
+
+/******************************************************************************
+ * Called after this view is loaded -- basically a constructor.
+ */
+- (void)viewDidLoad 
+{
+    [super viewDidLoad];
+	
+	EventsArray = [[NSMutableArray alloc] initWithCapacity:1000];
+	
+	// Create a delegate for the document viewer.
+	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
+	
+	// Make ourselves the delegate for the other web views.
+	commentary.delegate = self;
+	vocabulary.delegate = self;
+	sidebar.delegate = self;
+	
+	// Go fetch and display the document.
+	[self fetchDocumentData];
+	
+//	 http://www.cis.gvsu.edu/~prokope/index.php/rest/events
+	
+//	NSRange theRange = [URL rangeOfString:@"/" options:NSBackwardsSearch];
+//	NSString *path = [URL substringFromIndex:theRange.location];
+//	NSLog(@"%@", path);
+
+//	[self clearEventsFromDisk];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
+	
+	NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
+	
+	for (NSString *element in arrayFromFile)
+	{
+//		NSLog(@"file: %@", element);
+		[EventsArray addObject:element];
+	}
+	
+	URL = @"3";
+	
+	NSString *header = [NSString stringWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, [self getDate]];
+	
+	[EventsArray addObject:header];
+	
+	MyTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(MakeRestCall) userInfo:nil repeats:YES];
+}
+
+/******************************************************************************
+ * This method is called by the timer after a certain interval, and is called 
+ * when a user clicks to go back to the previous view controller. 
+ */
+-(void)MakeRestCall
+{	
+	if (UserName == nil)
+	{
+		NSLog(@"There is no user");
+	}
+	else
+	{
+		
+		/**
+		 * Logs user activity to the DB.
+		 * Assumes data comes in via POST with the format:
+		 * <entries user="USERNAME">
+		 *    <like date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
+		 *    <dislike date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
+		 *    <click date="2011-07-25 19:42:54" doc="DOCUMENTID" word="WORDID" />
+		 *     <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
+		 *     <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
+		 * </entries>
+		 
+		 * Where:
+		 *		USERNAME is the email address of the user
+		 *		DOCUMENTID is the (int) unique document id
+		 *		COMMENTID is the (int) unique comment id
+		 * 		WORDID is the id of the word within the document (usually of the form "10.2.1.14")
+		 
+		 * Returns "<result>1</result>" on success, 
+		 * 		<result>-1</result> on user not found,
+		 * 		<result>-2</result> on a runtime exception (probably malformed XML).
+		 */
+		
+		
+		NSURL *nsurl = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/log"];  
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:nsurl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:3600.0];   
+		
+		[request setURL:nsurl];
+		[request setHTTPMethod:@"POST"];  
+		[request setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
+		
+		
+		// we will make our rest calls when the user clicks back to the bookshelf. 
+		localData = [[NSMutableString alloc] init];
+		for (NSString *element in EventsArray)
+		{
+			if ([element hasPrefix:@"<entries"])
+			{
+				[localData setString:@""];
+				[localData appendString:element];
+			}
+			else if ([element hasPrefix:@"</entries>"])
+			{
+				[localData appendString:element];
+				NSLog(@"%@ \n\n", localData);
+				// make rest call with this data. 
+				// if there is an error, then we put it an another array. When we get done 
+				// there will be no data in our element array, but there could be data in the 
+				// error array, so we will just copy that data back into the element array.
+				
+				NSData *body = [localData dataUsingEncoding:NSASCIIStringEncoding];
+				
+				[request setHTTPBody:body];  
+				
+				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+				
+				if (connection)
+				{
+					NSLog(@"Connection created");
+					recievedData = [[NSMutableData data] retain];
+				}
+				else 
+				{
+					NSLog(@"Connection failed");
+				}	
+			} 
+			else
+			{
+				[localData appendString:element];
+			}
+		}
+		// end of for loop.
+	}
+}
+
+
+/******************************************************************************
+ * This method gets called when the parser found characters in an XML document. 
+ */
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if ([CurrentTag isEqualToString:@"result"])
+	{	
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		if ([string isEqualToString:@"-1"])
+		{
+			if ([paths count] > 0)
+			{
+				// Path to save array data
+				NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
+				NSString *ArrayEnding = @"</entries>";
+				[EventsArray addObject:ArrayEnding];
+				
+				// Write array
+				[EventsArray writeToFile:arrayPath atomically:YES];
+				
+				// Read both back in new collections
+				NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
+				
+				for (NSString *element in arrayFromFile) 
+					NSLog(@"file: %@", element);
+
+			}
+		}
+		else if ([string isEqualToString:@"-2"])
+		{
+		    NSLog(@"malformed Url %@", string);
+		}
+		else if ([string isEqualToString:@"1"])
+		{
+			NSLog(@"a successful upload %@", string);
+			
+			[self clearEventsFromDisk];
+		}
+	}
+	else
+	{
+	//	NSLog(@"%@", string);
+	} 
+}
+
+/******************************************************************************
+ * This method gets called when the parser starts parsing an XML element.  
+ */
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
+  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
+	attributes:(NSDictionary *)attributeDict
+{	
+	if([elementName isEqualToString:@"result"])
+		CurrentTag = @"result";
+	else
+		CurrentTag = @"Unknown";
 }
 
 /******************************************************************************
@@ -480,14 +520,14 @@
 				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Like');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:jss];
 				NSString *new = [NSString stringWithFormat:@"<like date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, ending];
-				[RatingsArray addObject:new];
+				[EventsArray addObject:new];
 			}
 			else if([path hasPrefix:@"/Dis-Like"])
 			{
 				NSString *jss = [NSString stringWithFormat: @"toggleLikeDislike('%@', 'Dis-Like');", ending];
 				[commentary stringByEvaluatingJavaScriptFromString:jss];
 				NSString *new = [NSString stringWithFormat:@"<dislike date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, ending];
-				[RatingsArray addObject:new];
+				[EventsArray addObject:new];
 			}
 		}
 		// Meaning this was an actually http request. Therefore we have our own code that gets called, and we present a WebViewController
@@ -504,7 +544,7 @@
 			else
 			{
 				NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, StringRequest];
-				[FollowArray addObject:new];
+				[EventsArray addObject:new];
 			}
 
 			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
@@ -520,6 +560,74 @@
 	return FALSE;
 }
 
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	//	NSLog(@"Recieved Response");
+	//  [receivedData setLength:0];
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [recievedData appendData:data];
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+	NSLog(@"Recieved an error");
+    [connection release];
+    [recievedData release];
+	//    NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{	
+    // release the connection, and the data object
+    [connection release];
+	
+	NSXMLParser *parse = [[NSXMLParser alloc] initWithData:recievedData];
+	[parse setDelegate:self];
+	[parse parse];
+	[parse release];
+	
+	//	NSString *theString = [[NSString alloc] initWithData:recievedData encoding:NSASCIIStringEncoding];
+	//	NSLog(@"%@", theString);
+	
+	[recievedData release];
+}
+
+/******************************************************************************
+ * A method that clears the userclicks.out file. This is called multiple times, so
+ * the same code needs to be executed.
+ */
+-(void)clearEventsFromDisk
+{
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	
+	NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	[fileManager removeItemAtPath:arrayPath error:NULL];
+	
+	[EventsArray removeAllObjects];
+	for (NSString *element in EventsArray) 
+		NSLog(@"Object: %@", element);	
+}
+
+/******************************************************************************
+ * A utility method that returns the date. This is called multiple times, so
+ * the same code needs to be executed.
+ */
 -(NSString *)getDate
 {
 	NSDate *currentDateTime = [NSDate date];
@@ -531,13 +639,18 @@
 	return dateInString;
 }
 
+/******************************************************************************
+ * This method captures when a url was made to a media object (image, movie, etc).
+ * There is a javascript function that returns a string that objective-c can then 
+ * store as an NSString. See the function GetIdFromHref to look at the function.
+ */
 -(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request
 {
 	NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
 		[NSString stringWithFormat:@"GetIdFromHref('%@')", request]];
 	
 	NSString *new = [NSString stringWithFormat:@"<media date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, returnval];
-	[MediaArray addObject:new];
+	[EventsArray addObject:new];
 }
 
 /* **********************************************************************************************************************
@@ -545,7 +658,6 @@
  */
 - (void) wordClicked:(NSString *)id
 {
-	
 	NSString *js = [NSString stringWithFormat: @"show_only('%@', 'commentary');", id];
 	[commentary stringByEvaluatingJavaScriptFromString:js];	
 	js = [NSString stringWithFormat: @"show_only('%@', 'vocabulary');", id];
@@ -555,70 +667,10 @@
 	[document stringByEvaluatingJavaScriptFromString:js];
 		
 	NSString *new = [NSString stringWithFormat:@"<click date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, id];
-	[ClicksArray addObject:new];
-	
-	[self pumpXMLtoOutput];
+	[EventsArray addObject:new];
 }
 
--(void)pumpXMLtoOutput
-{
-	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@'>", UserName]; 
-	[XMLString1 appendString:@"\n\n"];
-	
-	for (NSString *str in RatingsArray)
-	{
-		[XMLString1 appendString:str];
-	}
-	
-	for (NSString *str in MediaArray)
-	{		
-		[XMLString1 appendString:str];
-	}
-	
-	for (NSString *str in FollowArray)
-	{		
-		[XMLString1 appendString:str];
-	}
-	
-	for (NSString *str in ClicksArray)
-	{
-		[XMLString1 appendString:str];
-	}
-	[XMLString1 appendString:@"\n"];
-	[XMLString1 appendString:@"</entries>"];
-	
-	NSLog(@"%@", XMLString1);
-}
 
--(NSMutableString *)getXMLData
-{
-	NSMutableString *XMLString1 = [[NSMutableString alloc] initWithFormat:@"<entries user='%@'>", UserName]; 
-	[XMLString1 appendString:@"\n\n"];
-	
-	for (NSString *str in RatingsArray)
-	{
-		[XMLString1 appendString:str];
-	}
-	
-	for (NSString *str in MediaArray)
-	{		
-		[XMLString1 appendString:str];
-	}
-	
-	for (NSString *str in FollowArray)
-	{		
-		[XMLString1 appendString:str];
-	}
-	
-	for (NSString *str in ClicksArray)
-	{
-		[XMLString1 appendString:str];
-	}
-	[XMLString1 appendString:@"\n"];
-	[XMLString1 appendString:@"</entries>"];
-	
-	return XMLString1;	
-}
 
 /* ***********************************************************************************************
  * Clearing our memory.

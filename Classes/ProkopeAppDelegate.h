@@ -30,7 +30,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet ProkopeViewController *viewController;
+@property (nonatomic, retain) ProkopeViewController *viewController;
 
 
 @end

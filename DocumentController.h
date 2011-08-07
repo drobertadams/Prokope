@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DocumentController : UIViewController <UIWebViewDelegate>
+@interface DocumentController : UIViewController <UIWebViewDelegate, NSXMLParserDelegate>
 {	
 	UIWebView 
 		*document,		// where the document/text is displayed
@@ -23,11 +23,10 @@
 	NSString *Title;
 	NSString *UserName;
 	UILabel *label2;
+
 	
-	NSMutableArray *RatingsArray;	
-	NSMutableArray *ClicksArray;
-	NSMutableArray *MediaArray;
-	NSMutableArray *FollowArray;
+	NSMutableArray *EventsArray;
+	NSMutableArray *FileEventsArray;
 	
 	NSMutableString *XMLString;
 	
@@ -35,6 +34,10 @@
 	int TimerCount;
 	
 	NSMutableData *recievedData;
+	
+	NSString *CurrentTag;
+	
+	NSMutableString *localData;
 }
 
 @property (nonatomic, retain) IBOutlet UIWebView *document;
@@ -44,13 +47,16 @@
 @property (nonatomic, retain) NSString *URL;
 @property (nonatomic, retain) NSString *Title;
 @property (nonatomic, retain) NSString *UserName;
-@property (nonatomic, retain) NSMutableArray *FollowArray;
+@property (nonatomic, retain) NSMutableArray *EventsArray;
 
 - (void)fetchDocumentData;
 
 // Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
--(void)targetMethod;
+
+-(void)MakeRestCall;
+-(void)clearEventsFromDisk;
+
 -(NSString *)getDate;
 -(NSMutableString *)getXMLData;
 

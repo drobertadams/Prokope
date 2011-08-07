@@ -58,6 +58,10 @@
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
 	[viewController SetDataArray:AuthorsArray];
 	
+	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Prokope" style:UIBarButtonItemStylePlain target:nil action:nil];          
+	viewController.navigationItem.backBarButtonItem = anotherButton;
+	[anotherButton release];
+	
 	[ProkopeNavigationController pushViewController:viewController animated:NO];
 	[viewController release];
 	

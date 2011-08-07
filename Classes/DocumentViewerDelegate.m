@@ -72,7 +72,7 @@
 		else
 		{
 			NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [controller getDate], controller.URL, url];
-			[controller.FollowArray addObject:new];
+			[controller.EventsArray addObject:new];
 		}
 												   
 		webViewer.url = url;
