@@ -126,27 +126,20 @@
 	
 	if (self.controller.logedin)
 	{
-		NSLog(@"%@", self.controller.TheUserName);
 		[EmailText setText:self.controller.TheUserName];
-		NSLog(@"Here 1");
 		[PassWordText setText:self.controller.ThePassWord];
 		[PassWordConfirmText setText:self.controller.ThePassWord];
 		[ProfessorText setText:self.controller.Professor];
-		NSLog(@"Here 2");
 		
 		if (![[ProfessorText text] isEqualToString:@""])
 		{
 			[ProfessorLabel setText:@""];
 		}
-		NSLog(@"Here 3");
-		NSLog(@"%@", self.controller.TheUserName);
 		[PassWordLabel setText:@"New Password"];
 		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
 		[TitleLabel setText:[NSString stringWithFormat:@"Update Profile : %@", self.controller.TheUserName]];
 	}	
 	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
-	
-	NSLog(@"Here END");
 	
 	if(InternetConnection == TRUE)
 	{

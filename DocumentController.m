@@ -225,7 +225,7 @@
 	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.cis.gvsu.edu/~prokope/images/Like-Clicked.png\" />';"
 	"          newdiv.innerHTML = '<img width=15 height=15 src=\"http://www.cis.gvsu.edu/~prokope/images/Dislike-Clicked.png\" />';"
 	"      }"
-	"      newdiv.innerHTML = '<a href=\"Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + newid +'\"><img width=15 height=15 src=\"http://www.justinantranikian.com/Photos/Dislike-Up.png\" /></a>';"
+	"      newdiv.innerHTML = '<a href=\"Like' + newid +'\"><img width=15 height=15 src=\"http://www.cis.gvsu.edu/~prokope/images/Like-Up.png\" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"Dis-Like' + newid +'\"><img width=15 height=15 src=\"http://www.cis.gvsu.edu/~prokope/images/DisLike-Up.png\" /></a>';"
 	"      comments[i].appendChild(newdiv);" 
 	"	}"
 	"}"
@@ -392,6 +392,7 @@
 		}
 		else
 		{
+			// need to make the connection object to send out the request.
 			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 			
 			for (NSString *element in ErrorArray)
