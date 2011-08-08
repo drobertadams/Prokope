@@ -162,13 +162,7 @@
  * method. We can also call this method when we first load the view.
  */
 -(void)UpdateInternetConnectionStatus
-{
-	// A way to reference your application delegate.
-	//TabnavAppDelegate *delegate = (TabnavAppDelegate *)[[UIApplication sharedApplication]
-	//delegate];
-	
-	//	Reachability* curReach = [note object];
-	//	NetworkStatus internetStatus = [curReach currentReachabilityStatus];
+{	
 	NetworkStatus internetStatus = [internetReach currentReachabilityStatus];
 	
 	switch (internetStatus)

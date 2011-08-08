@@ -648,7 +648,6 @@
 	// button index 1 is the register/update profile button.
 	else if (buttonIndex == 1)
 	{
-		
 		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
 
 		reg.controller = self;

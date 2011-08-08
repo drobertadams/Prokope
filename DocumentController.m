@@ -8,6 +8,29 @@
 // Need to knows : 1) don't create an div tags in the commentary section. 
 //
 
+/**
+ * Logs user activity to the DB.
+ * Assumes data comes in via POST with the format:
+ * <entries user="USERNAME">
+ *    <like date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
+ *    <dislike date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
+ *    <click date="2011-07-25 19:42:54" doc="DOCUMENTID" word="WORDID" />
+ *     <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
+ *     <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
+ * </entries>
+ 
+ * Where:
+ *		USERNAME is the email address of the user
+ *		DOCUMENTID is the (int) unique document id
+ *		COMMENTID is the (int) unique comment id
+ * 		WORDID is the id of the word within the document (usually of the form "10.2.1.14")
+ 
+ * Returns "<result>1</result>" on success, 
+ * 		<result>-1</result> on user not found,
+ * 		<result>-2</result> on a runtime exception (probably malformed XML).
+ */
+
+
 #import "DocumentController.h"
 #import "DocumentViewerDelegate.h"
 #import "WebViewController.h"
@@ -283,6 +306,7 @@
     [super viewDidLoad];
 	
 	EventsArray = [[NSMutableArray alloc] initWithCapacity:1000];
+	ErrorArray = [[NSMutableArray alloc] initWithCapacity:1000]; 
 	
 	// Create a delegate for the document viewer.
 	document.delegate = [[DocumentViewerDelegate alloc] initWithController:self];
@@ -294,33 +318,37 @@
 	
 	// Go fetch and display the document.
 	[self fetchDocumentData];
-	
-//	 http://www.cis.gvsu.edu/~prokope/index.php/rest/events
-	
-//	NSRange theRange = [URL rangeOfString:@"/" options:NSBackwardsSearch];
-//	NSString *path = [URL substringFromIndex:theRange.location];
-//	NSLog(@"%@", path);
-
-//	[self clearEventsFromDisk];
+	[self stripUrl];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
 	
 	NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
-	
 	for (NSString *element in arrayFromFile)
 	{
-//		NSLog(@"file: %@", element);
-		[EventsArray addObject:element];
+		NSLog(@"IN LOADING: %@", element);
+		[ErrorArray addObject:element];
 	}
 	
-	URL = @"3";
+	// ???? Needs to be changed. 
+	UserName = @"john@gmail.com";
+//	[self clearEventsFromDisk];
 	
 	NSString *header = [NSString stringWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, [self getDate]];
-	
 	[EventsArray addObject:header];
 	
 	MyTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(MakeRestCall) userInfo:nil repeats:YES];
+}
+
+/******************************************************************************
+ * A simple method to strip the last part of the URL off, so it only returns
+ * the unique identifier.
+ */
+-(void)stripUrl
+{
+	NSRange theRange = [URL rangeOfString:@"/" options:NSBackwardsSearch];
+	NSString *path = [URL substringFromIndex:theRange.location + 1];
+	URL = [path copy];
 }
 
 /******************************************************************************
@@ -331,34 +359,10 @@
 {	
 	if (UserName == nil)
 	{
-		NSLog(@"There is no user");
+		NSLog(@"There is no user, therefore we do not need to keep track of clicks.");
 	}
 	else
 	{
-		
-		/**
-		 * Logs user activity to the DB.
-		 * Assumes data comes in via POST with the format:
-		 * <entries user="USERNAME">
-		 *    <like date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
-		 *    <dislike date="2011-07-25 19:42:54" doc="DOCUMENTID" comment="COMMENTID" />
-		 *    <click date="2011-07-25 19:42:54" doc="DOCUMENTID" word="WORDID" />
-		 *     <media date="2011-08-03 08:24:00" doc="DOCUMENTID" comment="281" />
-		 *     <follow date="2011-08-03 08:27:00" doc="DOCUMENTID" url="URL" />
-		 * </entries>
-		 
-		 * Where:
-		 *		USERNAME is the email address of the user
-		 *		DOCUMENTID is the (int) unique document id
-		 *		COMMENTID is the (int) unique comment id
-		 * 		WORDID is the id of the word within the document (usually of the form "10.2.1.14")
-		 
-		 * Returns "<result>1</result>" on success, 
-		 * 		<result>-1</result> on user not found,
-		 * 		<result>-2</result> on a runtime exception (probably malformed XML).
-		 */
-		
-		
 		NSURL *nsurl = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest/log"];  
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:nsurl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:3600.0];   
 		
@@ -366,48 +370,117 @@
 		[request setHTTPMethod:@"POST"];  
 		[request setValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
 		
-		
 		// we will make our rest calls when the user clicks back to the bookshelf. 
 		localData = [[NSMutableString alloc] init];
-		for (NSString *element in EventsArray)
+		recievedData = [[NSMutableData data] retain];
+		NSData *body;
+		
+		[localData setString:@""];
+		
+		localData = [self getCurrentEntries];
+		
+		// make rest call with this data. 
+		body = [localData dataUsingEncoding:NSASCIIStringEncoding];
+		[request setHTTPBody:body];  
+		
+		NSString *testconnect = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php"]];
+		if([testconnect length] == 0)
 		{
-			if ([element hasPrefix:@"<entries"])
-			{
-				[localData setString:@""];
-				[localData appendString:element];
-			}
-			else if ([element hasPrefix:@"</entries>"])
-			{
-				[localData appendString:element];
-				NSLog(@"%@ \n\n", localData);
-				// make rest call with this data. 
-				// if there is an error, then we put it an another array. When we get done 
-				// there will be no data in our element array, but there could be data in the 
-				// error array, so we will just copy that data back into the element array.
-				
-				NSData *body = [localData dataUsingEncoding:NSASCIIStringEncoding];
-				
-				[request setHTTPBody:body];  
-				
-				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-				
-				if (connection)
-				{
-					NSLog(@"Connection created");
-					recievedData = [[NSMutableData data] retain];
-				}
-				else 
-				{
-					NSLog(@"Connection failed");
-				}	
-			} 
-			else
-			{
-				[localData appendString:element];
-			}
+			NSLog(@"There is no internet connection");
+			[self PopulateErrorArray:localData];
+			[EventsArray removeAllObjects];
 		}
-		// end of for loop.
+		else
+		{
+			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+			
+			for (NSString *element in ErrorArray)
+			{
+				// make rest call with this data. 
+				body = [element dataUsingEncoding:NSASCIIStringEncoding];
+				[request setHTTPBody:body]; 
+				
+				NSURLConnection *connection2 = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+			}
+			[self clearEventsFromDisk];
+		}
+		// We recrate the element tag, just in case the timer has expired, and they need to repost data on the same session.
+		NSString *header = [NSString stringWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, [self getDate]];
+		[EventsArray addObject:header];
 	}
+}
+
+/******************************************************************************
+ * A method to return the current entries in a String version that is translated
+ * into XML.
+ */
+-(NSMutableString *)getCurrentEntries
+{
+	NSMutableString *local = [[NSMutableString alloc] init];
+	for (NSString *element in EventsArray)
+	{
+		[local appendString:element];
+	}
+	[local appendString:@"</entries>"];
+	return local;
+}
+
+/******************************************************************************
+ * Populates error array.
+ */
+-(void)PopulateErrorArray:(NSString *)dataString
+{
+	[ErrorArray addObject:dataString];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
+	
+	// Write array
+	[ErrorArray writeToFile:arrayPath atomically:YES];
+	
+	NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
+	for (NSString *element in arrayFromFile)
+	{
+		NSLog(@"IN METHOD: %@", element);
+	}
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	//	NSLog(@"Recieved Response");
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [recievedData appendData:data];
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    [recievedData setLength:0];
+	NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+
+/******************************************************************************
+ * Part of the NSURLConnection protocol. 
+ */
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{	
+	NSXMLParser *parse = [[NSXMLParser alloc] initWithData:recievedData];
+	[parse setDelegate:self];
+	[parse parse];
+	[parse release];
+	
+	[recievedData setLength:0];
 }
 
 
@@ -416,85 +489,91 @@
  */
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if ([CurrentTag isEqualToString:@"result"])
-	{	
-		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-		if ([string isEqualToString:@"-1"])
-		{
-			if ([paths count] > 0)
-			{
-				// Path to save array data
-				NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
-				NSString *ArrayEnding = @"</entries>";
-				[EventsArray addObject:ArrayEnding];
-				
-				// Write array
-				[EventsArray writeToFile:arrayPath atomically:YES];
-				
-				// Read both back in new collections
-				NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
-				
-				for (NSString *element in arrayFromFile) 
-					NSLog(@"file: %@", element);
-
-			}
-		}
-		else if ([string isEqualToString:@"-2"])
-		{
-		    NSLog(@"malformed Url %@", string);
-		}
-		else if ([string isEqualToString:@"1"])
-		{
-			NSLog(@"a successful upload %@", string);
-			
-			[self clearEventsFromDisk];
-		}
-	}
-	else
+	if ([string isEqualToString:@"-1"])
 	{
-	//	NSLog(@"%@", string);
-	} 
+		NSLog(@"The username does not exist");
+	}
+	else if ([string isEqualToString:@"-2"])
+	{
+		NSLog(@"There is a malformed URL");
+	}
+	else if ([string isEqualToString:@"1"])
+	{
+		NSLog(@"a successful upload %@", string);
+	}
 }
 
 /******************************************************************************
- * This method gets called when the parser starts parsing an XML element.  
+ * A method that clears the userclicks.out file. This is called multiple times, so
+ * the same code needs to be executed.
  */
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
-	attributes:(NSDictionary *)attributeDict
-{	
-	if([elementName isEqualToString:@"result"])
-		CurrentTag = @"result";
-	else
-		CurrentTag = @"Unknown";
-}
-
-/******************************************************************************
- * Fetches an entire XML element. NOTE: This method uses substring operations,
- * not an XML parser. Therefore, all elements must be unique.
- */
-- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data
+-(void)clearEventsFromDisk
 {
-	// Find where the start and end elements live.
-	NSRange startRange = [data rangeOfString:startElement];	
-	NSRange endRange = [data rangeOfString:endElement];
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	
-	// If we didn't find both elements, return an empty string.
-	if (startRange.length == 0 || endRange.length == 0)
-		return @"";
+	NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	[fileManager removeItemAtPath:arrayPath error:NULL];
 	
-	// Create a range that subsumes the two elements and everything in between.
-	NSRange dataRange;
-	dataRange.location = startRange.location;
-	dataRange.length = endRange.location - startRange.location + 1 + endRange.length;
+	[EventsArray removeAllObjects];
+	[ErrorArray removeAllObjects];
+}
+
+/******************************************************************************
+ * A utility method that returns the date. This is called multiple times, so
+ * the same code needs to be executed.
+ */
+-(NSString *)getDate
+{
+	NSDate *currentDateTime = [NSDate date];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
+	[dateFormatter release];
 	
-	// Return the data between the two.
-	return [data substringWithRange:dataRange];
+	return dateInString;
+}
+
+/******************************************************************************
+ * This method captures when a url was made to a media object (image, movie, etc).
+ * There is a javascript function that returns a string that objective-c can then 
+ * store as an NSString. See the function GetIdFromHref to look at the function.
+ */
+-(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request
+{
+	NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
+		[NSString stringWithFormat:@"GetIdFromHref('%@')", request]];
+	
+	NSString *new = [NSString stringWithFormat:@"<media date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, returnval];
+	[EventsArray addObject:new];
+}
+
+/* **********************************************************************************************************************
+ * Called by DocumentViewerDelegate when the user clicks on a word.
+ */
+- (void) wordClicked:(NSString *)id
+{
+	NSString *js = [NSString stringWithFormat: @"show_only('%@', 'commentary');", id];
+	[commentary stringByEvaluatingJavaScriptFromString:js];	
+	js = [NSString stringWithFormat: @"show_only('%@', 'vocabulary');", id];
+	[vocabulary stringByEvaluatingJavaScriptFromString:js];
+	
+	js = [NSString stringWithFormat:@"highlightword('%@')", id];
+	[document stringByEvaluatingJavaScriptFromString:js];
+		
+	NSString *new = [NSString stringWithFormat:@"<click date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, id];
+	[EventsArray addObject:new];
+	
+	for (NSString *element in EventsArray)
+	{
+		NSLog(@"element array: %@", element);
+	}
 }
 
 /* **********************************************************************************************************************
  * Called when any of the webviews (except document) wants to load a URL. The method screens requests made from
- * different webviews and directs the request to the appropriate place. 
+ * different webviews and directs the request to the appropriate place. This is part of the UIWebViewDelegate
+ * protocol.
  */
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -546,11 +625,11 @@
 				NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, StringRequest];
 				[EventsArray addObject:new];
 			}
-
+			
 			WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
-
+			
 			webViewer.url = StringRequest;
-
+			
 			// If not using a popover, create a modal view.
 			[self presentModalViewController:webViewer animated:YES];
 			[webViewer release];
@@ -561,116 +640,27 @@
 }
 
 /******************************************************************************
- * Part of the NSURLConnection protocol. 
+ * Fetches an entire XML element. NOTE: This method uses substring operations,
+ * not an XML parser. Therefore, all elements must be unique.
  */
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data
 {
-	//	NSLog(@"Recieved Response");
-	//  [receivedData setLength:0];
-}
-
-/******************************************************************************
- * Part of the NSURLConnection protocol. 
- */
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    [recievedData appendData:data];
-}
-
-/******************************************************************************
- * Part of the NSURLConnection protocol. 
- */
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-	NSLog(@"Recieved an error");
-    [connection release];
-    [recievedData release];
-	//    NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-}
-
-/******************************************************************************
- * Part of the NSURLConnection protocol. 
- */
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{	
-    // release the connection, and the data object
-    [connection release];
+	// Find where the start and end elements live.
+	NSRange startRange = [data rangeOfString:startElement];	
+	NSRange endRange = [data rangeOfString:endElement];
 	
-	NSXMLParser *parse = [[NSXMLParser alloc] initWithData:recievedData];
-	[parse setDelegate:self];
-	[parse parse];
-	[parse release];
+	// If we didn't find both elements, return an empty string.
+	if (startRange.length == 0 || endRange.length == 0)
+		return @"";
 	
-	//	NSString *theString = [[NSString alloc] initWithData:recievedData encoding:NSASCIIStringEncoding];
-	//	NSLog(@"%@", theString);
+	// Create a range that subsumes the two elements and everything in between.
+	NSRange dataRange;
+	dataRange.location = startRange.location;
+	dataRange.length = endRange.location - startRange.location + 1 + endRange.length;
 	
-	[recievedData release];
+	// Return the data between the two.
+	return [data substringWithRange:dataRange];
 }
-
-/******************************************************************************
- * A method that clears the userclicks.out file. This is called multiple times, so
- * the same code needs to be executed.
- */
--(void)clearEventsFromDisk
-{
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	
-	NSString  *arrayPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"userclicks.out"];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	[fileManager removeItemAtPath:arrayPath error:NULL];
-	
-	[EventsArray removeAllObjects];
-	for (NSString *element in EventsArray) 
-		NSLog(@"Object: %@", element);	
-}
-
-/******************************************************************************
- * A utility method that returns the date. This is called multiple times, so
- * the same code needs to be executed.
- */
--(NSString *)getDate
-{
-	NSDate *currentDateTime = [NSDate date];
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-	NSString *dateInString = [dateFormatter stringFromDate:currentDateTime];
-	[dateFormatter release];
-	
-	return dateInString;
-}
-
-/******************************************************************************
- * This method captures when a url was made to a media object (image, movie, etc).
- * There is a javascript function that returns a string that objective-c can then 
- * store as an NSString. See the function GetIdFromHref to look at the function.
- */
--(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request
-{
-	NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
-		[NSString stringWithFormat:@"GetIdFromHref('%@')", request]];
-	
-	NSString *new = [NSString stringWithFormat:@"<media date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, returnval];
-	[EventsArray addObject:new];
-}
-
-/* **********************************************************************************************************************
- * Called by DocumentViewerDelegate when the user clicks on a word.
- */
-- (void) wordClicked:(NSString *)id
-{
-	NSString *js = [NSString stringWithFormat: @"show_only('%@', 'commentary');", id];
-	[commentary stringByEvaluatingJavaScriptFromString:js];	
-	js = [NSString stringWithFormat: @"show_only('%@', 'vocabulary');", id];
-	[vocabulary stringByEvaluatingJavaScriptFromString:js];
-	
-	js = [NSString stringWithFormat:@"highlightword('%@')", id];
-	[document stringByEvaluatingJavaScriptFromString:js];
-		
-	NSString *new = [NSString stringWithFormat:@"<click date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, id];
-	[EventsArray addObject:new];
-}
-
-
 
 /* ***********************************************************************************************
  * Clearing our memory.

@@ -26,17 +26,12 @@
 
 	
 	NSMutableArray *EventsArray;
-	NSMutableArray *FileEventsArray;
-	
-	NSMutableString *XMLString;
-	
+	NSMutableArray *ErrorArray;
+		
 	NSTimer *MyTimer;
 	int TimerCount;
 	
 	NSMutableData *recievedData;
-	
-	NSString *CurrentTag;
-	
 	NSMutableString *localData;
 }
 
@@ -53,12 +48,15 @@
 
 // Utility method to extract an XML element from a string.
 - (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
+-(void)stripUrl;
 
 -(void)MakeRestCall;
 -(void)clearEventsFromDisk;
 
+-(NSMutableString *)getCurrentEntries;
+-(void)PopulateErrorArray:(NSString *)dataString;
+
 -(NSString *)getDate;
--(NSMutableString *)getXMLData;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 -(void)wordClicked:(NSString *)id;
