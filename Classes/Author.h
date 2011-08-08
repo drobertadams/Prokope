@@ -1,3 +1,6 @@
+//  The Author class mimics what an author would be in our application.
+//  It only contains data that is necessary. Having an author class
+//  makes it easy to keep multiple pieces of data for one object.
 //
 //  Author.h
 //  Prokope

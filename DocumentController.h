@@ -22,8 +22,6 @@
 	NSString *URL;
 	NSString *Title;
 	NSString *UserName;
-	UILabel *label2;
-
 	
 	NSMutableArray *EventsArray;
 	NSMutableArray *ErrorArray;
@@ -44,22 +42,18 @@
 @property (nonatomic, retain) NSString *UserName;
 @property (nonatomic, retain) NSMutableArray *EventsArray;
 
-- (void)fetchDocumentData;
-
-// Utility method to extract an XML element from a string.
-- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
+-(void)fetchDocumentData;
 -(void)stripUrl;
-
 -(void)MakeRestCall;
--(void)clearEventsFromDisk;
-
 -(NSMutableString *)getCurrentEntries;
 -(void)PopulateErrorArray:(NSString *)dataString;
-
+-(void)clearEventsFromDisk;
 -(NSString *)getDate;
+-(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request;
 
 // Called by DocumentVieweerDelegate when the user clicks on a word in the document.
 -(void)wordClicked:(NSString *)id;
--(void)captureURL:(UIWebView *)webView RequestMade:(NSString *)request;
 
+// Utility method to extract an XML element from a string.
+- (NSString *) getXMLElement:(NSString *)startElement endElement:(NSString *)endElement fromData:(NSString *)data;
 @end

@@ -112,7 +112,8 @@
 /******************************************************************************
  * auto created method. Called when the view is loaded. A constructor basically.
  */
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 	
 	ProfessorsDataPopulated = FALSE;
@@ -125,19 +126,27 @@
 	
 	if (self.controller.logedin)
 	{
+		NSLog(@"%@", self.controller.TheUserName);
 		[EmailText setText:self.controller.TheUserName];
+		NSLog(@"Here 1");
 		[PassWordText setText:self.controller.ThePassWord];
 		[PassWordConfirmText setText:self.controller.ThePassWord];
 		[ProfessorText setText:self.controller.Professor];
+		NSLog(@"Here 2");
+		
 		if (![[ProfessorText text] isEqualToString:@""])
 		{
 			[ProfessorLabel setText:@""];
 		}
+		NSLog(@"Here 3");
+		NSLog(@"%@", self.controller.TheUserName);
 		[PassWordLabel setText:@"New Password"];
 		[RegisterButton setTitle:@"Update" forState:UIControlStateNormal];
 		[TitleLabel setText:[NSString stringWithFormat:@"Update Profile : %@", self.controller.TheUserName]];
 	}	
 	ProfessorsArray = [[NSMutableArray alloc] initWithCapacity:100];
+	
+	NSLog(@"Here END");
 	
 	if(InternetConnection == TRUE)
 	{
@@ -169,7 +178,7 @@
 	{
 		case NotReachable:
 		{
-			UIAlertView *connectionAlert = [[UIAlertView alloc] initWithTitle:@"No internet connection" message:@"Please check your network conenction" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil]; 
+			UIAlertView *connectionAlert = [[UIAlertView alloc] initWithTitle:@"No Internet Connection" message:@"Please Check Your Internet Connection" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil]; 
 			[connectionAlert show];
 			[connectionAlert release];
 			RegisterButton.enabled = FALSE;
@@ -249,13 +258,9 @@
 			
 			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
-			NSLog(@"%@", StringUrl);
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
 			NSData *data = [NSData dataWithContentsOfURL: url];
-			
-			NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-			NSLog(@"%@", theString);
 
 			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 			[parse setDelegate:self];
@@ -269,7 +274,7 @@
 			{
 				if (![e_Name isEqualToString:theUser])
 				{	
-					NSString *message = [NSString stringWithFormat:@"%@ is not the default, would you like it to be ?", e_Name];
+					NSString *message = [NSString stringWithFormat:@"%@ is not the Default Profile, Would You Like it to Be ?", e_Name];
 					
 					UIAlertView *alertDialog;
 					alertDialog = [[UIAlertView alloc]initWithTitle:@"Remember Me" message:message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
@@ -278,7 +283,6 @@
 					[alertDialog release];
 				}
 				self.controller.TheUserName = [EmailText text];
-				NSLog(@"%@", [EmailText text]);
 				self.controller.ThePassWord = [PassWordText text];
 				self.controller.Professor = [ProfessorText text];
 				self.controller.logedin = TRUE;
@@ -296,13 +300,9 @@
 			
 			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];		
-			NSLog(@"%@", StringUrl);
 			
 			NSURL *url = [NSURL URLWithString:StringUrl];
 			NSData *data = [NSData dataWithContentsOfURL: url];
-			
-			NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-			NSLog(@"%@", theString);
 			
 			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
 			[parse setDelegate:self];
@@ -323,12 +323,11 @@
 					[self SaveContentsToFile];
 					
 					UIAlertView *alertDialog;
-					alertDialog = [[UIAlertView alloc]initWithTitle:@"Profile Updated" message:@"Your update has been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+					alertDialog = [[UIAlertView alloc]initWithTitle:@"Profile Updated" message:@"Your Update has Been Saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
 					[alertDialog show];
 					[alertDialog release];
 				}
 				self.controller.TheUserName = [EmailText text];
-				NSLog(@"%@", [EmailText text]);
 				self.controller.ThePassWord = [PassWordText text];
 				self.controller.Professor = [ProfessorText text];
 				self.controller.logedin = TRUE;
@@ -337,6 +336,10 @@
 	}
 }
 
+/******************************************************************************
+ * This method returns a BOOL if the user has filled out all the information 
+ * correctly. It display messages according to what the user has filled out.
+ */
 -(BOOL)FieldsFilledOutCorrectly
 {
 	BOOL correct = TRUE;
@@ -348,12 +351,14 @@
 	
 	NSError *anError = NULL;
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" options:0 error:&anError];
+	NSRegularExpression *regexPass = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9._-]+$" options:0 error:&anError];
 	
 	NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:e_Name options:0 range:NSMakeRange(0, [e_Name length])];
+	NSRange rangeOfFirstMatchPass = [regexPass rangeOfFirstMatchInString:p_Name options:0 range:NSMakeRange(0, [p_Name length])];
 	
 	if (NSEqualRanges(rangeOfFirstMatch, NSMakeRange(NSNotFound, 0)))
 	{
-		[EmailLabel setText:[NSString stringWithFormat:@"Please Provide a valid email."]];
+		[EmailLabel setText:[NSString stringWithFormat:@"Please Provide a Valid Email."]];
 		EmailLabel.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
@@ -362,15 +367,15 @@
 		[EmailLabel setText:@""];
 	}
 	
-	if ([p_Name isEqualToString:@""])
+	if (NSEqualRanges(rangeOfFirstMatchPass, NSMakeRange(NSNotFound, 0)))
 	{
-		[PassWordStatus setText:@"You have not entered a password."];
+		[PassWordStatus setText:@"Please user Alphabetic and Numeric Characters"];
 		PassWordStatus.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
 	else if(![p_Name isEqualToString:confirm])
 	{
-		[PassWordStatus setText:@"Your passwords are not the same"];
+		[PassWordStatus setText:@"Your Passwords are not the Same"];
 		PassWordStatus.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
@@ -381,16 +386,15 @@
 
 	if ([professor_Name isEqualToString:@""])
 	{
-		[ProfessorLabel setText:@"Please Select a professor"];
+		[ProfessorLabel setText:@"Please Select a Professor"];
 		ProfessorLabel.textColor = [UIColor redColor];
 		correct = FALSE;
 	}
 	else
 	{
-		[ProfessorLabel setText:@"Select a professor from the list"];
+		[ProfessorLabel setText:@""];
 		ProfessorLabel.textColor = [UIColor blackColor];
 	}
-
 	return correct;
 }
 
@@ -411,45 +415,46 @@
 			if ([string isEqualToString:@"-1"])
 			{
 				RegistrationResult = -1;
-				StatusString = @"This profile was not found.";
+				StatusString = @"An Error in the Update Occured";
 				StatusColor = [UIColor redColor];	
 			}
 			// a -2 means an error in the URI string
 			else if([string isEqualToString:@"-2"])
 			{
 				RegistrationResult = -2;
-				StatusString = @"Error in the URL string.";
+				StatusString = @"An Error in the Update Occured";
 				StatusColor = [UIColor redColor];				
 			}
 			// a -3 means permission is denied. The new user name already exists, and their authentication failed (wrong password).
 			else if([string isEqualToString:@"-3"])
 			{
 				RegistrationResult = -3;
-				StatusString = @"Permission is denied.";
+				StatusString = @"Permission is Denied";
 				StatusColor = [UIColor redColor];				
 			}
 			// a -4 means the new user name already exists, and their authentication was correct.
 			else if([string isEqualToString:@"-4"])
 			{
 				RegistrationResult = -4;
-				StatusString = @"New User Name already exists.";
+				StatusString = @"That Name Already Exists";
 				StatusColor = [UIColor redColor];				
 			}
 			// a 1 means the update was a success.
 			else if ([string isEqualToString:@"1"])
 			{
 				RegistrationResult = 1;
-				StatusString = @"Your profile was updated";
-				StatusColor = [UIColor greenColor];
+				StatusString = @"Your Profile Was Updated";
+				StatusColor = [UIColor darkTextColor];
 			}
 			else
 			{
 				RegistrationResult = 0;
-				StatusString = @"An error occured in the update";
+				StatusString = @"An Error in the Update Occured";
 				StatusColor = [UIColor darkGrayColor];
 			}
 			[StatusLabel setText:StatusString];
-			[StatusLabel setBackgroundColor:StatusColor];
+			StatusLabel.textColor = StatusColor;
+		//	[StatusLabel setBackgroundColor:StatusColor];
 		}
 		// The registration button title is equal to registration. So we know it is a registration.
 		else
@@ -476,7 +481,7 @@
 			{
 				RegistrationResult = 1;
 				StatusString = @"Your profile was created";
-				StatusColor = [UIColor greenColor];
+				StatusColor = [UIColor darkTextColor];
 			}
 			else 
 			{
@@ -485,7 +490,8 @@
 				StatusColor = [UIColor darkGrayColor];
 			}
 			[StatusLabel setText:StatusString];
-			[StatusLabel setBackgroundColor:StatusColor];
+			StatusLabel.textColor = StatusColor;
+		//	[StatusLabel setBackgroundColor:StatusColor];
 		}
 	}
 }
@@ -515,6 +521,8 @@
  */
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	// only one alertview with YES as the button title. The alertview to save the user
+	// preferences. 
 	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
 	if ([buttonTitle isEqualToString:@"YES"])
 		[self SaveContentsToFile];	
@@ -546,6 +554,19 @@
  * Deallocation our memory. 
  */
 - (void)dealloc {
+//	[EmailText release];
+//	[PassWordText release];
+//	[PassWordConfirmText release];
+//	[ProfessorText release];
+//	[ProfessorTable release];
+//	[RegisterButton release];
+//	[TitleLabel release];
+//	[EmailLabel release];
+//	[PassWordLabel release];
+//	[ProfessorLabel release];
+//	[PassWordStatus release];
+//	[StatusLabel release];
+//	[ProfessorsArray release];
     [super dealloc];
 }
 

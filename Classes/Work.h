@@ -1,3 +1,6 @@
+//  The Work class also mimics what a work would be in our application.
+//  It only contains data that is necessary. It has similar instance
+//  variables as the author class. 
 //
 //  Work.h
 //  Prokope

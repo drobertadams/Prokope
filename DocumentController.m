@@ -91,7 +91,9 @@
 }
 
 /******************************************************************************
- * Fetches and displays all the data related to a document.
+ * Fetches and displays all the data related to a document. Creates javascript
+ * functions and calls that can be injected into a webview. Then later we can 
+ * execute these javascript function in our code. 
  */
 - (void)fetchDocumentData
 {
@@ -299,7 +301,9 @@
 }
 
 /******************************************************************************
- * Called after this view is loaded -- basically a constructor.
+ * Called after this view is loaded -- basically a constructor. The constructor
+ * populates the Errors array which was loaded from the userclicks.out file
+ * when the application is first launched.
  */
 - (void)viewDidLoad 
 {
@@ -329,10 +333,6 @@
 		NSLog(@"IN LOADING: %@", element);
 		[ErrorArray addObject:element];
 	}
-	
-	// ???? Needs to be changed. 
-	UserName = @"john@gmail.com";
-//	[self clearEventsFromDisk];
 	
 	NSString *header = [NSString stringWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, [self getDate]];
 	[EventsArray addObject:header];
@@ -426,7 +426,8 @@
 }
 
 /******************************************************************************
- * Populates error array.
+ * Populates error array. It takes in a string and writes the update error array
+ * to the userclicks.out file.
  */
 -(void)PopulateErrorArray:(NSString *)dataString
 {
@@ -667,6 +668,12 @@
  */
 - (void)dealloc
 {
+	[document release];		
+	[commentary	release];
+	[vocabulary release];	
+	[sidebar release];
+	[EventsArray release];
+	[ErrorArray release];
     [super dealloc];
 }
 

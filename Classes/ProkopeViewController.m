@@ -26,9 +26,12 @@
 	AuthorsArray = dataArray;
 }
 
+/******************************************************************************
+ * This method is part of the UIWebViewDelegate protocol. It specifies an error 
+ * message when there is no internet, and data is loaded into a webview.
+ */
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-	NSLog(@"NO INTERNET PEOPLE");
     NSString *titleString = @"Error Loading Page";
     NSString *messageString = [error localizedDescription];
     NSString *moreString = [error localizedFailureReason] ?
@@ -108,7 +111,7 @@
 	
 //	UIDeviceBatteryStateCharging
 	
-	NSLog(@"%@", myDevice.batteryState);
+//	NSLog(@"%@", myDevice.batteryState);
 	
 	[super viewDidLoad];
 	ClickedFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
@@ -617,7 +620,7 @@
 		{
 			UIAlertView *alertDialog;
 			// the message needs the \n to make room for the two UITextFeilds to be placed in the alertview.
-			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+			alertDialog = [[UIAlertView alloc]initWithTitle:nil message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"CANCEL", nil];
 			alertDialog.tag = 1;
 			 
 			NSString *theUser = @"E-mail";
@@ -658,7 +661,7 @@
 	else if (buttonIndex == 2)
 	{
 		UIAlertView *alertDialog;
-		alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear Profile" message:@"Are you sure you want to clear the profile for this device ?" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:@"cancel", nil];
+		alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear Profile" message:@"Are You Sure You Want to Clear The Profile for This Device" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"CANCEL", nil];
 		alertDialog.tag = 6;
 		[alertDialog show];
 		[alertDialog release];
@@ -673,7 +676,7 @@
 	if([testconnect length] == 0)
 	{
 		UIAlertView *alertDialog;
-		alertDialog = [[UIAlertView alloc]initWithTitle:@"No Internet" message:@"You are not connected to the internet" delegate:self cancelButtonTitle:@"dismiss" otherButtonTitles: nil];
+		alertDialog = [[UIAlertView alloc]initWithTitle:@"No Internet Connection" message:@"Please Check Your Internet Connection and Try Again" delegate:self cancelButtonTitle:@"DISMISS" otherButtonTitles: nil];
 		[alertDialog show];
 		[alertDialog release];
 		return FALSE;
@@ -696,68 +699,68 @@
 	// The alertview with tag == 1 is the one that contains the dialog to log users in.
 	if(alertView.tag == 1)
 	{
-		if ([buttonTitle isEqualToString:@"ok"])
+		if ([self ShowNoInternetConnectionAlertView])
 		{
-			NSString *UserName = [userInput text];
-			NSString *PassWord = [passInput text];
+			if ([buttonTitle isEqualToString:@"OK"])
+			{
+				NSString *UserName = [userInput text];
+				NSString *PassWord = [passInput text];
+				
+				// have to convert to a NSData object and back. Otherwise there will be some conversion errors.
+				NSData *data; 
+				data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
+				UserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+				data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
+				PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+				
+				NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
+					"username/%@/password/%@", UserName, PassWord];
+				
+				StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+				StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
+				
+				NSURL *url = [NSURL URLWithString:StringUrl];
+				data = [NSData dataWithContentsOfURL: url];
+				
+		//		NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+		//		NSLog(@"%@", theString);
+				
+				NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
+				[parse setDelegate:self];
+				[parse parse];
+				[parse release];
+				
+				NSString *theUser = [test objectForKey:@"E-mail"];
+				
+				if(LoginResult == 1)
+				{			
+					if (![[userInput text] isEqualToString:theUser])
+					{
+						UIAlertView *alertDialog;
+						NSString *dialog_message = [NSString stringWithFormat:@"%@ is not the Default Profile, Would You Like it to Be ?", UserName];
+						alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
+						alertDialog.tag = 5;
+						
+						[alertDialog show];
+						[alertDialog release];
+					}
+					logedin = TRUE;
 			
-			NSLog(@"%@", UserName);
-			
-			NSData *data; 
-	//		NSData *data = [UserName dataUsingEncoding:NSASCIIStringEncoding];
-	//		UserName = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-	//		data = [PassWord dataUsingEncoding:NSASCIIStringEncoding];
-	//		PassWord = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]; 
-	//		NSLog(@"%@", UserName);
-			
-			NSString *StringUrl = [NSString stringWithFormat:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/login/"
-				"username/%@/password/%@", UserName, PassWord];
-			
-			StringUrl = [StringUrl stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-			StringUrl = [StringUrl stringByReplacingOccurrencesOfString:@"@" withString:@"%40"];
-			NSLog(@"%@", StringUrl);
-			
-			NSURL *url = [NSURL URLWithString:StringUrl];
-			data = [NSData dataWithContentsOfURL: url];
-			
-			NSString *theString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-			NSLog(@"%@", theString);
-			
-			NSXMLParser *parse = [[NSXMLParser alloc] initWithData:data];
-			[parse setDelegate:self];
-			[parse parse];
-			[parse release];
-			
-			NSString *theUser = [test objectForKey:@"E-mail"];
-			
-			if(LoginResult == 1)
-			{			
-				if (![[userInput text] isEqualToString:theUser])
+					TheUserName = UserName;
+					ThePassWord = PassWord;
+					
+					[self SetUpLoginButton];
+				}
+				// If the LoginResult comes back as anything other than -1 we know the login information was not correct. 
+				else
 				{
 					UIAlertView *alertDialog;
-					NSString *dialog_message = [NSString stringWithFormat:@"%@ is not the default profile, would you like it to be ?", UserName];
-					alertDialog = [[UIAlertView alloc]initWithTitle:nil message:dialog_message delegate:self cancelButtonTitle:@"YES" otherButtonTitles:@"NO", nil];
-					alertDialog.tag = 5;
+					NSString *dialog_message = @"Your Login was Unsucessful";
+					alertDialog = [[UIAlertView alloc]initWithTitle:@"Login attempt" message:dialog_message delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
 					
 					[alertDialog show];
 					[alertDialog release];
 				}
-				logedin = TRUE;
-		
-				TheUserName = UserName;
-				ThePassWord = PassWord;
-				
-				[self SetUpLoginButton];
-			}
-			// If the LoginResult comes back as anything other than -1 we know the login information was not correct. 
-			else
-			{
-				UIAlertView *alertDialog;
-				NSString *dialog_message = @"Your login was unsucessful";
-				alertDialog = [[UIAlertView alloc]initWithTitle:@"Login attempt" message:dialog_message delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-				
-				[alertDialog show];
-				[alertDialog release];
 			}
 		}
 	}
@@ -780,7 +783,7 @@
 	// The alertview with a 6 is the one asking to clear the p-list file or not. 
 	else if(alertView.tag == 6)
 	{
-		if ([buttonTitle isEqualToString:@"ok"])
+		if ([buttonTitle isEqualToString:@"OK"])
 		{
 			if(test)
 			{
@@ -803,9 +806,6 @@
 		if ([string isEqualToString:@"-1"])
 		{
 			LoginResult = -1;
-			// This needs to be converted into a NSData object and then back. 
-			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
-        	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
 		else if ([string isEqualToString:@"-2"])
 		{
@@ -814,6 +814,7 @@
 		else
 		{
 			LoginResult = 1;
+			// This needs to be converted into a NSData object and then back. 
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
@@ -949,6 +950,27 @@
  */
 - (void)dealloc
 {
+	[AuthorsArray release];
+	[BookShelfImage release];
+	[FirstShelf release];
+	[SecondShelf release];
+	[ThirdShelf release];
+	[CommentaryView release];
+	[popupQuery release];		
+	[userInput release];
+	[passInput release];
+	[BookSpine release];
+	[ClickedFont release];
+	[ControlFont release];
+	[FirstRightButton release];
+	[FirstLeftButton release];
+	[SecondLeftButton release];
+	[SecondRightButton release];
+	[ThirdLeftButton release];
+	[ThirdRightButton release];
+	[image_left release];
+	[image_right release];
+	[myDevice release];
     [super dealloc];
 }
 

@@ -63,10 +63,10 @@
 
 @property (nonatomic, retain) ProkopeViewController *controller;
 
+-(void)UpdateInternetConnectionStatus;
 -(void)PopulateProfessorsTable;
 -(IBAction)RegisterButtonClicked:(id)sender;
 -(BOOL)FieldsFilledOutCorrectly;
 -(void)SaveContentsToFile;
--(void)UpdateInternetConnectionStatus;
 
 @end

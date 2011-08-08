@@ -41,8 +41,6 @@ table.
 
 	NSString *CurrentAuthor;
 	NSString *CurrentWork;
-
-	UILabel *label2;
 			
 	int first_shelf_x_cord;
 	int second_shelf_x_cord;
