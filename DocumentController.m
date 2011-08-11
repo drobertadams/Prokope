@@ -359,10 +359,14 @@
  * the unique identifier.
  */
 -(void)stripUrl
-{
+{	
 	NSRange theRange = [URL rangeOfString:@"/" options:NSBackwardsSearch];
-	NSString *path = [URL substringFromIndex:theRange.location + 1];
-	URL = [path copy];
+
+	if ([URL rangeOfString:@"/"].location != NSNotFound)
+	{
+		NSString *path = [URL substringFromIndex:theRange.location + 1];
+		URL = [path copy];
+	}
 }
 
 /******************************************************************************
