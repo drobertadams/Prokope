@@ -629,19 +629,15 @@
 		// and show that with the contents of the request.
 		else
 		{
-			NSLog(@"%@", StringRequest);
-			
 			NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
 								   [NSString stringWithFormat:@"GetTypeFromHref('%@')", StringRequest]];
 			
 			if ([returnval isEqualToString:@"media"])
 			{
-				NSLog(@"MEDIA RESULT");
 				[self captureURL:webView RequestMade:StringRequest];
 			}
 			else
 			{
-				NSLog(@"NonMedia");
 				NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, StringRequest];
 				[EventsArray addObject:new];
 			}

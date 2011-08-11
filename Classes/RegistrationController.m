@@ -8,6 +8,7 @@
 
 #import "RegistrationController.h"
 #import "Reachability.h" 
+#import "Professor.h"
 
 @implementation RegistrationController
 
@@ -92,8 +93,8 @@
     }
 	
 	// we assign the cell's text to the name in the Professor's array.
-    NSString *a = [ProfessorsArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = a;
+    Professor *a = [ProfessorsArray objectAtIndex:indexPath.row];
+    cell.textLabel.text = a.fullname;
 	
     return cell;
 }
@@ -105,8 +106,8 @@
 	
 	[ProfessorTable deselectRowAtIndexPath:indexPath animated:YES];
 	
-	NSString *a = [ProfessorsArray objectAtIndex:indexPath.row];
-	[ProfessorText setText:a];
+	Professor *a = [ProfessorsArray objectAtIndex:indexPath.row];
+	[ProfessorText setText:a.name];
 }
 
 /******************************************************************************
@@ -504,8 +505,12 @@
 	else if([elementName isEqualToString:@"professor"])
 	{
 		CurrentTag = @"professor";
+		NSString *fullname = [attributeDict objectForKey:@"fullname"];
 		NSString *username = [attributeDict objectForKey:@"username"];
-		[ProfessorsArray addObject:username];
+		Professor *professor = [[Professor alloc] init];
+		professor.name = username;
+		professor.fullname = fullname;
+		[ProfessorsArray addObject:professor];
 	}
 }
 

@@ -23,6 +23,7 @@
 		47B06D201379EC67008BFF61 /* DocumentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B06D1E1379EC67008BFF61 /* DocumentController.xib */; };
 		94030D42139D951C00454502 /* StoneBook.png in Resources */ = {isa = PBXBuildFile; fileRef = 94030D41139D951C00454502 /* StoneBook.png */; };
 		944D1142138AF36100DEF8B2 /* SecondNavigation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D1140138AF36100DEF8B2 /* SecondNavigation.xib */; };
+		94766C5513F35F45008414D9 /* Professor.m in Sources */ = {isa = PBXBuildFile; fileRef = 94766C5413F35F45008414D9 /* Professor.m */; };
 		947B13C413AEBAA1009F0858 /* more-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B13C313AEBAA1009F0858 /* more-icon.png */; };
 		947FCCA213E100EF00927806 /* Registration_BackGround.png in Resources */ = {isa = PBXBuildFile; fileRef = 947FCCA113E100EF00927806 /* Registration_BackGround.png */; };
 		948D01A713B2A46F007BFFAD /* more-icon-left.png in Resources */ = {isa = PBXBuildFile; fileRef = 948D01A613B2A46F007BFFAD /* more-icon-left.png */; };
@@ -64,6 +65,8 @@
 		8D1107310486CEB800E47090 /* Prokope-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Prokope-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		94030D41139D951C00454502 /* StoneBook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoneBook.png; sourceTree = "<group>"; };
 		944D1140138AF36100DEF8B2 /* SecondNavigation.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SecondNavigation.xib; path = Classes/SecondNavigation.xib; sourceTree = "<group>"; };
+		94766C5313F35F45008414D9 /* Professor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Professor.h; sourceTree = "<group>"; };
+		94766C5413F35F45008414D9 /* Professor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Professor.m; sourceTree = "<group>"; };
 		947B13C313AEBAA1009F0858 /* more-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more-icon.png"; sourceTree = "<group>"; };
 		947FCCA113E100EF00927806 /* Registration_BackGround.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Registration_BackGround.png; sourceTree = "<group>"; };
 		948D01A613B2A46F007BFFAD /* more-icon-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more-icon-left.png"; sourceTree = "<group>"; };
@@ -199,6 +202,8 @@
 				94AE4B991399BAD000827A1E /* Author.m */,
 				94AE4D041399DAB100827A1E /* Work.h */,
 				94AE4D051399DAB100827A1E /* Work.m */,
+				94766C5313F35F45008414D9 /* Professor.h */,
+				94766C5413F35F45008414D9 /* Professor.m */,
 			);
 			name = "Data Classes";
 			sourceTree = "<group>";
@@ -300,6 +305,7 @@
 				94AE4D061399DAB100827A1E /* Work.m in Sources */,
 				948D06D513B3F7D7007BFFAD /* RegistrationController.m in Sources */,
 				94E9667F13E5E6C800228C99 /* Reachability.m in Sources */,
+				94766C5513F35F45008414D9 /* Professor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
