@@ -146,13 +146,27 @@
 	"    "
 	"function GetIdFromHref(url)"
 	"{"
-	"   var elems = document.body.getElementsByTagName('a');"
+	"    var elems = document.body.getElementsByTagName('a');"
 	"    var anchors = document.body.getElementsByTagName('a');"
 	"	 for (i = 0; i < anchors.length; i++)"
 	"    {"
 	"        if(anchors[i].getAttribute('href', 0) == url)"
 	"        {"
 	"            var id = anchors[i].getAttribute('id', 0);"
+	"            return id;"
+	"        }"
+	"    }"
+	"}"
+	"    "
+	"function GetTypeFromHref(url)"
+	"{"
+	"    var anchors = document.body.getElementsByTagName('a');"
+	"	 for (i = 0; i < anchors.length; i++)"
+	"    {"
+	"        if(anchors[i].getAttribute('href', 0) == url)"
+	"        {"
+	"            var id = anchors[i].getAttribute('type', 0);"
+//	"            alert(id);"
 	"            return id;"
 	"        }"
 	"    }"
@@ -337,7 +351,7 @@
 	NSString *header = [NSString stringWithFormat:@"<entries user='%@' url='%@' date='%@'>", UserName, URL, [self getDate]];
 	[EventsArray addObject:header];
 	
-	MyTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(MakeRestCall) userInfo:nil repeats:YES];
+	MyTimer = [NSTimer scheduledTimerWithTimeInterval:45.0 target:self selector:@selector(MakeRestCall) userInfo:nil repeats:YES];
 }
 
 /******************************************************************************
@@ -579,6 +593,7 @@
  */
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+	NSString *StringRequest = [[request URL] absoluteString];
 	// "Other" means we are loading a page ourselves (i.e., not in response to click) -- probably a document.
 	if (navigationType == UIWebViewNavigationTypeOther)
 		return TRUE; // load the document
@@ -587,7 +602,6 @@
 	else if (navigationType == UIWebViewNavigationTypeLinkClicked) {
 		
 		// Get the URL begin requested and feed it to our imageViewController.
-		NSString *StringRequest = [[request URL] absoluteString];
 		if ( [StringRequest rangeOfString:@"http"].length == 0 )
 		{
 			NSRange theRange = [StringRequest rangeOfString:@"/" options:NSBackwardsSearch];
@@ -615,15 +629,19 @@
 		// and show that with the contents of the request.
 		else
 		{
-			// Load the image viewer nib and set the URL.
-			NSString *extension = [StringRequest pathExtension];
+			NSLog(@"%@", StringRequest);
 			
-			if ([extension isEqualToString:@"jpg"] || [extension isEqualToString:@"png"])
+			NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
+								   [NSString stringWithFormat:@"GetTypeFromHref('%@')", StringRequest]];
+			
+			if ([returnval isEqualToString:@"media"])
 			{
+				NSLog(@"MEDIA RESULT");
 				[self captureURL:webView RequestMade:StringRequest];
 			}
 			else
 			{
+				NSLog(@"NonMedia");
 				NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, StringRequest];
 				[EventsArray addObject:new];
 			}

@@ -5,6 +5,8 @@
 //  Created by D. Robert Adams on 5/9/11.
 //  Copyright 2011 Grand Valley State University. All rights reserved.
 //
+//  1) Need a list of extensions for the media types (jpgs, pngs, etc.)
+//  2) Alerts for areas with no internet connection.
 
 #import "DocumentController.h"
 #import "ProkopeViewController.h"

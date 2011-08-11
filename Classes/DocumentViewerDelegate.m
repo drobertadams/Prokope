@@ -63,14 +63,18 @@
 		// in the WebViewController.		
 		WebViewController *webViewer = [[WebViewController alloc] initWithNibName:@"WebViewController" bundle:nil];
 		
-		NSString *extension = [url pathExtension];
+		NSLog(@"%@", url);
+		NSString *returnval = [webView stringByEvaluatingJavaScriptFromString:
+							   [NSString stringWithFormat:@"GetTypeFromHref('%@')", url]];
 		
-		if ([extension isEqualToString:@"jpg"] || [extension isEqualToString:@"png"])
+		if ([returnval isEqualToString:@"media"])
 		{
+			NSLog(@"MEDIA RESULT");
 			[controller captureURL:webView RequestMade:url];
 		}
 		else
 		{
+			NSLog(@"NonMedia");
 			NSString *new = [NSString stringWithFormat:@"<follow date='%@' doc='%@' comment='%@' /> \n", [controller getDate], controller.URL, url];
 			[controller.EventsArray addObject:new];
 		}
