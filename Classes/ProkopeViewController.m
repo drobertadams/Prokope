@@ -82,22 +82,22 @@
  */
 -(void)viewDidLoad
 {
-	[[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
+/*	[[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
 	
-	[[UIDevice currentDevice] batteryLevel];
-	[[UIDevice currentDevice] batteryState];
+//	[[UIDevice currentDevice] batteryLevel];
+//	[[UIDevice currentDevice] batteryState];
 	
 //	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStatus) name:UIDeviceBatteryLevelDidChangeNotification object:nil];
 	
 //	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStatus) name:UIDeviceBatteryStateDidChangeNotification object:nil];
 	
-	NSArray *batteryStatus = [NSArray arrayWithObjects: 
-							  @"Battery status is UNKNOWN, can't tell the level.", 
-							  @"Battery is in use (discharging).", 
-							  @"Battery is charging.", 
-							  @"Battery is fully charged.", nil];
+//	NSArray *batteryStatus = [NSArray arrayWithObjects: 
+//							  @"Battery status is UNKNOWN, can't tell the level.", 
+//							  @"Battery is in use (discharging).", 
+//							  @"Battery is charging.", 
+//							  @"Battery is fully charged.", nil];
 	
-	if ([[UIDevice currentDevice] batteryState] == UIDeviceBatteryStateUnknown)
+//	if ([[UIDevice currentDevice] batteryState] == UIDeviceBatteryStateUnknown)
 	{
 	//	[textViewStatus setText:[batteryStatus objectAtIndex:0]];  
 		NSLog(@"%@", [batteryStatus objectAtIndex:0]);
@@ -113,7 +113,7 @@
 	
 //	UIDeviceBatteryStateCharging
 	
-//	NSLog(@"%@", myDevice.batteryState);
+//	NSLog(@"%@", myDevice.batteryState); */
 	
 	[super viewDidLoad];
 	ClickedFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
@@ -350,8 +350,8 @@
  */
 -(void)FirstShelfButtonClicked:(id)sender
 {
-    float batteryLevel = [myDevice batteryLevel];
-	NSLog(@"bat level : %f ", batteryLevel);
+//    float batteryLevel = [myDevice batteryLevel];
+//	NSLog(@"bat level : %f ", batteryLevel);
 	
 	[self ClearShelf:self.SecondShelf];
 	[self ClearShelf:self.ThirdShelf];

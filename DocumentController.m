@@ -166,7 +166,6 @@
 	"        if(anchors[i].getAttribute('href', 0) == url)"
 	"        {"
 	"            var id = anchors[i].getAttribute('type', 0);"
-//	"            alert(id);"
 	"            return id;"
 	"        }"
 	"    }"
@@ -344,7 +343,7 @@
 	NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
 	for (NSString *element in arrayFromFile)
 	{
-		NSLog(@"IN LOADING: %@", element);
+//		NSLog(@"IN LOADING: %@", element);
 		[ErrorArray addObject:element];
 	}
 	
@@ -377,7 +376,7 @@
 {	
 	if (UserName == nil)
 	{
-		NSLog(@"There is no user, therefore we do not need to keep track of clicks.");
+	//	NSLog(@"There is no user, therefore we do not need to keep track of clicks.");
 	}
 	else
 	{
@@ -459,10 +458,10 @@
 	[ErrorArray writeToFile:arrayPath atomically:YES];
 	
 	NSArray *arrayFromFile = [NSArray arrayWithContentsOfFile:arrayPath];
-	for (NSString *element in arrayFromFile)
-	{
-		NSLog(@"IN METHOD: %@", element);
-	}
+//	for (NSString *element in arrayFromFile)
+//	{
+//		NSLog(@"IN METHOD: %@", element);
+//	}
 }
 
 /******************************************************************************
@@ -584,10 +583,10 @@
 	NSString *new = [NSString stringWithFormat:@"<click date='%@' doc='%@' comment='%@' /> \n", [self getDate], URL, id];
 	[EventsArray addObject:new];
 	
-	for (NSString *element in EventsArray)
-	{
-		NSLog(@"element array: %@", element);
-	}
+//	for (NSString *element in EventsArray)
+//	{
+//		NSLog(@"element array: %@", element);
+//	}
 }
 
 /* **********************************************************************************************************************

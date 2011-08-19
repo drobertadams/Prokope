@@ -552,19 +552,19 @@
  * Deallocation our memory. 
  */
 - (void)dealloc {
-//	[EmailText release];
-//	[PassWordText release];
-//	[PassWordConfirmText release];
-//	[ProfessorText release];
-//	[ProfessorTable release];
-//	[RegisterButton release];
-//	[TitleLabel release];
-//	[EmailLabel release];
-//	[PassWordLabel release];
-//	[ProfessorLabel release];
-//	[PassWordStatus release];
-//	[StatusLabel release];
-//	[ProfessorsArray release];
+	[EmailText release];
+	[PassWordText release];
+	[PassWordConfirmText release];
+	[ProfessorText release];
+	[ProfessorTable release];
+	[RegisterButton release];
+	[TitleLabel release];
+	[EmailLabel release];
+	[PassWordLabel release];
+	[ProfessorLabel release];
+	[PassWordStatus release];
+	[StatusLabel release];
+	[ProfessorsArray release];
     [super dealloc];
 }
 

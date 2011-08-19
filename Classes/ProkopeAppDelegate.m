@@ -32,12 +32,12 @@
 	AuthorCount = 0;							
 	WorkCount = 0;
 		
-	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
-	NSData* data = [NSData dataWithContentsOfFile: path];
+//	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
+//	NSData* data = [NSData dataWithContentsOfFile: path];
 	
-//	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
+	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
 //	NSURL *url = [NSURL URLWithString:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
-//	NSData *data = [NSData dataWithContentsOfURL:url]; 
+	NSData *data = [NSData dataWithContentsOfURL:url]; 
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
 	// The current tag keeps track of what the current element is in the parser. 
