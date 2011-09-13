@@ -35,18 +35,18 @@
 //	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
 //	NSData* data = [NSData dataWithContentsOfFile: path];
 	
-	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
+//	NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
 //	NSURL *url = [NSURL URLWithString:@"https://www.cis.gvsu.edu/~prokope/index.php/rest/big"];
-	NSData *data = [NSData dataWithContentsOfURL:url]; 
-	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
+//	NSData *data = [NSData dataWithContentsOfURL:url]; 
+//	NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
 	
 	// The current tag keeps track of what the current element is in the parser. 
-	CurrentTag = @"";
+//	CurrentTag = @"";
 	
 	// Set the parser's delgate to this class, since it implements the NSXMLParserDelegate protocol.
-	[parser setDelegate:self];
-	[parser parse];
-	[parser release];
+//	[parser setDelegate:self];
+//	[parser parse];
+//	[parser release];
 	
 	// This line initialized the navigation controller. 
 	ProkopeNavigationController = [[UINavigationController alloc] init];
@@ -56,7 +56,7 @@
 	// Calling the SetDataArray will give the next controller the data we got from parsing the XML file.
 	// It is an essential method, and it is how controllers pass data to other controllers. 
 	viewController = [[ProkopeViewController alloc] initWithNibName:@"ProkopeViewController" bundle:nil];
-	[viewController SetDataArray:AuthorsArray];
+//	[viewController SetDataArray:AuthorsArray];
 	
 	UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Prokope" style:UIBarButtonItemStylePlain target:nil action:nil];          
 	viewController.navigationItem.backBarButtonItem = anotherButton;

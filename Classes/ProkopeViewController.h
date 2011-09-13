@@ -39,6 +39,9 @@ table.
 			
 	UIImage *BookSpine;
 
+	int AuthorCount;
+	int WorkCount;
+			
 	NSString *CurrentAuthor;
 	NSString *CurrentWork;
 			
@@ -94,6 +97,10 @@ table.
 
 -(void)setUpNavBar;
 -(void)ForceScroll:(UIScrollView *)scroll;
+
+-(void)SetUpFirstShelf;
+
+-(void)getDocumentDataFromProkopeServer;
 
 -(void)FirstShelfButtonClicked:(id)sender;
 -(void)SecondShelfButtonClicked:(id)sender;

@@ -116,6 +116,9 @@
 //	NSLog(@"%@", myDevice.batteryState); */
 	
 	[super viewDidLoad];
+	
+	AuthorsArray = [[NSMutableArray alloc] initWithCapacity:100];
+	
 	ClickedFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:25.0];
 	ControlFont = [UIFont systemFontOfSize:25];
 	
@@ -142,31 +145,8 @@
 	image_left = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon-left" ofType:@"png"]];
 	image_right = [UIImage imageWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"more-icon" ofType:@"png"]];
 	
-	first_shelf_x_cord = -55;
-	// This loop populates the 'top shelf' of the BookShelfImage.
-	for (Author *a in AuthorsArray)
-	{
-		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		ProgramButton.frame = CGRectMake(first_shelf_x_cord, 60, FirstShelf.frame.size.height, 60);
-		[ProgramButton.titleLabel setFont:ControlFont];
-		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
-		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
-		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
-		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
-		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
-		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
-		[ProgramButton addTarget:self action:@selector(FirstShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-		
-		// This line of code rotates the button to be facing vertical.
-		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
-		[FirstShelf addSubview:ProgramButton];
-		first_shelf_x_cord += 65;
-	}
-	first_shelf_x_cord += 55;
-	
 	[FirstShelf setScrollEnabled:YES];
 	[FirstShelf setShowsHorizontalScrollIndicator:YES];
-	[FirstShelf setContentSize:CGSizeMake(first_shelf_x_cord, FirstShelf.frame.size.height)];
 	
 	[SecondShelf setScrollEnabled:YES];
 	[SecondShelf setShowsHorizontalScrollIndicator:YES];
@@ -193,6 +173,39 @@
 	
 	ThirdRightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	[self InitalizeButton:ThirdRightButton Tag:26 Shelf:ThirdShelf Side:@"Right"];
+	
+	[self getDocumentDataFromProkopeServer];
+	[self SetUpFirstShelf];
+	
+}
+
+-(void)SetUpFirstShelf
+{
+	first_shelf_x_cord = -55;
+	// This loop populates the 'top shelf' of the BookShelfImage.
+	for (Author *a in AuthorsArray)
+	{
+		UIButton *ProgramButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		ProgramButton.frame = CGRectMake(first_shelf_x_cord, 60, FirstShelf.frame.size.height, 60);
+		[ProgramButton.titleLabel setFont:ControlFont];
+		[ProgramButton setTitle:a.name forState:UIControlStateNormal];
+		[ProgramButton setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
+		[ProgramButton setBackgroundColor:[UIColor cyanColor]];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateNormal];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateHighlighted];
+		[ProgramButton setBackgroundImage:BookSpine forState:UIControlStateSelected];
+		[ProgramButton addTarget:self action:@selector(FirstShelfButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		
+		// This line of code rotates the button to be facing vertical.
+		ProgramButton.transform = CGAffineTransformMakeRotation( ( 90 * M_PI ) / 180 );
+		[FirstShelf addSubview:ProgramButton];
+		first_shelf_x_cord += 65;
+	}
+	first_shelf_x_cord += 55;
+	
+	[FirstShelf setScrollEnabled:YES];
+	[FirstShelf setShowsHorizontalScrollIndicator:YES];
+	[FirstShelf setContentSize:CGSizeMake(first_shelf_x_cord, FirstShelf.frame.size.height)];
 	
 	[self ForceScroll:FirstShelf];
 }
@@ -294,7 +307,7 @@
 	}
 	
 	CGPoint offset = scroll.contentOffset;
-	// This calculation scrolls us to the very right of the scrollview. 
+	// This calculation scrolls gets us to the very right of the scrollview. 
     offset.x = x_cord - scroll.frame.size.width;
     offset.y = 0;
     [scroll setContentOffset:offset animated:YES];
@@ -543,7 +556,27 @@
  * shelf is clicked.
  */
 -(void)ClearShelf:(UIScrollView *)BookShelfScrollView
-{
+{	
+	int tid = [BookShelfScrollView tag];
+	
+	// if the tag is 22 we know it is the right button on the first shelf since we tagged it. 
+	if (tid == 1)
+	{
+		first_shelf_x_cord = 0;
+	}
+	else if (tid == 2)
+	{
+		second_shelf_x_cord = 0;
+	}
+	else if (tid == 3)
+	{
+		third_shelf_x_cord = 0;
+	}
+	else
+	{
+		return;
+	}
+	
 	NSArray *viewsToRemove = [BookShelfScrollView subviews];
 	for (UIView *v in viewsToRemove)
 	{
@@ -562,8 +595,7 @@
 			 }
 		}
 	}
-	third_shelf_x_cord = 0;
-	[ThirdShelf setContentSize:CGSizeMake(0, 0)];
+	[BookShelfScrollView setContentSize:CGSizeMake(0, 0)];
 }
 
 /******************************************************************************
@@ -588,10 +620,35 @@
 	// If popupQuery is nil then we create a new one. otherwise we don't. 
 	if(!popupQuery)
 	{
-		popupQuery = [[UIActionSheet alloc] initWithTitle:@"Profile Options" delegate:self cancelButtonTitle:@"NO" destructiveButtonTitle:nil otherButtonTitles:login_string, register_string, @"Forget Me", nil];
+		popupQuery = [[UIActionSheet alloc] initWithTitle:@"Profile Options" delegate:self cancelButtonTitle:@"NO" destructiveButtonTitle:nil otherButtonTitles:@"Refresh", login_string, register_string, @"Forget Me", nil];
 		popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
 		[popupQuery showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
 		[popupQuery release];
+	}
+}
+
+-(void)getDocumentDataFromProkopeServer
+{
+	AuthorCount = 0;							
+	WorkCount = 0;
+
+//	NSString* path = [[NSBundle mainBundle] pathForResource: @"Authors" ofType: @"xml"];
+//	NSData* data = [NSData dataWithContentsOfFile: path];
+	
+	if ([self ShowNoInternetConnectionAlertView])
+	{
+		NSURL *url = [NSURL URLWithString:@"http://www.cis.gvsu.edu/~prokope/index.php/rest"];
+		NSData *data = [NSData dataWithContentsOfURL:url]; 
+	
+		NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
+	
+		// The current tag keeps track of what the current element is in the parser. 
+		CurrentTag = @"";
+	
+		// Set the parser's delgate to this class, since it implements the NSXMLParserDelegate protocol.
+		[parser setDelegate:self];
+		[parser parse];
+		[parser release];
 	}
 }
 
@@ -607,8 +664,26 @@
 	// initilize the Dictionary to the appropriate path. The file is AppUserData.plist
 	NSDictionary *test = [[NSDictionary alloc] initWithContentsOfFile:file];
 	
-	// buttonIndex 0 is the login/logout button.
-	if (buttonIndex == 0)
+	// buttonIndex 0 is the refresh button. 
+	if(buttonIndex == 0)
+	{
+		if ([self ShowNoInternetConnectionAlertView])
+		{
+			[self ClearShelf:FirstShelf];
+			[self ClearShelf:SecondShelf];
+			[self ClearShelf:ThirdShelf];
+		
+			[self ForceScroll:FirstShelf];
+			[self ForceScroll:SecondShelf];
+			[self ForceScroll:ThirdShelf];
+		
+			[AuthorsArray removeAllObjects];
+			[self getDocumentDataFromProkopeServer];
+			[self SetUpFirstShelf];
+		}
+	}
+	// buttonIndex 1 is the login/logout button.
+	else if (buttonIndex == 1)
 	{
 		if(logedin == TRUE)
 		{
@@ -650,8 +725,8 @@
 			[alertDialog release];
 		}
 	}
-	// button index 1 is the register/update profile button.
-	else if (buttonIndex == 1)
+	// button index 2 is the register/update profile button.
+	else if (buttonIndex == 2)
 	{
 		RegistrationController *reg = [[RegistrationController alloc] initWithNibName:@"RegistrationController" bundle:nil];
 
@@ -659,8 +734,8 @@
 		[self.navigationController pushViewController:reg animated:YES];
 		[reg release];
 	}
-	// button index 2 is the forget me button. 
-	else if (buttonIndex == 2)
+	// button index 3 is the forget me button. 
+	else if (buttonIndex == 3)
 	{
 		UIAlertView *alertDialog;
 		alertDialog = [[UIAlertView alloc]initWithTitle:@"Clear Profile" message:@"Are You Sure You Want to Clear The Profile for This Device" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"CANCEL", nil];
@@ -799,6 +874,76 @@
 }
 
 /******************************************************************************
+ * This method gets called when the parser starts parsing an XML element.  
+ */
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
+  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
+	attributes:(NSDictionary *)attributeDict
+{	
+	if([elementName isEqualToString:@"author"])
+	{	
+		WorkCount = 0;
+		
+		Author *newAuthor = [[Author alloc] init];
+		NSString *thename = [attributeDict objectForKey:@"name"];
+		NSString *icon = [attributeDict objectForKey:@"icon"];
+		
+		newAuthor.name = thename;
+		newAuthor.iconURL = icon;
+		newAuthor.bio =	@"Cicero was a <i>great</i> speaker. He had many important works, and was well liked by"
+		"all of his peers. His works continue to inspire people. Check out his <strong> wikipedia </strong>"
+		"page for more info.";
+		
+		[AuthorsArray addObject:newAuthor];
+		CurrentTag = @"author";
+		
+	}
+	else if ([elementName isEqualToString:@"work"])
+	{	
+		NSString *url = [attributeDict objectForKey:@"url"];
+		NSString *name = [attributeDict objectForKey:@"name"]; 
+		
+		Work *w = [[Work alloc] init];
+		w.name = name;
+		w.workURL = url;
+		
+		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
+		[a.WorksArray addObject:w];
+		[w release];
+		CurrentTag = @"work";
+	}
+	else if ([elementName isEqualToString:@"chapter"])
+	{	
+		NSString *name = [attributeDict objectForKey:@"name"];
+		NSString *url = [attributeDict objectForKey:@"url"]; 
+		
+		// This is the key to setting up the array. The counts are incremented as the XML file is being parsed.
+		// That serves as a place holder to know where to insert the 'Chapters'.
+		Author *a = [AuthorsArray objectAtIndex:AuthorCount];
+		Work *w = [a.WorksArray objectAtIndex:WorkCount];
+		
+		Work *newOne = [[Work alloc] init];
+		newOne.name = name;
+		newOne.workURL = url;
+		
+		[w.ChaptersArray addObject:newOne];
+		CurrentTag = @"chapter";
+	}
+	else if ([elementName isEqualToString:@"bio"])
+	{
+	    CurrentTag = @"bio";
+	}
+	else if([elementName isEqualToString:@"result"])
+	{
+		CurrentTag = @"result";
+	}
+	else
+	{
+		CurrentTag = @"Unknown";
+	}
+}
+
+/******************************************************************************
  * This method gets called when the parser found characters in an XML document. 
  */
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
@@ -820,21 +965,43 @@
 			NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
         	Professor = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 		}
-
+	}
+	else if ([CurrentTag isEqualToString:@"bio"])
+	{
+	    Author *a = [AuthorsArray objectAtIndex:AuthorCount];
+		a.bio = string;
+		
+		[AuthorsArray replaceObjectAtIndex:AuthorCount withObject:a];
+		[a release];
 	}
 }
 
+
 /******************************************************************************
- * This method gets called when the parser starts parsing an XML element.  
+ * This method is used by the NSXMLParserDelegate protocol and it keeps track of
+ * what the current author and work are. 
  */
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
-	attributes:(NSDictionary *)attributeDict
-{	
-	if([elementName isEqualToString:@"result"])
-		CurrentTag = @"result";
-	else
-		CurrentTag = @"Unknown";
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
+  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	if([elementName isEqualToString:@"prokope"])
+	{
+		//	NSLog(@"Done Parsing Prokope");
+	}
+	else if ([elementName isEqualToString:@"author"])
+	{
+		// Since the NSXMLParserDelegate is an event driven parser these 'counts' are incremented
+		// in order to know what the current author and work are. 
+		AuthorCount ++;
+	}
+	else if ([elementName isEqualToString:@"work"])
+	{
+		WorkCount ++;
+	}
+	else if ([elementName isEqualToString:@"bio"])
+	{
+		CurrentTag = @"";
+	}
 }
 
 /******************************************************************************
